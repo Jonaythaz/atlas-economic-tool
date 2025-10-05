@@ -1,0 +1,23 @@
+<kirby-page>
+    <kirby-header title="Atlas Economic Tool">
+        <kirby-action-group *kirbyHeaderActions>
+            <button kirby-button (click)="vm.loadInvoices()">
+                <kirby-icon name="upload"></kirby-icon>
+                <span class="text">Load Invoices</span>
+            </button>
+        </kirby-action-group>
+    </kirby-header>
+    <kirby-page-content>
+        <kirby-loading-overlay [isLoading]="vm.isLoading()">
+            @let invoices = vm.invoices();
+            @let invoiceError = vm.invoiceError();
+            @if (invoices !== null) {
+                <atlas-invoice-list [invoices]="invoices" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
+            } @else if (invoiceError !== null) {
+                <p>Error occured: {{ invoiceError }}</p>
+            } @else {
+                <p>Load some invoices to get started.</p>
+            }
+        </kirby-loading-overlay>
+    </kirby-page-content>
+</kirby-page>

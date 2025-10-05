@@ -1,0 +1,18 @@
+@let invoices = vm.invoices();
+
+@if (invoices.length > 0) {
+    <kirby-list [items]="invoices" (itemSelect)="vm.selectInvoice($event)">
+        <kirby-item *kirbyListItemTemplate="let item" disclosure="arrow-more" [selectable]="true">
+            <kirby-label>
+                <p class="kirby-item-title">{{ item.recipient }}</p>
+                <p class="kirby-item-subtitle">ID: {{ item.id }}</p>
+            </kirby-label>
+            <kirby-label slot="end">
+                <p class="kirby-item-title">{{ item.customer.name }}</p>
+                <p class="kirby-item-subtitle">Lines: {{ item.lines.length }}</p>
+            </kirby-label>
+        </kirby-item>
+    </kirby-list>
+} @else {
+    <p>No invoices found</p>
+}
