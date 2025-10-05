@@ -1,15 +1,15 @@
-import { Component, inject, Signal, signal } from "@angular/core";
+import { Component, computed, inject, resource, Signal } from "@angular/core";
 import { HeaderModule, PageModule, LoadingOverlayComponent, ButtonComponent, ActionGroupComponent, IconModule } from "@kirbydesign/designsystem";
-import { loadInvoices } from "../../commands/load-invoices.command";
+import { loadInvoices } from "../../commands";
 import { Invoice } from "../../models";
 import { InvoiceListComponent } from "../../components/invoice-list";
-import { InvoiceModalService } from "../../modals/invoice/invoice.modal-service";
+import { InvoiceModalService } from "../../modals/invoice";
 
 type ViewModel = {
-    invoices: Signal<Invoice[] | null>;
-    invoiceError: Signal<string | null>;
+    invoices: Signal<Invoice[] | undefined>;
+    invoiceError: Signal<string | undefined>;
     isLoading: Signal<boolean>;
-    loadInvoices: () => Promise<void>;
+    loadInvoices: () => void;
     viewInvoice: (invoice: Invoice) => Promise<void>;
 }
 
@@ -21,31 +21,15 @@ type ViewModel = {
 export class HomeComponent {
     readonly #invoiceModalService = inject(InvoiceModalService);
 
-    readonly #invoices = signal<Invoice[] | null>(null);
-    readonly #invoiceError = signal<string | null>(null);
-    readonly #isLoading = signal(false);
-
-    async #loadInvoices(): Promise<void> {
-        this.#isLoading.set(true);
-        await loadInvoices().then(
-            (invoices) => {
-                this.#invoices.set(invoices);
-                this.#invoiceError.set(null);
-                this.#isLoading.set(false);
-            },
-            (err) => {
-                this.#invoiceError.set(err);
-                this.#invoices.set(null);
-                this.#isLoading.set(false);
-            }
-        );
-    }
+    readonly #invoiceResource = resource({
+        loader: ({ previous }) => previous.status === 'idle' ? Promise.resolve(undefined) : loadInvoices()
+    });
 
     readonly vm: ViewModel = {
-        invoices: this.#invoices.asReadonly(),
-        invoiceError: this.#invoiceError.asReadonly(),
-        isLoading: this.#isLoading.asReadonly(),
-        loadInvoices: this.#loadInvoices.bind(this),
+        invoices: computed(() => this.#invoiceResource.hasValue() ? this.#invoiceResource.value() : undefined),
+        invoiceError: computed(() => this.#invoiceResource.error()?.cause as string | undefined),
+        isLoading: this.#invoiceResource.isLoading,
+        loadInvoices: this.#invoiceResource.reload.bind(this.#invoiceResource),
         viewInvoice: this.#invoiceModalService.openInvoiceModal.bind(this.#invoiceModalService),
     };
 }

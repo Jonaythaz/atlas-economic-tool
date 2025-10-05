@@ -11,9 +11,9 @@
         <kirby-loading-overlay [isLoading]="vm.isLoading()">
             @let invoices = vm.invoices();
             @let invoiceError = vm.invoiceError();
-            @if (invoices !== null) {
+            @if (invoices !== undefined) {
                 <atlas-invoice-list [invoices]="invoices" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
-            } @else if (invoiceError !== null) {
+            } @else if (invoiceError) {
                 <p>Error occured: {{ invoiceError }}</p>
             } @else {
                 <p>Load some invoices to get started.</p>
