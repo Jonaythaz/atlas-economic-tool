@@ -1,5 +1,5 @@
 import { Component, computed, inject, resource, Signal } from "@angular/core";
-import { HeaderModule, PageModule, LoadingOverlayComponent, ButtonComponent, ActionGroupComponent, IconModule } from "@kirbydesign/designsystem";
+import { HeaderModule, PageModule, LoadingOverlayComponent, ButtonComponent, ActionGroupComponent, IconModule, EmptyStateModule } from "@kirbydesign/designsystem";
 import { loadInvoices } from "../../commands";
 import { Invoice } from "../../models";
 import { InvoiceListComponent } from "../../components/invoice-list";
@@ -16,7 +16,7 @@ type ViewModel = {
 @Component({
     selector: "atlas-home",
     templateUrl: "./home.component.html",
-    imports: [PageModule, HeaderModule, ActionGroupComponent, IconModule, LoadingOverlayComponent, InvoiceListComponent, ButtonComponent]
+    imports: [PageModule, HeaderModule, ActionGroupComponent, IconModule, LoadingOverlayComponent, InvoiceListComponent, ButtonComponent, EmptyStateModule]
 })
 export class HomeComponent {
     readonly #invoiceModalService = inject(InvoiceModalService);
