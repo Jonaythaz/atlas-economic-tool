@@ -1,0 +1,25 @@
+@let progress = vm.updateProgress();
+@if (progress !== null) {
+    <kirby-progress-circle [value]="progress" size="lg">
+        {{ progress | number: '1.1-1' }}%
+    </kirby-progress-circle>
+} @else if (vm.updateAvailable()) {
+    <kirby-empty-state
+        title="Update Available"
+        subtitle="Would you like to update to the newest version of the application?"
+        icon="update"
+        themeColor="warning"
+    >
+        <button kirby-button attentionLevel="1" (click)="vm.startUpdate()">Start Update</button>
+        <button kirby-button attentionLevel="2" (click)="vm.dismiss()">Maybe Later</button>
+    </kirby-empty-state>
+} @else {
+    <kirby-empty-state
+        title="No Update Available"
+        subtitle="You are using the latest version of the application."
+        icon="verify"
+        themeColor="success"
+    >
+        <button kirby-button attentionLevel="2" (click)="vm.dismiss()">Close</button>
+    </kirby-empty-state>
+}
