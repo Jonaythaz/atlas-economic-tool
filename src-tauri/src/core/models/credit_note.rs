@@ -1,12 +1,11 @@
 use serde::{Deserialize, Serialize};
-
-use super::common::{AccountingParty, Delivery, Item, OrderReference, Price};
+use super::common::{AccountingParty, Item, OrderReference, Price};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Invoice {
+pub struct CreditNote {
     #[serde(rename = "ID")]
     pub id: String,
-    
+
     #[serde(rename = "IssueDate")]
     pub issue_date: String,
 
@@ -16,15 +15,12 @@ pub struct Invoice {
     #[serde(rename = "AccountingCustomerParty")]
     pub accounting_customer_party: AccountingParty,
 
-    #[serde(rename = "Delivery")]
-    pub delivery: Delivery,
-    
-    #[serde(rename = "InvoiceLine")]
-    pub invoice_lines: Vec<InvoiceLine>,
+    #[serde(rename = "CreditNoteLine")]
+    pub credit_note_lines: Vec<CreditNoteLine>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct InvoiceLine {
+pub struct CreditNoteLine {
     #[serde(rename = "Item")]
     pub item: Item,
 

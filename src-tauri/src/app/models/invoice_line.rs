@@ -15,8 +15,21 @@ impl From<crate::core::InvoiceLine> for InvoiceLine {
                 id: line.item.sellers_item_identification.id,
                 name: line.item.name,
             },
-            price: line.price.price_amount.value,
-            quantity: line.price.base_quantity.value,
+            price: line.price.price_amount,
+            quantity: line.price.base_quantity,
+        }
+    }
+}
+
+impl From<crate::core::CreditNoteLine> for InvoiceLine {
+    fn from(line: crate::core::CreditNoteLine) -> Self {
+        Self {
+            product: Product {
+                id: line.item.sellers_item_identification.id,
+                name: line.item.name,
+            },
+            price: line.price.price_amount,
+            quantity: line.price.base_quantity,
         }
     }
 }

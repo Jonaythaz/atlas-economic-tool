@@ -1,7 +1,5 @@
 use std::{fmt::Display, path::PathBuf};
 
-use futures::future::try_join_all;
-
 #[derive(Debug, Clone)]
 pub enum Error {
     DialogClosed,
@@ -26,7 +24,7 @@ async fn load_xml_files<T>(folder: PathBuf) -> Result<Vec<T>, Error>
 where
     T: serde::de::DeserializeOwned,
 {
-    let results = std::fs::read_dir(folder)?
+    std::fs::read_dir(folder)?
         .into_iter()
         .filter_map(|entry| match entry {
             Err(e) => return Some(Err(e)),
@@ -36,18 +34,17 @@ where
                 .is_some_and(|s| s.eq_ignore_ascii_case("xml"))
                 .then(|| Ok(dir.path())),
         })
-        .map(async |path| read_xml_data(path?).await);
-
-    try_join_all(results).await
+        .map(|path| read_xml_data(path?))
+        .collect()
 }
 
-async fn read_xml_data<T>(file: PathBuf) -> Result<T, Error>
+fn read_xml_data<T>(file: PathBuf) -> Result<T, Error>
 where
     T: serde::de::DeserializeOwned,
 {
     let content = std::fs::read_to_string(&file)?;
 
-    serde_xml_rs::from_str(&content).map_err(Error::from)
+    quick_xml::de::from_str(&content).map_err(Error::from)
 }
 
 impl From<std::io::Error> for Error {
@@ -56,8 +53,8 @@ impl From<std::io::Error> for Error {
     }
 }
 
-impl From<serde_xml_rs::Error> for Error {
-    fn from(value: serde_xml_rs::Error) -> Self {
+impl From<quick_xml::DeError> for Error {
+    fn from(value: quick_xml::DeError) -> Self {
         Error::ParseError(value.to_string())
     }
 }
