@@ -54,7 +54,12 @@ impl From<crate::core::CreditNote> for Invoice {
             damage_number: Some(credit_note.order_reference.id),
             customer: Customer {
                 id: credit_note.accounting_customer_party.party.endpoint_id,
-                name: credit_note.accounting_customer_party.party.party_name.name.clone(),
+                name: credit_note
+                    .accounting_customer_party
+                    .party
+                    .party_name
+                    .name
+                    .clone(),
             },
             recipient: credit_note.accounting_customer_party.party.party_name.name,
             lines: credit_note

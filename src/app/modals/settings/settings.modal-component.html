@@ -1,0 +1,28 @@
+<kirby-page-title>Settings</kirby-page-title>
+
+@let error = vm.error();
+<kirby-loading-overlay [isLoading]="vm.isLoading()">
+    @if (error) {
+        <kirby-empty-state
+            iconName="warning"
+            themeColor="warning"
+            title="Unable to load settings"
+            [subtitle]="error"
+        >
+            <button kirby-button (click)="vm.reload()">Retry</button>
+        </kirby-empty-state>
+    } @else {
+        <kirby-card [hasPadding]="true">
+            <kirby-form-field label="Secret Token" [message]="vm.secretTokenField.message()">
+                <input kirby-input type="password" [(ngModel)]="vm.secretTokenField" [hasError]="vm.secretTokenField.message() !== null"/>
+            </kirby-form-field>
+            <kirby-form-field label="Grant Token" [message]="vm.grantTokenField.message()">
+                <input kirby-input type="password" [(ngModel)]="vm.grantTokenField" [hasError]="vm.grantTokenField.message() !== null" />
+            </kirby-form-field>
+        </kirby-card>
+    }
+</kirby-loading-overlay>
+
+<kirby-modal-footer>
+    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Save</button>
+</kirby-modal-footer>

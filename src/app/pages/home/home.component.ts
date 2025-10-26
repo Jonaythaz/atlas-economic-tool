@@ -4,12 +4,14 @@ import { loadInvoices } from "../../commands";
 import { Invoice } from "../../models";
 import { InvoiceListComponent } from "../../components/invoice-list";
 import { InvoiceModalService } from "../../modals/invoice";
+import { SettingsModalService } from "../../modals/settings";
 
 type ViewModel = {
     invoices: Signal<Invoice[] | undefined>;
     invoiceError: Signal<string | undefined>;
     isLoading: Signal<boolean>;
     loadInvoices: () => void;
+    openSettings: () => Promise<void>;
     viewInvoice: (invoice: Invoice) => Promise<void>;
 }
 
@@ -20,6 +22,7 @@ type ViewModel = {
 })
 export class HomeComponent {
     readonly #invoiceModalService = inject(InvoiceModalService);
+    readonly #settingsModalService = inject(SettingsModalService);
 
     readonly #invoiceResource = resource({
         loader: ({ previous }) => previous.status === 'idle' ? Promise.resolve(undefined) : loadInvoices()
@@ -30,6 +33,7 @@ export class HomeComponent {
         invoiceError: computed(() => this.#invoiceResource.error()?.cause as string | undefined),
         isLoading: this.#invoiceResource.isLoading,
         loadInvoices: this.#invoiceResource.reload.bind(this.#invoiceResource),
+        openSettings: this.#settingsModalService.open.bind(this.#settingsModalService),
         viewInvoice: this.#invoiceModalService.openInvoiceModal.bind(this.#invoiceModalService),
     };
 }

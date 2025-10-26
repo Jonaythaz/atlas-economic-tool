@@ -6,7 +6,7 @@ use super::common::{AccountingParty, Delivery, Item, OrderReference, Price};
 pub struct Invoice {
     #[serde(rename = "ID")]
     pub id: String,
-    
+
     #[serde(rename = "IssueDate")]
     pub issue_date: String,
 
@@ -18,7 +18,7 @@ pub struct Invoice {
 
     #[serde(rename = "Delivery")]
     pub delivery: Delivery,
-    
+
     #[serde(rename = "InvoiceLine")]
     pub invoice_lines: Vec<InvoiceLine>,
 }

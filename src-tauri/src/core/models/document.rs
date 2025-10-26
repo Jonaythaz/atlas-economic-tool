@@ -1,5 +1,5 @@
+use super::{CreditNote, Invoice};
 use serde::{Deserialize, Serialize};
-use super::{Invoice, CreditNote};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Document {

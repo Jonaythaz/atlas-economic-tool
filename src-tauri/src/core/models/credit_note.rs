@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use super::common::{AccountingParty, Item, OrderReference, Price};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreditNote {
