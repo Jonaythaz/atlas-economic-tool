@@ -13,7 +13,7 @@ type ViewModel = {
     loadInvoices: () => void;
     openSettings: () => Promise<void>;
     viewInvoice: (invoice: Invoice) => Promise<void>;
-}
+};
 
 @Component({
     selector: "atlas-home",
@@ -30,7 +30,7 @@ export class HomeComponent {
 
     readonly vm: ViewModel = {
         invoices: computed(() => this.#invoiceResource.hasValue() ? this.#invoiceResource.value() : undefined),
-        invoiceError: computed(() => this.#invoiceResource.error()?.cause as string | undefined),
+        invoiceError: computed(() => this.#invoiceResource.error()?.message),
         isLoading: this.#invoiceResource.isLoading,
         loadInvoices: this.#invoiceResource.reload.bind(this.#invoiceResource),
         openSettings: this.#settingsModalService.open.bind(this.#settingsModalService),

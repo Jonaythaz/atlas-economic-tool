@@ -19,16 +19,21 @@
                 <atlas-invoice-list [invoices]="invoices" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
             } @else if (invoiceError) {
                 <kirby-empty-state
-                    title="Loading Invoices Failed"
-                    subtitle="An error occurred while loading invoices."
                     iconName="warning"
                     themeColor="danger"
-                >{{ invoiceError }}</kirby-empty-state>
+                    title="Loading Invoices Failed"
+                    [subtitle]="invoiceError"
+                >
+                    <button kirby-button (click)="vm.loadInvoices()">
+                        <kirby-icon name="upload"></kirby-icon>
+                        <span class="text">Retry</span>
+                    </button>
+                </kirby-empty-state>
             } @else {
                 <kirby-empty-state
+                    iconName="help"
                     title="No Invoices Loaded"
                     subtitle="Load some invoices to get started."
-                    iconName="help"
                 >
                     <button kirby-button (click)="vm.loadInvoices()">
                         <kirby-icon name="upload"></kirby-icon>
