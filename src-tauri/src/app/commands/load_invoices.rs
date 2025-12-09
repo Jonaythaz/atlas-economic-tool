@@ -8,6 +8,10 @@ pub async fn load_invoices() -> Result<HashSet<Invoice>, String> {
         .await
         .map_err(|e| e.to_string())?
         .into_iter()
+        .filter(|document| match document {
+            crate::core::models::Document::Invoice(_) => true,
+            crate::core::models::Document::CreditNote(_) => false,
+        })
         .map(Invoice::from)
         .collect();
 
