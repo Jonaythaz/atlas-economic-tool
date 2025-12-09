@@ -1,13 +1,7 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PaymentTerms {
     #[serde(rename = "paymentTermsNumber")]
-    number: i32,
-}
-
-impl Default for PaymentTerms {
-    fn default() -> Self {
-        Self { number: 1 }
-    }
+    pub id: i32,
 }

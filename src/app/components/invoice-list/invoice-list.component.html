@@ -2,15 +2,26 @@
 
 @if (invoices.length > 0) {
     <kirby-list [items]="invoices" (itemSelect)="vm.selectInvoice($event)">
-        <kirby-item *kirbyListItemTemplate="let item" disclosure="arrow-more" [selectable]="true">
+        <kirby-item *kirbyListItemTemplate="let invoice" disclosure="arrow-more" [selectable]="true">
             <kirby-label>
-                <p class="kirby-item-title">{{ item.recipient }}</p>
-                <p class="kirby-item-subtitle">ID: {{ item.id }}</p>
+                <p class="kirby-item-title">{{ invoice.model.recipient }}</p>
+                <p class="kirby-item-detail">ID: {{ invoice.model.id }}</p>
             </kirby-label>
-            <kirby-label slot="end">
-                <p class="kirby-item-title">{{ item.customer.name }}</p>
-                <p class="kirby-item-subtitle">Lines: {{ item.lines.length }}</p>
-            </kirby-label>
+            @switch (invoice.state.status) {
+                @case ('creating') {
+                    <kirby-spinner slot="end"></kirby-spinner>
+                }
+                @case ('created') {
+                    <kirby-badge slot="end" themeColor="success">
+                        <kirby-icon name="checkmark-selected"></kirby-icon>
+                    </kirby-badge>
+                }
+                @case ('error') {
+                    <kirby-badge slot="end" themeColor="danger">
+                        <kirby-icon name="warning"></kirby-icon>
+                    </kirby-badge>
+                }
+            }
         </kirby-item>
     </kirby-list>
 } @else {

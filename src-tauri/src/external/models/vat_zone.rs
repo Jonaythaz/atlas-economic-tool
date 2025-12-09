@@ -1,13 +1,7 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VatZone {
     #[serde(rename = "vatZoneNumber")]
-    number: i32,
-}
-
-impl Default for VatZone {
-    fn default() -> Self {
-        Self { number: 4 }
-    }
+    pub id: i32,
 }

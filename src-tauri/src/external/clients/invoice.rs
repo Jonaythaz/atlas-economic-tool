@@ -1,21 +1,12 @@
-use crate::external::{
-    clients::{helper::post, parse_error},
-    models::Invoice,
-    ClientError, Tokens,
-};
+use crate::external::{clients::{helper::ClientError, post}, models::Invoice};
 
-pub async fn create_invoice(invoice: &Invoice, tokens: &Tokens) -> Result<(), ClientError> {
-    let response = post(
-        "https://restapi.e-conomic.com/invoices/drafts",
-        invoice,
-        &tokens.secret,
-        &tokens.grant,
-    )
-    .await
-    .map_err(ClientError::from)?;
+pub async fn post_invoice(invoice: &Invoice, secret: &str, grant: &str) -> Result<(), ClientError> {
+    let response = post("https://restapi.e-conomic.com/invoices/drafts", invoice, secret, grant).await
+        .map_err(ClientError::from)?;
 
     if response.status().is_success() {
-        return Ok(());
+        Ok(())
+    } else {
+        Err(ClientError::async_from(response).await)
     }
-    Err(parse_error(response).await)
 }

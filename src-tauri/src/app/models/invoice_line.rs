@@ -1,35 +1,35 @@
-use crate::app::models::Product;
+use super::InvoiceProduct;
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct InvoiceLine {
-    pub product: Product,
+    pub product: InvoiceProduct,
     pub price: f64,
     pub quantity: f64,
 }
 
-impl From<crate::core::InvoiceLine> for InvoiceLine {
-    fn from(line: crate::core::InvoiceLine) -> Self {
+impl From<crate::core::models::InvoiceLine> for InvoiceLine {
+    fn from(line: crate::core::models::InvoiceLine) -> Self {
         Self {
-            product: Product {
-                id: line.item.sellers_item_identification.id,
-                name: line.item.name,
-            },
+            product: InvoiceProduct::from(line.item),
             price: line.price.price_amount,
             quantity: line.price.base_quantity,
         }
     }
 }
 
-impl From<crate::core::CreditNoteLine> for InvoiceLine {
-    fn from(line: crate::core::CreditNoteLine) -> Self {
+impl From<crate::core::models::CreditNoteLine> for InvoiceLine {
+    fn from(line: crate::core::models::CreditNoteLine) -> Self {
         Self {
-            product: Product {
-                id: line.item.sellers_item_identification.id,
-                name: line.item.name,
-            },
+            product: InvoiceProduct::from(line.item),
             price: line.price.price_amount,
             quantity: line.price.base_quantity,
         }
+    }
+}
+
+impl Into<crate::external::models::InvoiceLine> for InvoiceLine {
+    fn into(self) -> crate::external::models::InvoiceLine {
+        crate::external::models::InvoiceLine::new(self.product.id, self.quantity, self.price)
     }
 }

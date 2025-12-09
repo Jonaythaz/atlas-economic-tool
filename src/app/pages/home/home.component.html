@@ -13,16 +13,14 @@
     </kirby-header>
     <kirby-page-content>
         <kirby-loading-overlay [isLoading]="vm.isLoading()">
-            @let invoices = vm.invoices();
-            @let invoiceError = vm.invoiceError();
-            @if (invoices !== undefined) {
-                <atlas-invoice-list [invoices]="invoices" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
-            } @else if (invoiceError) {
+            @if (vm.hasInvoices()) {
+                <atlas-invoice-overview></atlas-invoice-overview>
+            } @else if (vm.error(); as error) {
                 <kirby-empty-state
                     iconName="warning"
                     themeColor="danger"
                     title="Loading Invoices Failed"
-                    [subtitle]="invoiceError"
+                    [subtitle]="error"
                 >
                     <button kirby-button (click)="vm.loadInvoices()">
                         <kirby-icon name="upload"></kirby-icon>

@@ -1,9 +1,10 @@
 mod app;
 mod core;
-mod db;
 mod external;
 
-use app::load_invoices;
+use app::commands::{
+    create_customer, create_invoice, create_product, fetch_customer, fetch_product, load_invoices,
+};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -15,7 +16,14 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![load_invoices])
+        .invoke_handler(tauri::generate_handler![
+            create_customer,
+            create_invoice,
+            create_product,
+            fetch_customer,
+            fetch_product,
+            load_invoices
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

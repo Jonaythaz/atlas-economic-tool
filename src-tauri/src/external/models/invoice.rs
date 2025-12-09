@@ -48,14 +48,29 @@ struct References {
     other: String,
 }
 
-impl Default for Layout {
-    fn default() -> Self {
-        Self { number: 21 }
-    }
-}
-
-impl Default for Customer {
-    fn default() -> Self {
-        Self { number: 1 }
+impl Invoice {
+    pub fn new(
+        date: String,
+        layout: i32,
+        customer: i32,
+        recipient: String,
+        payment_terms: i32,
+        vat_zone: i32,
+        damage_number: Option<String>,
+        lines: Vec<InvoiceLine>,
+    ) -> Self {
+        Self {
+            currency: "DKK".to_string(),
+            customer: Customer { number: customer },
+            date,
+            layout: Layout { number: layout },
+            payment_terms: PaymentTerms { id: payment_terms },
+            recipient: Recipient {
+                name: recipient,
+                vat_zone: VatZone { id: vat_zone },
+            },
+            references: damage_number.map(|dn| References { other: dn }),
+            lines,
+        }
     }
 }

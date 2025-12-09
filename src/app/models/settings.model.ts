@@ -1,6 +1,7 @@
+import { Defaults } from "./defaults.model";
+import { Tokens } from "./tokens.model";
+
 export type Settings = {
-    tokens: {
-        secret: string;
-        grant: string;
-    },
+    tokens: Tokens,
+    defaults: Defaults,
 };

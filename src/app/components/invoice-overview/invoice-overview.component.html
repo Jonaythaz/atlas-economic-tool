@@ -1,0 +1,25 @@
+<kirby-segmented-control
+    [items]="vm.segments()"
+    [value]="vm.selectedSegment()"
+    (segmentSelect)="vm.selectSegment($event)"
+></kirby-segmented-control>
+
+<br/>
+
+@switch (vm.selectedSegment().id) {
+    @case ('invoices') {
+        <atlas-invoice-list [invoices]="vm.invoices()" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
+    }
+    @case ('customers') {
+        <atlas-customer-list [customers]="vm.customers()" (customerSelected)="vm.editCustomer($event)"></atlas-customer-list>
+    }
+    @case ('products') {
+        <atlas-product-list [products]="vm.products()" (productSelected)="vm.editProduct($event)"></atlas-product-list>
+    }
+}
+
+<br/>
+
+<div style="display: flex; align-items: flex-end;">
+    <button kirby-button attentionLevel="1" (click)="vm.createInvoices()" [disabled]="vm.creating()">Create</button>
+</div>

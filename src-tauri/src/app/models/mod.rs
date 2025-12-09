@@ -1,9 +1,21 @@
 mod customer;
-mod invoice;
+mod invoice_customer;
 mod invoice_line;
+mod invoice;
+mod new_customer;
+mod new_invoice_line;
+mod new_invoice;
+mod new_product;
+mod invoice_product;
 mod product;
 
 pub use customer::Customer;
+pub use invoice_customer::InvoiceCustomer;
 pub use invoice::Invoice;
 pub use invoice_line::InvoiceLine;
+pub use new_customer::NewCustomer;
+pub use new_invoice_line::NewInvoiceLine;
+pub use new_invoice::NewInvoice;
+pub use new_product::NewProduct;
+pub use invoice_product::InvoiceProduct;
 pub use product::Product;

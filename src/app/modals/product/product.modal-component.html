@@ -1,0 +1,19 @@
+<kirby-page-title>Product {{ vm.id }}</kirby-page-title>
+
+<kirby-loading-overlay [isLoading]="vm.isLoading()">
+    <kirby-card [hasPadding]="true">
+        <kirby-card-header [title]="vm.errorMessage() ?? ''" [flagged]="vm.errorMessage() ? 'danger' : null"></kirby-card-header>
+        
+        @let regularFieldsUneditable = vm.uneditable;
+        <kirby-form-field label="Name" [message]="vm.nameField.message()">
+            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+        <kirby-form-field label="Group" [message]="vm.groupField.message()">
+            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+    </kirby-card>
+</kirby-loading-overlay>
+
+<kirby-modal-footer>
+    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Save</button>
+</kirby-modal-footer>

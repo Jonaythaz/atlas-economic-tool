@@ -1,7 +1,7 @@
-import { Product } from "./product.model";
+import { InvoiceProduct } from "./invoice-product.model";
 
 export type InvoiceLine = {
-    product: Product;
+    product: InvoiceProduct;
     price: number;
     quantity: number;
 };

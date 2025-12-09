@@ -1,8 +1,8 @@
 import { invoke } from "@tauri-apps/api/core";
-import { Invoice } from "../models";
+import { InvoiceModel } from "../models";
 
-export async function loadInvoices(): Promise<Invoice[]> {
-    return invoke<Invoice[]>("load_invoices").catch((errorMessage) => {
+export async function loadInvoices(): Promise<InvoiceModel[]> {
+    return invoke<InvoiceModel[]>("load_invoices").catch((errorMessage) => {
         throw new Error(errorMessage);
     });
 }

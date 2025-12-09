@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, Signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from "@angular/core";
 import { UpdaterService } from "../../services/updater";
 import { ButtonComponent, EmptyStateModule, Modal, ProgressCircleComponent } from "@kirbydesign/designsystem";
 import { DecimalPipe } from "@angular/common";
@@ -13,6 +13,7 @@ type ViewModel = {
 @Component({
     selector: 'app-updater-modal',
     templateUrl: './updater.modal-component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [ProgressCircleComponent, EmptyStateModule, ButtonComponent, DecimalPipe],
 })
 export class UpdaterModalComponent {

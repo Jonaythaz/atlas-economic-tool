@@ -1,23 +1,27 @@
-import { Component, inject } from "@angular/core";
-import { Invoice } from "../../models";
+import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { InvoiceModel } from "../../models";
 import { AccordionModule, CardModule, COMPONENT_PROPS, FormFieldModule, PageModule, ItemModule, SectionHeaderComponent } from "@kirbydesign/designsystem";
+import { Invoice } from "../../types";
 
 export type ComponentProps = {
     invoice: Invoice;
 };
 
 type ViewModel = {
-    invoice: Invoice;
+    errorMessage?: string;
+    invoice: InvoiceModel;
 };
 
 @Component({
     templateUrl: "./invoice.modal-component.html",
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [PageModule, CardModule, FormFieldModule, AccordionModule, ItemModule, SectionHeaderComponent]
 })
 export class InvoiceModalComponent {
     readonly #invoice = inject<ComponentProps>(COMPONENT_PROPS).invoice;
 
     readonly vm: ViewModel = {
-        invoice: this.#invoice,
+        errorMessage: this.#invoice.state.status === 'error' ? this.#invoice.state.errorMessage : undefined,
+        invoice: this.#invoice.model,
     };
 }

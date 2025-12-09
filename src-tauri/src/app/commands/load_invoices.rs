@@ -1,7 +1,9 @@
+use std::collections::HashSet;
+
 use crate::{app::models::Invoice, core};
 
 #[tauri::command]
-pub async fn load_invoices() -> Result<Vec<Invoice>, String> {
+pub async fn load_invoices() -> Result<HashSet<Invoice>, String> {
     let invoices = core::load_documents()
         .await
         .map_err(|e| e.to_string())?

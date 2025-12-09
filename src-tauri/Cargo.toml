@@ -18,17 +18,16 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-chrono = "0.4"
 futures = "0.3"
-rfd = "0.15"
-rusqlite = { version = "0.37", features = ["bundled"] }
-tauri = { version = "2.8", features = [] }
-tauri-plugin-opener = "2"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+rfd = "0.16.0"
+rusqlite = { version = "0.37.0", features = ["bundled"] }
+tauri = { version = "2.9.4", features = [] }
+tauri-plugin-opener = "2.5.2"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
 surf = "2.3"
-quick-xml = { version = "0.38.3", features = ["serialize"] }
-tauri-plugin-store = "2"
+quick-xml = { version = "0.38.4", features = ["serialize"] }
+tauri-plugin-store = "2.4.1"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-updater = "2"

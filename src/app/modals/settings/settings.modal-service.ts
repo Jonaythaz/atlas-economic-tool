@@ -9,6 +9,7 @@ export class SettingsModalService {
     async open(): Promise<void> {
         await this.#modalController.showModal({
             component: SettingsModalComponent,
+            size: 'large'
         });
     }
 }

@@ -15,4 +15,5 @@ const DEFAULT_SETTINGS: Settings = {
         secret: '',
         grant: '',
     },
+    defaults: {}
 };

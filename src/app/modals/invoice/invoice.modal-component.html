@@ -4,6 +4,8 @@
     <h3 heading>Invoice Details</h3>
 </kirby-section-header>
 <kirby-card [hasPadding]="true">
+    <kirby-card-header [title]="vm.errorMessage ?? ''" [flagged]="vm.errorMessage ? 'danger' : null"></kirby-card-header>
+
     <kirby-item>
         <p class="kirby-item-title">ID</p>
         <data slot="end">{{ vm.invoice.id }}</data>

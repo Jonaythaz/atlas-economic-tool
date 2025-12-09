@@ -1,0 +1,28 @@
+<kirby-page-title>Customer {{ vm.id }}</kirby-page-title>
+
+<kirby-loading-overlay [isLoading]="vm.isLoading()">
+    <kirby-card [hasPadding]="true">
+        <kirby-card-header [title]="vm.errorMessage() ?? ''" [flagged]="vm.errorMessage() ? 'danger' : null"></kirby-card-header>
+        
+        @let regularFieldsUneditable = vm.uneditable || vm.externalIdField() !== undefined;
+        <kirby-form-field label="Name" [message]="vm.nameField.message()">
+            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+        <kirby-form-field label="Group" [message]="vm.groupField.message()">
+            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+        <kirby-form-field label="Payment Terms" [message]="vm.paymentTermsField.message()">
+            <input kirby-input type="number" [(ngModel)]="vm.paymentTermsField" [hasError]="vm.paymentTermsField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+        <kirby-form-field label="Vat Zone" [message]="vm.vatZoneField.message()">
+            <input kirby-input type="number" [(ngModel)]="vm.vatZoneField" [hasError]="vm.vatZoneField.message() !== null" [disabled]="regularFieldsUneditable" />
+        </kirby-form-field>
+        <kirby-form-field label="External ID">
+            <input kirby-input type="number" [(ngModel)]="vm.externalIdField" [disabled]="vm.uneditable" />
+        </kirby-form-field>
+    </kirby-card>
+</kirby-loading-overlay>
+
+<kirby-modal-footer>
+    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Save</button>
+</kirby-modal-footer>

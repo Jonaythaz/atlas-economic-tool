@@ -1,6 +1,7 @@
-import { Component, input, output, Signal } from "@angular/core";
-import { Invoice } from "../../models";
-import { ItemModule, ListModule } from "@kirbydesign/designsystem";
+import { ChangeDetectionStrategy, Component, input, output, Signal } from "@angular/core";
+import { ItemModule, ListModule, SpinnerComponent, IconComponent } from "@kirbydesign/designsystem";
+import { Invoice } from "../../types";
+import { BadgeComponent } from "@kirbydesign/designsystem/badge";
 
 type ViewModel = {
     invoices: Signal<Invoice[]>;
@@ -10,7 +11,8 @@ type ViewModel = {
 @Component({
     selector: 'atlas-invoice-list',
     templateUrl: './invoice-list.component.html',
-    imports: [ListModule, ItemModule]
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [ListModule, ItemModule, SpinnerComponent, BadgeComponent, IconComponent]
 })
 export class InvoiceListComponent {
     readonly invoices = input.required<Invoice[]>();
