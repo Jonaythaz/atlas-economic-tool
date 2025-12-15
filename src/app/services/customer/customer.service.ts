@@ -1,17 +1,17 @@
 import { computed, inject, Injectable, linkedSignal, Signal } from "@angular/core";
 import { createCustomer } from "../../commands";
 import { CustomerModel, Defaults, NewCustomer, Tokens } from "../../models";
-import { InvoiceService } from "../invoice";
 import { Customer, CustomerState } from "../../types";
 import { CustomerModalService } from "../../modals/customer";
 import { fetchCustomer } from "../../commands/fetch-customer.command";
+import { DocumentService } from "../document";
 
 @Injectable({ providedIn: 'root' })
 export class CustomerService {
-    readonly #invoiceService = inject(InvoiceService);
+    readonly #documentService = inject(DocumentService);
     readonly #customerModalService = inject(CustomerModalService);
 
-    readonly #customerMap = computed(() => new Map(this.#invoiceService.invoices()?.map(i => [i.customer.id, i.customer])));
+    readonly #customerMap = computed(() => new Map(this.#documentService.documents()?.map(document => [document.customer.id, document.customer])));
     readonly #customers = linkedSignal<Customer[]>(() => Array.from(this.#customerMap().values()).map(customer => ({ ...customer, state: { status: 'pending' } })));
     readonly #hasErrors = computed(() => this.#customers().some(customer => customer.state.status === 'error'));
 

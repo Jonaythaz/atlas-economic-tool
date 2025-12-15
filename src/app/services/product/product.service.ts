@@ -1,27 +1,21 @@
 import { computed, inject, Injectable, linkedSignal, signal, Signal } from "@angular/core";
 import { createProduct, fetchProduct } from "../../commands";
 import { Defaults, NewProduct, Tokens } from "../../models";
-import { InvoiceService } from "../invoice";
 import { Product, ProductState } from "../../types";
 import { ProductModalService } from "../../modals/product";
+import { DocumentService } from "../document";
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-    readonly #invoiceService = inject(InvoiceService);
+    readonly #documentService = inject(DocumentService);
     readonly #productModalService = inject(ProductModalService);
 
-    readonly #creating = signal<boolean>(false);
-
-    readonly #productMap = computed(() => new Map(this.#invoiceService.invoices()?.flatMap(i => i.lines.map(l => [l.product.id, l.product]))));
+    readonly #productMap = computed(() => new Map(this.#documentService.documents()?.flatMap(document => document.lines.map(line => [line.product.id, line.product]))));
     readonly #products = linkedSignal<Product[]>(() => Array.from(this.#productMap().values()).map(product => ({ ...product, state: { status: 'pending' } })));
     readonly #hasErrors = computed(() => this.#products().some(product => product.state.status === 'error'));
 
     get products(): Signal<Product[]> {
         return this.#products;
-    }
-
-    get creating(): Signal<boolean> {
-        return this.#creating;
     }
 
     get hasErrors(): Signal<boolean> {
@@ -37,7 +31,6 @@ export class ProductService {
     }
 
     async createProducts(tokens: Tokens, defaults: Defaults): Promise<Product[]> {
-        this.#creating.set(true);
         this.#products.update((products) => products.map((product) => ({ ...product, state: product.state.status !== 'created' ? { status: 'creating' } : product.state })));
         const productCreations = this.#products()
             .filter((product) => product.state.status === 'creating')
@@ -48,7 +41,7 @@ export class ProductService {
                     return productResult;
                 })
             );
-        return Promise.all(productCreations).finally(() => this.#creating.set(false));
+        return Promise.all(productCreations);
     }
 
     async #fetchProduct(id: string, tokens: Tokens): Promise<Product> {

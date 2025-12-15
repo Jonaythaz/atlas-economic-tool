@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from "@angular/core";
 import { HeaderModule, PageModule, LoadingOverlayComponent, ButtonComponent, ActionGroupComponent, IconModule, EmptyStateModule } from "@kirbydesign/designsystem";
 import { SettingsModalService } from "../../modals/settings";
-import { InvoiceService } from "../../services/invoice";
-import { InvoiceOverviewComponent } from "../../components/invoice-overview";
+import { DocumentOverviewComponent } from "../../components/document-overview";
+import { DocumentService } from "../../services/document";
 
 type ViewModel = {
-    hasInvoices: Signal<boolean>;
+    hasDocuments: Signal<boolean>;
     error: Signal<string | undefined>;
     isLoading: Signal<boolean>;
     loadInvoices: () => void;
@@ -16,17 +16,17 @@ type ViewModel = {
     selector: "atlas-home",
     templateUrl: "./home.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [PageModule, HeaderModule, ActionGroupComponent, IconModule, LoadingOverlayComponent, ButtonComponent, EmptyStateModule, InvoiceOverviewComponent]
+    imports: [PageModule, HeaderModule, ActionGroupComponent, IconModule, LoadingOverlayComponent, ButtonComponent, EmptyStateModule, DocumentOverviewComponent]
 })
 export class HomeComponent {
-    readonly #invoiceService = inject(InvoiceService);
+    readonly #documentService = inject(DocumentService);
     readonly #settingsModalService = inject(SettingsModalService);
 
     readonly vm: ViewModel = {
-        hasInvoices: computed(() => this.#invoiceService.invoices().length > 0),
-        error: this.#invoiceService.error,
-        isLoading: this.#invoiceService.isLoading,
-        loadInvoices: this.#invoiceService.loadInvoices.bind(this.#invoiceService),
+        hasDocuments: computed(() => this.#documentService.documents().length > 0),
+        error: this.#documentService.error,
+        isLoading: this.#documentService.isLoading,
+        loadInvoices: this.#documentService.load.bind(this.#documentService),
         openSettings: this.#settingsModalService.open.bind(this.#settingsModalService),
     };
 }

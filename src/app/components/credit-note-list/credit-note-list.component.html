@@ -1,0 +1,30 @@
+@let creditNotes = vm.creditNotes();
+
+@if (creditNotes.length > 0) {
+    <kirby-section-header>
+        <p label>Credit Notes</p>
+    </kirby-section-header>
+    <kirby-list [items]="creditNotes" (itemSelect)="vm.selectCreditNote($event)">
+        <kirby-item *kirbyListItemTemplate="let creditNote" disclosure="arrow-more" [selectable]="true">
+            <kirby-label>
+                <p class="kirby-item-title">{{ creditNote.model.customer.name }}</p>
+                <p class="kirby-item-detail">ID: {{ creditNote.model.id }}</p>
+            </kirby-label>
+            @switch (creditNote.state.status) {
+                @case ('creating') {
+                    <kirby-spinner slot="end"></kirby-spinner>
+                }
+                @case ('created') {
+                    <kirby-badge slot="end" themeColor="success">
+                        <kirby-icon name="checkmark-selected"></kirby-icon>
+                    </kirby-badge>
+                }
+                @case ('error') {
+                    <kirby-badge slot="end" themeColor="danger">
+                        <kirby-icon name="warning"></kirby-icon>
+                    </kirby-badge>
+                }
+            }
+        </kirby-item>
+    </kirby-list>
+}

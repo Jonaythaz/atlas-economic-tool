@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal, Signal } from "@angular/core";
-import { Customer, Invoice, InvoiceSegment, InvoiceState, Product } from "../../types";
+import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from "@angular/core";
+import { Customer, Invoice, OverviewSegment, Product, CreditNote } from "../../types";
 import { InvoiceService } from "../../services/invoice";
 import { CustomerService } from "../../services/customer";
 import { ProductService } from "../../services/product";
@@ -7,54 +7,56 @@ import { InvoiceListComponent } from "../invoice-list";
 import { CustomerListComponent } from "../customer-list";
 import { ProductListComponent } from "../product-list";
 import { ButtonComponent, SegmentedControlComponent, SegmentItem, ThemeColor, ToastController } from "@kirbydesign/designsystem";
-import { INVOICE_SEGMENTS } from "../../constants";
+import { OVERVIEW_SEGMENTS } from "../../constants";
 import { fetchSettings } from "../../commands";
-import { InvoiceModel } from "../../models";
+import { CreditNoteService } from "../../services/credit-note";
+import { CreditNoteListComponent } from "../credit-note-list";
 
 type ViewModel = {
     segments: Signal<SegmentItem[]>;
     selectedSegment: Signal<SegmentItem>;
     invoices: Signal<Invoice[]>;
+    creditNotes: Signal<CreditNote[]>;
     customers: Signal<Customer[]>;
     products: Signal<Product[]>;
     creating: Signal<boolean>;
     selectSegment: (segment: SegmentItem) => void;
     viewInvoice: (invoice: Invoice) => Promise<void>;
+    viewCreditNote: (creditNote: CreditNote) => Promise<void>;
     editCustomer: (customer: Customer) => Promise<void>;
     editProduct: (product: Product) => Promise<void>;
     createInvoices: () => void;
 };
 
 @Component({
-    selector: "atlas-invoice-overview",
-    templateUrl: "./invoice-overview.component.html",
+    selector: "atlas-document-overview",
+    templateUrl: "./document-overview.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [InvoiceListComponent, CustomerListComponent, ProductListComponent, SegmentedControlComponent, ButtonComponent]
+    imports: [InvoiceListComponent, CustomerListComponent, ProductListComponent, SegmentedControlComponent, ButtonComponent, CreditNoteListComponent]
 })
-export class InvoiceOverviewComponent {
+export class DocumentOverviewComponent {
     readonly #invoiceService = inject(InvoiceService);
+    readonly #creditNoteService = inject(CreditNoteService);
     readonly #customerService = inject(CustomerService);
     readonly #productService = inject(ProductService);
     readonly #toastController = inject(ToastController);
 
     readonly creating = signal(false);
 
-    readonly #selectedSegment = signal(INVOICE_SEGMENTS[InvoiceSegment.Invoices]);
+    readonly #selectedSegment = signal(OVERVIEW_SEGMENTS[OverviewSegment.Documents]);
     readonly #segments = computed(() => {
         const customerItem = this.#customerService.hasErrors()
-            ? { ...INVOICE_SEGMENTS[InvoiceSegment.Customers], badge: ERRORS_BADGE } 
-            : INVOICE_SEGMENTS[InvoiceSegment.Customers];
+            ? { ...OVERVIEW_SEGMENTS[OverviewSegment.Customers], badge: ERRORS_BADGE } 
+            : OVERVIEW_SEGMENTS[OverviewSegment.Customers];
         const productItem = this.#productService.hasErrors()
-            ? { ...INVOICE_SEGMENTS[InvoiceSegment.Products], badge: ERRORS_BADGE } 
-            : INVOICE_SEGMENTS[InvoiceSegment.Products];
+            ? { ...OVERVIEW_SEGMENTS[OverviewSegment.Products], badge: ERRORS_BADGE } 
+            : OVERVIEW_SEGMENTS[OverviewSegment.Products];
         return [
-            INVOICE_SEGMENTS[InvoiceSegment.Invoices],
+            OVERVIEW_SEGMENTS[OverviewSegment.Documents],
             customerItem,
             productItem,
         ];
     });
-
-    readonly #invoices = linkedSignal<Invoice[]>(() => this.#invoiceService.invoices().map((model) => ({ model, state: { status: 'pending' } })));
 
     async #createInvoices(): Promise<void> {
         this.creating.set(true);
@@ -74,28 +76,22 @@ export class InvoiceOverviewComponent {
             }
             return map;
         }, new Map<string, number>());
-        this.#invoices.update((invoices) => invoices.map((invoice) => invoice.state.status !== 'created' ? { ...invoice, state: { status: 'creating' } } : invoice));
-        const invoiceResults = this.#invoices()
-            .filter((invoice) => invoice.state.status === 'creating')
-            .map((invoice) => this.#invoiceService.createInvoice(invoice.model, customerMap, tokens, defaults)
-                .then(
-                    () => ({ model: invoice.model, state: { status: 'created' } satisfies InvoiceState }),
-                    (error) => ({ model: invoice.model, state: { status: 'error', errorMessage: error.message } satisfies InvoiceState })
-                )
-                .then((invoiceResult) => this.#invoices.update((invoices) => invoices.map((i) => i.model.id === invoiceResult.model.id ? invoiceResult : i)))
-            );
-        await Promise.all(invoiceResults).finally(() => this.creating.set(false));
+        const invoicesPromise = this.#invoiceService.createInvoices(customerMap, tokens, defaults);
+        const creditNotesPromise = this.#creditNoteService.createCreditNotes(customerMap, tokens, defaults);
+        await Promise.all([invoicesPromise, creditNotesPromise]).finally(() => this.creating.set(false));
     }
 
     readonly vm: ViewModel = {
         segments: this.#segments,
         selectedSegment: this.#selectedSegment,
-        invoices: this.#invoices,
+        invoices: this.#invoiceService.invoices,
+        creditNotes: this.#creditNoteService.creditNotes,
         customers: this.#customerService.customers,
         products: this.#productService.products,
         creating: this.creating,
         selectSegment: (segment: SegmentItem) => this.#selectedSegment.set(segment),
         viewInvoice: this.#invoiceService.viewInvoice.bind(this.#invoiceService),
+        viewCreditNote: this.#creditNoteService.viewCreditNote.bind(this.#creditNoteService),
         editCustomer: this.#customerService.editCustomer.bind(this.#customerService),
         editProduct: this.#productService.editProduct.bind(this.#productService),
         createInvoices: this.#createInvoices.bind(this),

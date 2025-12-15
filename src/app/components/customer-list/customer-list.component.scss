@@ -1,0 +1,21 @@
+.error-warning {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.error-tooltip {
+    visibility: hidden;
+    width: 130px;
+    background-color: black;
+    color: #ffffff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.error-warning:hover .error-tooltip {
+    visibility: visible;
+}

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from "@angular/core";
 import { Product } from "../../types/product.type";
-import { CardModule, COMPONENT_PROPS, FormFieldModule, PageModule, ModalFooterComponent, Modal, InputComponent, ButtonComponent, LoadingOverlayComponent } from "@kirbydesign/designsystem";
+import { CardModule, COMPONENT_PROPS, FormFieldModule, PageModule, ModalFooterComponent, Modal, InputComponent, ButtonComponent, LoadingOverlayComponent, FlagComponent } from "@kirbydesign/designsystem";
 import { FormField, formField } from "../../utils/form-field";
 import { FormsModule } from "@angular/forms";
 import { DISMISS_ALERT_CONFIG } from "../../constants";
@@ -25,7 +25,7 @@ type ViewModel = {
 @Component({
     templateUrl: "./product.modal-component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [PageModule, CardModule, FormFieldModule, InputComponent, ModalFooterComponent, FormsModule, ButtonComponent, LoadingOverlayComponent]
+    imports: [PageModule, CardModule, FormFieldModule, InputComponent, ModalFooterComponent, FormsModule, ButtonComponent, LoadingOverlayComponent, FlagComponent]
 })
 export class ProductModalComponent {
     readonly #modal = inject(Modal);

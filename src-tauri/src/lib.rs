@@ -3,7 +3,7 @@ mod core;
 mod external;
 
 use app::commands::{
-    create_customer, create_invoice, create_product, fetch_customer, fetch_product, load_invoices,
+    create_customer, create_invoice, create_product, fetch_customer, fetch_product, load_documents,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -22,7 +22,7 @@ pub fn run() {
             create_product,
             fetch_customer,
             fetch_product,
-            load_invoices
+            load_documents
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

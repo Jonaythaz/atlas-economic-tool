@@ -1,9 +1,11 @@
 <kirby-page-title>Product {{ vm.id }}</kirby-page-title>
 
+@if (vm.errorMessage(); as errorMessage) {
+    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+}
+
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     <kirby-card [hasPadding]="true">
-        <kirby-card-header [title]="vm.errorMessage() ?? ''" [flagged]="vm.errorMessage() ? 'danger' : null"></kirby-card-header>
-        
         @let regularFieldsUneditable = vm.uneditable;
         <kirby-form-field label="Name" [message]="vm.nameField.message()">
             <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="regularFieldsUneditable" />

@@ -3,36 +3,30 @@ use std::hash::{Hash, Hasher};
 
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct InvoiceCustomer {
+pub struct DocumentCustomer {
     pub id: String,
     pub name: String,
-    pub group: Option<i32>,
-    pub vat_zone: Option<i32>,
-    pub payment_terms: Option<i32>,
 }
 
-impl From<crate::core::models::AccountingParty> for InvoiceCustomer {
+impl From<crate::core::models::AccountingParty> for DocumentCustomer {
     fn from(party: crate::core::models::AccountingParty) -> Self {
         Self {
             id: party.party.endpoint_id,
             name: party.party.party_name.name,
-            group: None,
-            vat_zone: None,
-            payment_terms: None,
         }
     }
 }
 
-impl Hash for InvoiceCustomer {
+impl Hash for DocumentCustomer {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.id.hash(state);
     }
 }
 
-impl PartialEq for InvoiceCustomer {
+impl PartialEq for DocumentCustomer {
     fn eq(&self, other: &Self) -> bool {
         self.id == other.id
     }
 }
 
-impl Eq for InvoiceCustomer {}
+impl Eq for DocumentCustomer {}

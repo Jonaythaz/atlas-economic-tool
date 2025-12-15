@@ -7,6 +7,6 @@ export type NewInvoice = {
     recipient: string;
     paymentTerms: number;
     vatZone: number;
-    damageNumber?: string;
+    reference?: string;
     lines: NewInvoiceLine[];
 }

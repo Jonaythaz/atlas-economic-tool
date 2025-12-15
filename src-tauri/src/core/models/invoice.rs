@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use super::common::{AccountingParty, Delivery, Item, OrderReference, Price};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Invoice {
     #[serde(rename = "ID")]
     pub id: String,
@@ -23,7 +23,7 @@ pub struct Invoice {
     pub invoice_lines: Vec<InvoiceLine>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct InvoiceLine {
     #[serde(rename = "Item")]
     pub item: Item,

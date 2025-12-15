@@ -13,8 +13,8 @@
     </kirby-header>
     <kirby-page-content>
         <kirby-loading-overlay [isLoading]="vm.isLoading()">
-            @if (vm.hasInvoices()) {
-                <atlas-invoice-overview></atlas-invoice-overview>
+            @if (vm.hasDocuments()) {
+                <atlas-document-overview></atlas-document-overview>
             } @else if (vm.error(); as error) {
                 <kirby-empty-state
                     iconName="warning"

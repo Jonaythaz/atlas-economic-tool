@@ -1,0 +1,58 @@
+<kirby-page-title>Credit Note {{ vm.creditNote.id }}</kirby-page-title>
+
+@if (vm.errorMessage; as errorMessage) {
+    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+    <br/>
+}
+
+<kirby-section-header>
+    <h3 heading>Credit Note Details</h3>
+</kirby-section-header>
+<kirby-card [hasPadding]="true">
+    <kirby-item>
+        <p class="kirby-item-title">ID</p>
+        <data slot="end">{{ vm.creditNote.id }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Invoice ID</p>
+        <data slot="end">{{ vm.creditNote.invoiceId }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Date</p>
+        <data slot="end">{{ vm.creditNote.date }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Customer</p>
+        <data slot="end">{{ vm.creditNote.customer.name }}</data>
+    </kirby-item>
+</kirby-card>
+
+<br/>
+
+<kirby-section-header>
+    <h3 heading>Credit Note Lines</h3>
+</kirby-section-header>
+<kirby-card>
+    <kirby-accordion>
+        @for (line of vm.creditNote.lines; track $index) {
+            <kirby-accordion-item [title]="($index + 1) + '. ' + line.product.name">
+                <kirby-item>
+                    <p class="kirby-item-title">Product ID</p>
+                    <data slot="end">{{ line.product.id }}</data>
+                </kirby-item>
+                <kirby-item>
+                    <p class="kirby-item-title">Product Name</p>
+                    <data slot="end">{{ line.product.name }}</data>
+                </kirby-item>
+                <kirby-item>
+                    <p class="kirby-item-title">Price</p>
+                    <data slot="end">{{ line.price }}DKK</data>
+                </kirby-item>
+                <kirby-item>
+                    <p class="kirby-item-title">Quantity</p>
+                    <data slot="end">{{ line.quantity }}</data>
+                </kirby-item>
+            </kirby-accordion-item>
+        }
+    </kirby-accordion>
+</kirby-card>

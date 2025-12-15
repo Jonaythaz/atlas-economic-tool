@@ -1,6 +1,9 @@
 @let invoices = vm.invoices();
 
 @if (invoices.length > 0) {
+    <kirby-section-header>
+        <p label>Invoices</p>
+    </kirby-section-header>
     <kirby-list [items]="invoices" (itemSelect)="vm.selectInvoice($event)">
         <kirby-item *kirbyListItemTemplate="let invoice" disclosure="arrow-more" [selectable]="true">
             <kirby-label>
@@ -24,6 +27,4 @@
             }
         </kirby-item>
     </kirby-list>
-} @else {
-    <p>No invoices found</p>
 }

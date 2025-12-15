@@ -1,41 +1,43 @@
-import { computed, inject, Injectable, resource, Signal } from "@angular/core";
-import { createInvoice, loadInvoices } from "../../commands";
+import { inject, Injectable, linkedSignal, Signal } from "@angular/core";
+import { createInvoice } from "../../commands";
 import { Defaults, InvoiceModel, NewInvoice, Tokens } from "../../models";
 import { InvoiceModalService } from "../../modals/invoice";
 import { Invoice } from "../../types";
+import { DocumentService } from "../document";
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceService {
+    readonly #documentService = inject(DocumentService);
     readonly #invoiceModalService = inject(InvoiceModalService);
 
-    readonly #invoiceResource = resource({
-        loader: ({ previous }) => previous.status === 'idle' ? Promise.resolve(undefined) : loadInvoices()
-    });
+    readonly #invoices = linkedSignal<Invoice[]>(() => this.#documentService.documents()
+        .filter((document) => document.type === 'invoice')
+        .map((model) => ({ model, state: { status: 'pending' } }))
+    );
 
-    readonly #invoices = computed(() => this.#invoiceResource.hasValue() ? this.#invoiceResource.value() : []);
-    readonly #error = computed(() => this.#invoiceResource.error()?.message);
-
-    get invoices(): Signal<InvoiceModel[]> {
+    get invoices(): Signal<Invoice[]> {
         return this.#invoices;
-    }
-
-    get error(): Signal<string | undefined> {
-        return this.#error;
-    }
-
-    get isLoading(): Signal<boolean> {
-        return this.#invoiceResource.isLoading;
-    }
-
-    loadInvoices(): void {
-        this.#invoiceResource.reload();
     }
 
     async viewInvoice(invoice: Invoice): Promise<void> {
         await this.#invoiceModalService.openInvoiceModal(invoice);
     }
 
-    async createInvoice(invoice: InvoiceModel, customerMap: Map<string, number>, tokens: Tokens, defaults: Defaults): Promise<void> {
+    async createInvoices(customerMap: Map<string, number>, tokens: Tokens, defaults: Defaults): Promise<void> {
+        this.#invoices.update((invoices) => invoices.map((invoice) => invoice.state.status !== 'created' ? { ...invoice, state: { status: 'creating' } } : invoice));
+        const invoiceResults = this.#invoices()
+            .filter((invoice) => invoice.state.status === 'creating')
+            .map((invoice) => this.#createInvoice(invoice.model, customerMap, tokens, defaults)
+                .then<Invoice, Invoice>(
+                    () => ({ model: invoice.model, state: { status: 'created' } }),
+                    (error) => ({ model: invoice.model, state: { status: 'error', errorMessage: error.message } })
+                )
+                .then((invoiceResult) => this.#invoices.update((invoices) => invoices.map((i) => i.model.id === invoiceResult.model.id ? invoiceResult : i)))
+            );
+        await Promise.all(invoiceResults);
+    }
+
+    async #createInvoice(invoice: InvoiceModel, customerMap: Map<string, number>, tokens: Tokens, defaults: Defaults): Promise<void> {
         const { layout, paymentTerms, vatZone } = defaults;
         if (layout === undefined || paymentTerms === undefined || vatZone === undefined) {
             throw new Error('Missing default values for creating invoice.');
@@ -57,7 +59,7 @@ function toNewInvoice(invoice: InvoiceModel, customer: number, layout: number, p
         recipient: invoice.recipient,
         paymentTerms: paymentTerms,
         vatZone: vatZone,
-        damageNumber: invoice.damageNumber,
+        reference: invoice.damageNumber,
         lines: invoice.lines.map((line) => ({
             product: line.product.id,
             price: line.price,

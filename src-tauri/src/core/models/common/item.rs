@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Item {
     #[serde(rename = "Name")]
     pub name: String,
@@ -9,7 +9,7 @@ pub struct Item {
     pub sellers_item_identification: SellersItemIdentification,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct SellersItemIdentification {
     #[serde(rename = "ID")]
     pub id: String,

@@ -1,2 +1,2 @@
 export * from './dismiss-alert-config.constant';
-export * from './invoice-segments.constant';
+export * from './overview-segments.constant';

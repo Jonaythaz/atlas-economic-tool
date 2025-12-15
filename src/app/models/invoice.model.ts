@@ -1,11 +1,12 @@
-import { InvoiceCustomer } from "./invoice-customer.model";
-import { InvoiceLine } from "./invoice-line.model";
+import { DocumentCustomer } from "./document-customer.model";
+import { DocumentLine } from "./document-line.model";
 
 export type InvoiceModel = {
+    type: 'invoice';
     id: string;
     date: string;
     damageNumber?: string;
-    customer: InvoiceCustomer;
+    customer: DocumentCustomer;
     recipient: string;
-    lines: InvoiceLine[];
+    lines: DocumentLine[];
 };

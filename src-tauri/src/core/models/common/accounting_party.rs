@@ -1,12 +1,12 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct AccountingParty {
     #[serde(rename = "Party")]
     pub party: Party,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Party {
     #[serde(rename = "EndpointID")]
     pub endpoint_id: String,
@@ -15,7 +15,7 @@ pub struct Party {
     pub party_name: PartyName,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct PartyName {
     #[serde(rename = "Name")]
     pub name: String,

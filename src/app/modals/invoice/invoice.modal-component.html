@@ -1,5 +1,9 @@
 <kirby-page-title>Invoice {{ vm.invoice.id }}</kirby-page-title>
 
+@if (vm.errorMessage; as errorMessage) {
+    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+}
+
 <kirby-section-header>
     <h3 heading>Invoice Details</h3>
 </kirby-section-header>

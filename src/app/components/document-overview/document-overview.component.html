@@ -7,8 +7,10 @@
 <br/>
 
 @switch (vm.selectedSegment().id) {
-    @case ('invoices') {
+    @case ('documents') {
         <atlas-invoice-list [invoices]="vm.invoices()" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
+        <br/>
+        <atlas-credit-note-list [creditNotes]="vm.creditNotes()" (creditNoteSelected)="vm.viewCreditNote($event)"></atlas-credit-note-list>
     }
     @case ('customers') {
         <atlas-customer-list [customers]="vm.customers()" (customerSelected)="vm.editCustomer($event)"></atlas-customer-list>
@@ -20,6 +22,6 @@
 
 <br/>
 
-<div style="display: flex; align-items: flex-end;">
+<div style="display: flex; flex-direction: row; justify-content: flex-end;">
     <button kirby-button attentionLevel="1" (click)="vm.createInvoices()" [disabled]="vm.creating()">Create</button>
 </div>
