@@ -56,7 +56,7 @@ impl Invoice {
         recipient: String,
         payment_terms: i32,
         vat_zone: i32,
-        reference: Option<String>,
+        damage_number: Option<String>,
         lines: Vec<InvoiceLine>,
     ) -> Self {
         Self {
@@ -69,7 +69,7 @@ impl Invoice {
                 name: recipient,
                 vat_zone: VatZone { id: vat_zone },
             },
-            references: reference.map(|dn| References { other: dn }),
+            references: damage_number.map(|dn| References { other: dn }),
             lines,
         }
     }

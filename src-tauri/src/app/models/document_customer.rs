@@ -1,5 +1,4 @@
 use serde::Serialize;
-use std::hash::{Hash, Hasher};
 
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -16,17 +15,3 @@ impl From<crate::core::models::AccountingParty> for DocumentCustomer {
         }
     }
 }
-
-impl Hash for DocumentCustomer {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
-    }
-}
-
-impl PartialEq for DocumentCustomer {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
-}
-
-impl Eq for DocumentCustomer {}

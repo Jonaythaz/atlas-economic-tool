@@ -1,4 +1,4 @@
-use super::common::{AccountingParty, BillingReference, Item, Price};
+use super::common::{AccountingParty, BillingReference, OrderReference, Item, Price};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -8,6 +8,9 @@ pub struct CreditNote {
 
     #[serde(rename = "IssueDate")]
     pub issue_date: String,
+
+    #[serde(rename = "OrderReference")]
+    pub order_reference: OrderReference,
 
     #[serde(rename = "BillingReference")]
     pub billing_reference: BillingReference,

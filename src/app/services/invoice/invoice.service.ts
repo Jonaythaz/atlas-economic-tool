@@ -59,7 +59,7 @@ function toNewInvoice(invoice: InvoiceModel, customer: number, layout: number, p
         recipient: invoice.recipient,
         paymentTerms: paymentTerms,
         vatZone: vatZone,
-        reference: invoice.damageNumber,
+        damageNumber: invoice.damageNumber,
         lines: invoice.lines.map((line) => ({
             product: line.product.id,
             price: line.price,

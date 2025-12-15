@@ -11,7 +11,7 @@ pub struct NewInvoice {
     pub recipient: String,
     pub payment_terms: i32,
     pub vat_zone: i32,
-    pub reference: Option<String>,
+    pub damage_number: Option<String>,
     pub lines: Vec<NewInvoiceLine>,
 }
 
@@ -24,7 +24,7 @@ impl Into<crate::external::models::Invoice> for NewInvoice {
             self.recipient,
             self.payment_terms,
             self.vat_zone,
-            self.reference,
+            self.damage_number,
             self.lines.into_iter().map(|line| line.into()).collect(),
         )
     }

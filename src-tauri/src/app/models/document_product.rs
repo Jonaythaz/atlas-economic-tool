@@ -1,5 +1,4 @@
 use serde::Serialize;
-use std::hash::{Hash, Hasher};
 
 #[derive(Clone, Serialize)]
 pub struct DocumentProduct {
@@ -15,17 +14,3 @@ impl From<crate::core::models::Item> for DocumentProduct {
         }
     }
 }
-
-impl Hash for DocumentProduct {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.id.hash(state);
-    }
-}
-
-impl PartialEq for DocumentProduct {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    }
-}
-
-impl Eq for DocumentProduct {}
