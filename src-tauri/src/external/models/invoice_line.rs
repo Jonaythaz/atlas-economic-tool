@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize)]
 pub struct InvoiceLine {
+    #[serde(rename = "description")]
+    description: String,
     #[serde(rename = "product")]
     product: Product,
     #[serde(rename = "quantity")]
@@ -23,8 +25,9 @@ struct Product {
 }
 
 impl InvoiceLine {
-    pub fn new(product: String, quantity: f64, price: f64) -> Self {
+    pub fn new(description: String, product: String, quantity: f64, price: f64) -> Self {
         Self {
+            description,
             product: Product { id: product },
             quantity: quantity,
             unit_net_price: price,

@@ -30,6 +30,6 @@ impl From<crate::core::models::CreditNoteLine> for DocumentLine {
 
 impl Into<crate::external::models::InvoiceLine> for DocumentLine {
     fn into(self) -> crate::external::models::InvoiceLine {
-        crate::external::models::InvoiceLine::new(self.product.id, self.quantity, self.price)
+        crate::external::models::InvoiceLine::new(self.product.name, self.product.id, self.quantity, self.price)
     }
 }

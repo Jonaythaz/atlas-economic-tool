@@ -16,7 +16,7 @@ pub struct Invoice {
     payment_terms: PaymentTerms,
     #[serde(rename = "recipient")]
     recipient: Recipient,
-    #[serde(rename = "references")]
+    #[serde(rename = "references", skip_serializing_if = "Option::is_none")]
     references: Option<References>,
     #[serde(rename = "lines")]
     lines: Vec<InvoiceLine>,
