@@ -6,7 +6,7 @@ import { ProductService } from "../../services/product";
 import { InvoiceListComponent } from "../invoice-list";
 import { CustomerListComponent } from "../customer-list";
 import { ProductListComponent } from "../product-list";
-import { ButtonComponent, SegmentedControlComponent, SegmentItem, ThemeColor, ToastController } from "@kirbydesign/designsystem";
+import { ButtonComponent, SegmentedControlComponent, SegmentItem, ThemeColor, ToastController, IconComponent } from "@kirbydesign/designsystem";
 import { OVERVIEW_SEGMENTS } from "../../constants";
 import { fetchSettings } from "../../commands";
 import { CreditNoteService } from "../../services/credit-note";
@@ -32,7 +32,7 @@ type ViewModel = {
     selector: "atlas-document-overview",
     templateUrl: "./document-overview.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [InvoiceListComponent, CustomerListComponent, ProductListComponent, SegmentedControlComponent, ButtonComponent, CreditNoteListComponent]
+    imports: [InvoiceListComponent, CustomerListComponent, ProductListComponent, SegmentedControlComponent, ButtonComponent, CreditNoteListComponent, IconComponent]
 })
 export class DocumentOverviewComponent {
     readonly #invoiceService = inject(InvoiceService);

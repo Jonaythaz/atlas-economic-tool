@@ -13,7 +13,7 @@ pub enum Document {
         date: String,
         customer: DocumentCustomer,
         recipient: String,
-        lines: Vec<DocumentLine>, 
+        lines: Vec<DocumentLine>,
     },
     #[serde(rename_all = "camelCase")]
     CreditNote {
@@ -23,7 +23,7 @@ pub enum Document {
         date: String,
         customer: DocumentCustomer,
         lines: Vec<DocumentLine>,
-    }
+    },
 }
 
 impl From<crate::core::models::Document> for Document {
@@ -39,7 +39,11 @@ impl From<crate::core::models::Invoice> for Document {
     fn from(invoice: crate::core::models::Invoice) -> Self {
         Self::Invoice {
             id: invoice.id,
-            damage_number: invoice.order_reference.id.ne("n/a").then_some(invoice.order_reference.id),
+            damage_number: invoice
+                .order_reference
+                .id
+                .ne("n/a")
+                .then_some(invoice.order_reference.id),
             date: invoice.issue_date,
             customer: DocumentCustomer::from(invoice.accounting_customer_party),
             recipient: invoice.delivery.delivery_location.address.mark_attention,
@@ -57,7 +61,11 @@ impl From<crate::core::models::CreditNote> for Document {
         Self::CreditNote {
             id: credit_note.id,
             invoice_id: credit_note.billing_reference.invoice_reference.id,
-            damage_number: credit_note.order_reference.id.ne("n/a").then_some(credit_note.order_reference.id),
+            damage_number: credit_note
+                .order_reference
+                .id
+                .ne("n/a")
+                .then_some(credit_note.order_reference.id),
             date: credit_note.issue_date,
             customer: DocumentCustomer::from(credit_note.accounting_customer_party),
             lines: credit_note
@@ -81,9 +89,13 @@ impl Hash for Document {
 impl PartialEq for Document {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
-            (Self::Invoice { id: self_id, .. }, Self::Invoice { id: other_id, .. }) => self_id == other_id,
-            (Self::CreditNote { id: self_id, .. }, Self::CreditNote { id: other_id, .. }) => self_id == other_id,
-            _ => false
+            (Self::Invoice { id: self_id, .. }, Self::Invoice { id: other_id, .. }) => {
+                self_id == other_id
+            }
+            (Self::CreditNote { id: self_id, .. }, Self::CreditNote { id: other_id, .. }) => {
+                self_id == other_id
+            }
+            _ => false,
         }
     }
 }

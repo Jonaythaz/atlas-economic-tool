@@ -47,7 +47,7 @@ export class InvoiceService {
             return Promise.reject(new Error(`Missing external ID for customer with ID ${invoice.customer.id}`));
         }
         const newInvoice = toNewInvoice(invoice, customerId, layout, paymentTerms, vatZone);
-        await createInvoice(newInvoice, tokens.secret, tokens.grant);
+        await createInvoice(newInvoice, tokens);
     }
 }
 
@@ -62,6 +62,7 @@ function toNewInvoice(invoice: InvoiceModel, customer: number, layout: number, p
         damageNumber: invoice.damageNumber,
         lines: invoice.lines.map((line) => ({
             product: line.product.id,
+            description: line.product.name,
             price: line.price,
             quantity: line.quantity,
         }))

@@ -1,9 +1,10 @@
 import { invoke } from "@tauri-apps/api/core";
-import { NewProduct } from "../models";
+import { NewProduct, Tokens } from "../models";
+import { parseError } from "../functions/parse-error";
 
 
-export async function createProduct(product: NewProduct, secret: string, grant: string): Promise<void> {
-    await invoke("create_product", { product, secret, grant }).catch((errorMessage) => {
-        throw new Error(errorMessage);
+export async function createProduct(product: NewProduct, tokens: Tokens): Promise<void> {
+    await invoke("create_product", { product, tokens }).catch((error) => {
+        throw parseError(error);
     });
 }

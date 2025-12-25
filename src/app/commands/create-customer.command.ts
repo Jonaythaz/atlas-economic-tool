@@ -1,9 +1,10 @@
 import { invoke } from "@tauri-apps/api/core";
-import { NewCustomer } from "../models";
+import { NewCustomer, Tokens } from "../models";
+import { parseError } from "../functions/parse-error";
 
 
-export async function createCustomer(customer: NewCustomer, secret: string, grant: string): Promise<number> {
-    return invoke<number>("create_customer", { customer, secret, grant }).catch((errorMessage) => {
-        throw new Error(errorMessage);
+export async function createCustomer(localId: string, newCustomer: NewCustomer, tokens: Tokens): Promise<number> {
+    return invoke<number>("create_customer", { request: { localId, newCustomer, tokens } }).catch((error) => {
+        throw parseError(error);
     });
 }

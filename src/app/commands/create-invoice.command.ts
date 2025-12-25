@@ -1,9 +1,10 @@
 import { invoke } from "@tauri-apps/api/core";
-import { NewInvoice } from "../models";
+import { NewInvoice, Tokens } from "../models";
+import { parseError } from "../functions/parse-error";
 
 
-export async function createInvoice(invoice: NewInvoice, secret: string, grant: string): Promise<void> {
-    await invoke("create_invoice", { invoice, secret, grant }).catch((errorMessage) => {
-        throw new Error(errorMessage);
+export async function createInvoice(invoice: NewInvoice, tokens: Tokens): Promise<void> {
+    await invoke("create_invoice", { invoice, tokens }).catch((error) => {
+        throw parseError(error);
     });
 }

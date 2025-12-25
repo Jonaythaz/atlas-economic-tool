@@ -1,10 +1,15 @@
 mod app;
 mod core;
 mod external;
+mod persistence;
 
 use app::commands::{
-    create_customer, create_invoice, create_product, fetch_customer, fetch_product, load_documents,
+    create_customer, create_invoice, create_product, fetch_customer, fetch_product, find_customer,
+    load_documents, update_customer,
 };
+use tauri::Manager;
+
+use crate::{app::AppState, persistence::open_connection};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -22,8 +27,16 @@ pub fn run() {
             create_product,
             fetch_customer,
             fetch_product,
-            load_documents
+            find_customer,
+            load_documents,
+            update_customer,
         ])
+        .setup(|app| {
+            let data_directory = app.path().app_data_dir()?;
+            let connection = open_connection(&data_directory).map_err(|error| error.to_string())?;
+            app.manage(AppState::new(connection));
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
