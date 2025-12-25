@@ -1,6 +1,17 @@
 use serde::Deserialize;
 
-use crate::external::models::{CustomerGroup, PaymentTerms, VatZone};
+use crate::{
+    app::models::tokens::Tokens,
+    external::models::{CustomerGroup, PaymentTerms, VatZone},
+};
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateCustomerRequest {
+    pub local_id: String,
+    pub new_customer: NewCustomer,
+    pub tokens: Tokens,
+}
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

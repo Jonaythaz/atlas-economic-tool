@@ -1,4 +1,4 @@
-use super::common::{AccountingParty, BillingReference, OrderReference, Item, Price};
+use super::common::{AccountingParty, BillingReference, Item, OrderReference, Price};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]

@@ -47,7 +47,7 @@ export class CreditNoteService {
             return Promise.reject(new Error(`Missing external ID for customer with ID ${creditNote.customer.id}`));
         }
         const newCreditNote = toNewInvoice(creditNote, customerId, layout, paymentTerms, vatZone);
-        await createInvoice(newCreditNote, tokens.secret, tokens.grant);
+        await createInvoice(newCreditNote, tokens);
     }
 }
 
@@ -62,6 +62,7 @@ function toNewInvoice(creditNote: CreditNoteModel, customer: number, layout: num
         damageNumber: creditNote.damageNumber,
         lines: creditNote.lines.map((line) => ({
             product: line.product.id,
+            description: line.product.name,
             price: line.price,
             quantity: -Math.abs(line.quantity),
         }))

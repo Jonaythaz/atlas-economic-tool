@@ -11,6 +11,11 @@ pub struct NewInvoiceLine {
 
 impl Into<crate::external::models::InvoiceLine> for NewInvoiceLine {
     fn into(self) -> crate::external::models::InvoiceLine {
-        crate::external::models::InvoiceLine::new(self.description, self.product, self.quantity, self.price)
+        crate::external::models::InvoiceLine::new(
+            self.description,
+            self.product,
+            self.quantity,
+            self.price,
+        )
     }
 }

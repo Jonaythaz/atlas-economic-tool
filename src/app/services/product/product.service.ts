@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, linkedSignal, signal, Signal } from "@angular/core";
+import { computed, inject, Injectable, linkedSignal, Signal } from "@angular/core";
 import { createProduct, fetchProduct } from "../../commands";
 import { Defaults, NewProduct, Tokens } from "../../models";
 import { Product, ProductState } from "../../types";
@@ -35,7 +35,8 @@ export class ProductService {
         const productCreations = this.#products()
             .filter((product) => product.state.status === 'creating')
             .map((product) => this.#fetchProduct(product.id, tokens)
-                .catch(() => this.#createProduct(product, tokens, defaults))
+                .then(async (fetchedProduct) => fetchedProduct ?? await this.#createProduct(product, tokens, defaults))
+                .catch((error: Error) => ({ ...product, state: { status: 'error', errorMessage: error.message }} satisfies Product))
                 .then((productResult) => {
                     this.#products.update((products) => products.map((p) => p.id === productResult.id ? productResult : p));
                     return productResult;
@@ -44,21 +45,18 @@ export class ProductService {
         return Promise.all(productCreations);
     }
 
-    async #fetchProduct(id: string, tokens: Tokens): Promise<Product> {
-        return fetchProduct(id, tokens.secret, tokens.grant).then((fetchedProduct) => ({
+    async #fetchProduct(id: string, tokens: Tokens): Promise<Product | null> {
+        return fetchProduct(id, tokens).then((fetchedProduct) => fetchedProduct ? ({
             id,
             name: fetchedProduct.name,
             group: fetchedProduct.group,
             state: { status: 'created' },
-        }));
+        }) : null);
     }
 
     async #createProduct(product: Product, tokens: Tokens, defaults: Defaults): Promise<Product> {
         const newProduct = toNewProduct(product, defaults);
-        return createProduct(newProduct, tokens.secret, tokens.grant).then(
-            () => fromNewProduct(newProduct, { status: 'created' }),
-            (error) => fromNewProduct(newProduct, { status: 'error', errorMessage: error.message })
-        );
+        return createProduct(newProduct, tokens).then(() => fromNewProduct(newProduct, { status: 'created' }));
     }
 }
 

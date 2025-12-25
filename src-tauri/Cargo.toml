@@ -28,6 +28,7 @@ serde_json = "1.0.145"
 surf = "2.3"
 quick-xml = { version = "0.38.4", features = ["serialize"] }
 tauri-plugin-store = "2.4.1"
+rusqlite_migration = "2.3.0"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-updater = "2"

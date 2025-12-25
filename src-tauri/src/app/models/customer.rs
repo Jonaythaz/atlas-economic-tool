@@ -15,7 +15,9 @@ impl TryFrom<crate::external::models::Customer> for Customer {
 
     fn try_from(customer: crate::external::models::Customer) -> Result<Self, Self::Error> {
         Ok(Self {
-            external_id: customer.id.ok_or("Expected retrieved customer to have an id")?,
+            external_id: customer
+                .id
+                .ok_or("Expected retrieved customer to have an id")?,
             name: customer.name,
             group: customer.group.id,
             vat_zone: customer.vat_zone.id,

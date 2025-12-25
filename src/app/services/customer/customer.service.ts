@@ -1,9 +1,8 @@
 import { computed, inject, Injectable, linkedSignal, Signal } from "@angular/core";
-import { createCustomer } from "../../commands";
-import { CustomerModel, Defaults, NewCustomer, Tokens } from "../../models";
+import { createCustomer, findCustomer, updateCustomer } from "../../commands";
+import { Defaults, NewCustomer, Tokens } from "../../models";
 import { Customer, CustomerState } from "../../types";
 import { CustomerModalService } from "../../modals/customer";
-import { fetchCustomer } from "../../commands/fetch-customer.command";
 import { DocumentService } from "../document";
 
 @Injectable({ providedIn: 'root' })
@@ -24,9 +23,15 @@ export class CustomerService {
     }
 
     async editCustomer(customer: Customer): Promise<void> {
-        await this.#customerModalService.open(customer).then((updatedCustomer) => {
-            if (updatedCustomer) {
-                this.#customers.update((customers) => customers.map((c) => c.id === updatedCustomer.id ? updatedCustomer : c));
+        await this.#customerModalService.open(customer).then(async (updatedCustomer) => {
+            if (!updatedCustomer) {
+                return;
+            }
+            
+            this.#customers.update((customers) => customers.map((c) => c.id === updatedCustomer.id ? updatedCustomer : c));
+            
+            if (updatedCustomer.state.status === 'created') {
+                await updateCustomer(updatedCustomer.id, updatedCustomer.state.externalId);
             }
         });
     }
@@ -35,36 +40,31 @@ export class CustomerService {
         this.#customers.update((customers) => customers.map((customer) => ({ ...customer, state: customer.state.status !== 'created' ? { status: 'creating' } : customer.state })));
         const customerCreations = this.#customers()
             .filter((customer) => customer.state.status === 'creating')
-            .map((customer) => this.#createCustomer(customer, tokens, defaults).then((customerResult) => {
-                this.#customers.update((customers) => customers.map((c) => c.id === customerResult.id ? customerResult : c));
-                return customerResult;
-            }));
+            .map((customer) => this.#findCustomer(customer)
+                .then(async (foundCustomer) => foundCustomer ?? await this.#createCustomer(customer, tokens, defaults))
+                .catch((error: Error) => ({ ...customer, state: { status: 'error', errorMessage: error.message }} satisfies Customer))
+                .then((customerResult) => {
+                    this.#customers.update((customers) => customers.map((c) => c.id === customerResult.id ? customerResult : c));
+                    return customerResult;
+                })
+            );
         return Promise.all(customerCreations);
     }
 
-    async fetchCustomer(id: string, externalId: number, tokens: Tokens): Promise<Customer> {
-        return fetchCustomer(externalId, tokens.secret, tokens.grant)
-            .then((fetchedCustomer) => fromFetchedCustomer(fetchedCustomer, id));
+    async #findCustomer(customer: Customer): Promise<Customer | null> {
+        return findCustomer(customer.id).then((externalId) =>
+            externalId 
+                ? { ...customer, state: { status: 'created', externalId } }
+                : null
+        );
     }
 
     async #createCustomer(customer: Customer, tokens: Tokens, defaults: Defaults): Promise<Customer> {
         const newCustomer = toNewCustomer(customer, defaults);
-        return createCustomer(newCustomer, tokens.secret, tokens.grant).then(
-            (externalId) => fromNewCustomer(newCustomer, customer.id, { status: 'created', externalId }),
-            (error) => fromNewCustomer(newCustomer, customer.id, { status: 'error', errorMessage: error.message })
+        return createCustomer(customer.id, newCustomer, tokens).then(
+            (externalId) => fromNewCustomer(newCustomer, customer.id, { status: 'created', externalId })
         );
     }
-}
-
-function fromFetchedCustomer(customer: CustomerModel, id: string): Customer {
-    return {
-        id,
-        name: customer.name,
-        group: customer.group,
-        paymentTerms: customer.paymentTerms,
-        vatZone: customer.vatZone,
-        state: { status: 'created', externalId: customer.externalId },
-    };
 }
 
 function fromNewCustomer(customer: NewCustomer, id: string, state: CustomerState): Customer {
