@@ -1,11 +1,9 @@
-import { computed, inject, Injectable, resource, signal, Signal } from "@angular/core";
-import { fetchSettings, updateSettings } from "../../commands";
-import { Settings } from "../../models/settings.model";
-import { ToastController } from "@kirbydesign/designsystem";
+import { computed, Injectable, resource, Signal } from "@angular/core";
+import { fetchSettings } from "../../commands";
+import { Settings } from "../../models";
 
 @Injectable({ providedIn: "root" })
 export class SettingsService {
-    readonly #saving = signal<boolean>(false);
     readonly #settingsResource = resource({ loader: fetchSettings });
 
     readonly #settings = computed(() => this.#settingsResource.hasValue() ? this.#settingsResource.value() : undefined);
@@ -23,16 +21,7 @@ export class SettingsService {
         return this.#settingsResource.isLoading;
     }
 
-    get saving(): Signal<boolean> {
-        return this.#saving;
-    }
-
     load(): void {
         this.#settingsResource.reload();
-    }
-
-    async save(settings: Settings): Promise<void> {
-        this.#saving.set(true);
-        await updateSettings(settings).then(() => this.#settingsResource.set(settings)).finally(() => this.#saving.set(false));
     }
 }

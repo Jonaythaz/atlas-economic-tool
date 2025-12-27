@@ -1,6 +1,7 @@
 import { load } from '@tauri-apps/plugin-store';
 import { Settings } from "../models/settings.model";
 import { parseError } from '../functions/parse-error';
+import { DEFAULT_SETTINGS } from '../constants';
 
 export async function fetchSettings(): Promise<Settings> {
     return await load("store.json")
@@ -10,11 +11,3 @@ export async function fetchSettings(): Promise<Settings> {
             (error) => { throw parseError(error); }
         );
 }
-
-const DEFAULT_SETTINGS: Settings = {
-    tokens: {
-        secret: '',
-        grant: '',
-    },
-    defaults: {}
-};

@@ -75,7 +75,7 @@ export class OverviewService {
 
 function createCustomerMap(customers: CustomerResource[]): Map<string, number> {
     return customers.reduce((map, customer) => {
-        if (customer.status === 'created') {
+        if (customer.model.externalId) {
             map.set(customer.model.id, customer.model.externalId);
         }
         return map;

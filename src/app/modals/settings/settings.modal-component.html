@@ -16,11 +16,11 @@
             <h3 heading>API Tokens</h3>
         </kirby-section-header>
         <kirby-card [hasPadding]="true">
-            <kirby-form-field label="Secret Token" [message]="vm.secretTokenField.message()">
-                <input kirby-input type="password" [(ngModel)]="vm.secretTokenField" [hasError]="vm.secretTokenField.message() !== null"/>
+            <kirby-form-field label="Secret Token" [message]="vm.form.tokens.secret().errors().at(0)?.message">
+                <input kirby-input type="password" [field]="vm.form.tokens.secret" [hasError]="vm.form.tokens.secret().invalid()"/>
             </kirby-form-field>
-            <kirby-form-field label="Grant Token" [message]="vm.grantTokenField.message()">
-                <input kirby-input type="password" [(ngModel)]="vm.grantTokenField" [hasError]="vm.grantTokenField.message() !== null" />
+            <kirby-form-field label="Grant Token" [message]="vm.form.tokens.grant().errors().at(0)?.message">
+                <input kirby-input type="password" [field]="vm.form.tokens.grant" [hasError]="vm.form.tokens.grant().invalid()" />
             </kirby-form-field>
         </kirby-card>
 
@@ -31,19 +31,19 @@
         </kirby-section-header>
         <kirby-card [hasPadding]="true">
             <kirby-form-field label="Customer Group">
-                <input kirby-input type="number" [(ngModel)]="vm.defaultCustomerGroupField"/>
+                <input kirby-input type="number" [field]="vm.form.defaults.customerGroup"/>
             </kirby-form-field>
             <kirby-form-field label="Product Group">
-                <input kirby-input type="number" [(ngModel)]="vm.defaultProductGroupField"/>
+                <input kirby-input type="number" [field]="vm.form.defaults.productGroup"/>
             </kirby-form-field>
             <kirby-form-field label="Invoice Layout">
-                <input kirby-input type="number" [(ngModel)]="vm.defaultLayoutField"/>
+                <input kirby-input type="number" [field]="vm.form.defaults.layout"/>
             </kirby-form-field>
             <kirby-form-field label="Payment Terms">
-                <input kirby-input type="number" [(ngModel)]="vm.defaultPaymentTermsField"/>
+                <input kirby-input type="number" [field]="vm.form.defaults.paymentTerms"/>
             </kirby-form-field>
             <kirby-form-field label="Vat Zone">
-                <input kirby-input type="number" [(ngModel)]="vm.defaultVatZoneField"/>
+                <input kirby-input type="number" [field]="vm.form.defaults.vatZone"/>
             </kirby-form-field>
         </kirby-card>
     }

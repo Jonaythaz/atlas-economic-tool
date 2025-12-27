@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, linkedSignal, Signal } from "@angular/core";
 import { createCustomer, findCustomer, updateCustomer } from "../../commands";
 import { Defaults, NewCustomer, Settings } from "../../models";
-import { CreatedCustomer, Customer, CustomerResource } from "../../types";
+import { Customer, CustomerResource } from "../../types";
 import { DocumentService } from "../document";
 import { createResources } from "../../functions/create-resources";
 
@@ -55,7 +55,7 @@ export class CustomerService {
         });
     }
 
-    async #createCustomer(customer: Customer, settings: Settings): Promise<CreatedCustomer> {
+    async #createCustomer(customer: Customer, settings: Settings): Promise<Customer> {
         const externalId = await findCustomer(customer.id);
         if (externalId) {
             return { ...customer, externalId };
@@ -77,7 +77,7 @@ export class CustomerService {
     }
 }
 
-function fromNewCustomer(customer: NewCustomer, id: string, externalId: number): CreatedCustomer {
+function fromNewCustomer(customer: NewCustomer, id: string, externalId: number): Customer {
     return {
         id,
         name: customer.name,

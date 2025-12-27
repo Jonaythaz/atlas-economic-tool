@@ -4,4 +4,5 @@ export type Customer = {
     group?: number;
     vatZone?: number;
     paymentTerms?: number;
+    externalId?: number;
 };

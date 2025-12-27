@@ -1,4 +1,4 @@
-export type DocumentResource<T, R = T> = PendingResource<T> | LoadingResource<T> | ErroredResource<T> | CreatedResource<R>;
+export type DocumentResource<T> = PendingResource<T> | LoadingResource<T> | ErroredResource<T> | CreatedResource<T>;
 
 type PendingResource<T> = {
     model: T;
@@ -16,7 +16,7 @@ type ErroredResource<T> = {
     message: string;
 };
 
-type CreatedResource<R> = {
-    model: R;
+type CreatedResource<T> = {
+    model: T;
     status: 'created';
 };

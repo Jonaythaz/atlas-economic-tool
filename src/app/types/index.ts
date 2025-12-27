@@ -1,4 +1,3 @@
-export * from './created-customer.type';
 export * from './credit-note-resource.type';
 export * from './customer-resource.type';
 export * from './customer.type';

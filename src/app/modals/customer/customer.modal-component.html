@@ -1,25 +1,25 @@
-<kirby-page-title>Customer {{ vm.id() }}</kirby-page-title>
+<kirby-page-title>Customer {{ vm.form.id().value() }}</kirby-page-title>
 
-@if (vm.errorMessage(); as errorMessage) {
-    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+@if (vm.errorMessage) {
+    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ vm.errorMessage }}</kirby-flag>
 }
 
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     <kirby-card [hasPadding]="true">
-        <kirby-form-field label="Name" [message]="vm.nameField.message()">
-            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Name" [message]="vm.form.name().errors().at(0)?.message">
+            <input kirby-input [field]="vm.form.name" [hasError]="vm.form.name().invalid()" />
         </kirby-form-field>
-        <kirby-form-field label="Group" [message]="vm.groupField.message()">
-            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Group" [message]="vm.form.group().errors().at(0)?.message">
+            <input kirby-input type="number" [field]="vm.form.group" [hasError]="vm.form.group().invalid()" />
         </kirby-form-field>
-        <kirby-form-field label="Payment Terms" [message]="vm.paymentTermsField.message()">
-            <input kirby-input type="number" [(ngModel)]="vm.paymentTermsField" [hasError]="vm.paymentTermsField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Payment Terms" [message]="vm.form.paymentTerms().errors().at(0)?.message">
+            <input kirby-input type="number" [field]="vm.form.paymentTerms" [hasError]="vm.form.paymentTerms().invalid()" />
         </kirby-form-field>
-        <kirby-form-field label="Vat Zone" [message]="vm.vatZoneField.message()">
-            <input kirby-input type="number" [(ngModel)]="vm.vatZoneField" [hasError]="vm.vatZoneField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Vat Zone" [message]="vm.form.vatZone().errors().at(0)?.message">
+            <input kirby-input type="number" [field]="vm.form.vatZone" [hasError]="vm.form.vatZone().invalid()" />
         </kirby-form-field>
         <kirby-form-field label="External ID">
-            <input kirby-input type="number" [(ngModel)]="vm.externalIdField" />
+            <input kirby-input type="number" [field]="vm.form.externalId" />
         </kirby-form-field>
     </kirby-card>
 </kirby-loading-overlay>

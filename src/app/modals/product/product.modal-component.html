@@ -1,16 +1,16 @@
-<kirby-page-title>Product {{ vm.id() }}</kirby-page-title>
+<kirby-page-title>Product {{ vm.form.id().value() }}</kirby-page-title>
 
-@if (vm.errorMessage(); as errorMessage) {
-    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+@if (vm.errorMessage) {
+    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ vm.errorMessage }}</kirby-flag>
 }
 
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     <kirby-card [hasPadding]="true">
-        <kirby-form-field label="Name" [message]="vm.nameField.message()">
-            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Name" [message]="vm.form.name().errors().at(0)?.message">
+            <input kirby-input [field]="vm.form.name" [hasError]="vm.form.name().invalid()" />
         </kirby-form-field>
-        <kirby-form-field label="Group" [message]="vm.groupField.message()">
-            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="vm.uneditable()" />
+        <kirby-form-field label="Group" [message]="vm.form.group().errors().at(0)?.message">
+            <input kirby-input type="number" [field]="vm.form.group" [hasError]="vm.form.group().invalid()" />
         </kirby-form-field>
     </kirby-card>
 </kirby-loading-overlay>

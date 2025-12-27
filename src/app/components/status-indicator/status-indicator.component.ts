@@ -11,5 +11,5 @@ import { BadgeComponent } from "@kirbydesign/designsystem/badge";
     imports: [SpinnerComponent, BadgeComponent, IconComponent]
 })
 export class StatusIndicatorComponent {
-    readonly status = input.required<DocumentResource<never, never>['status']>();
+    readonly status = input.required<DocumentResource<never>['status']>();
 }
