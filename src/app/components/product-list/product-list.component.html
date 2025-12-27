@@ -2,26 +2,12 @@
 
 @if (products.length > 0) {
     <kirby-list [items]="products" (itemSelect)="vm.selectProduct($event)">
-        <kirby-item *kirbyListItemTemplate="let product" [selectable]="product.state.status !== 'creating'" disclosure="arrow-more">
+        <kirby-item *kirbyListItemTemplate="let product" [selectable]="product.status !== 'creating'" disclosure="arrow-more">
             <kirby-label>
-                <p class="kirby-item-title">{{ product.name }}</p>
-                <p class="kirby-item-subtitle">{{ product.id }}</p>
+                <p class="kirby-item-title">{{ product.model.name }}</p>
+                <p class="kirby-item-subtitle">{{ product.model.id }}</p>
             </kirby-label>
-            @switch (product.state.status) {
-                @case ('creating') {
-                    <kirby-spinner slot="end"></kirby-spinner>
-                }
-                @case ('created') {
-                    <kirby-badge slot="end" themeColor="success">
-                        <kirby-icon name="checkmark-selected"></kirby-icon>
-                    </kirby-badge>
-                }
-                @case ('error') {
-                    <kirby-badge slot="end" themeColor="danger">
-                        <kirby-icon name="warning"></kirby-icon>
-                    </kirby-badge>
-                }
-            }
+            <atlas-status-indicator [status]="product.status" slot="end"></atlas-status-indicator>
         </kirby-item>
     </kirby-list>
 } @else {

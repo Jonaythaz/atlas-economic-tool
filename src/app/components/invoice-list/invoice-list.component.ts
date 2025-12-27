@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, input, output, Signal } from "@angular/core";
-import { ItemModule, ListModule, SpinnerComponent, IconComponent, SectionHeaderComponent } from "@kirbydesign/designsystem";
-import { Invoice } from "../../types";
-import { BadgeComponent } from "@kirbydesign/designsystem/badge";
+import { ItemModule, ListModule, SectionHeaderComponent } from "@kirbydesign/designsystem";
+import { InvoiceResource } from "../../types";
+import { StatusIndicatorComponent } from "../status-indicator";
 
 type ViewModel = {
-    invoices: Signal<Invoice[]>;
-    selectInvoice: (invoice: Invoice) => void;
+    invoices: Signal<InvoiceResource[]>;
+    selectInvoice: (invoice: InvoiceResource) => void;
 }
 
 @Component({
     selector: 'atlas-invoice-list',
     templateUrl: './invoice-list.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ListModule, ItemModule, SpinnerComponent, BadgeComponent, IconComponent, SectionHeaderComponent]
+    imports: [ListModule, ItemModule, SectionHeaderComponent, StatusIndicatorComponent]
 })
 export class InvoiceListComponent {
-    readonly invoices = input.required<Invoice[]>();
-    readonly invoiceSelected = output<Invoice>();
+    readonly invoices = input.required<InvoiceResource[]>();
+    readonly invoiceSelected = output<InvoiceResource>();
 
     readonly vm: ViewModel = {
         invoices: this.invoices,

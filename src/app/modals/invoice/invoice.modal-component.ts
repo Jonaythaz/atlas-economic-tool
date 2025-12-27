@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { InvoiceModel } from "../../models";
 import { AccordionModule, CardModule, COMPONENT_PROPS, FormFieldModule, PageModule, ItemModule, SectionHeaderComponent, FlagComponent } from "@kirbydesign/designsystem";
-import { Invoice } from "../../types";
+import { InvoiceResource } from "../../types";
 
 export type ComponentProps = {
-    invoice: Invoice;
+    invoice: InvoiceResource;
 };
 
 type ViewModel = {
@@ -21,7 +21,7 @@ export class InvoiceModalComponent {
     readonly #invoice = inject<ComponentProps>(COMPONENT_PROPS).invoice;
 
     readonly vm: ViewModel = {
-        errorMessage: this.#invoice.state.status === 'error' ? this.#invoice.state.errorMessage : undefined,
+        errorMessage: this.#invoice.status === 'error' ? this.#invoice.message : undefined,
         invoice: this.#invoice.model,
     };
 }

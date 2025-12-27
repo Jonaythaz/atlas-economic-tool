@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
 import { CreditNoteModel } from "../../models";
 import { AccordionModule, CardModule, COMPONENT_PROPS, FormFieldModule, PageModule, ItemModule, SectionHeaderComponent, FlagComponent } from "@kirbydesign/designsystem";
-import { CreditNote } from "../../types";
+import { CreditNoteResource } from "../../types";
 
 export type ComponentProps = {
-    creditNote: CreditNote;
+    creditNote: CreditNoteResource;
 };
 
 type ViewModel = {
@@ -21,7 +21,7 @@ export class CreditNoteModalComponent {
     readonly #creditNote = inject<ComponentProps>(COMPONENT_PROPS).creditNote;
 
     readonly vm: ViewModel = {
-        errorMessage: this.#creditNote.state.status === 'error' ? this.#creditNote.state.errorMessage : undefined,
+        errorMessage: this.#creditNote.status === 'error' ? this.#creditNote.message : undefined,
         creditNote: this.#creditNote.model,
     };
 }

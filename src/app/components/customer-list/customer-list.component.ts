@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, input, output, Signal } from "@angular/core";
-import { ItemModule, ListModule, SpinnerComponent, IconComponent } from "@kirbydesign/designsystem";
-import { Customer } from "../../types";
-import { BadgeComponent } from "@kirbydesign/designsystem/badge";
+import { ItemModule, ListModule } from "@kirbydesign/designsystem";
+import { CustomerResource } from "../../types";
+import { StatusIndicatorComponent } from "../status-indicator";
 
 type ViewModel = {
-    customers: Signal<Customer[]>;
-    selectCustomer: (customer: Customer) => void;
+    customers: Signal<CustomerResource[]>;
+    selectCustomer: (customer: CustomerResource) => void;
 }
 
 @Component({
     selector: 'atlas-customer-list',
     templateUrl: './customer-list.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ListModule, ItemModule, SpinnerComponent, IconComponent, BadgeComponent]
+    imports: [ListModule, ItemModule, StatusIndicatorComponent]
 })
 export class CustomerListComponent {
-    readonly customers = input.required<Customer[]>();
-    readonly customerSelected = output<Customer>();
+    readonly customers = input.required<CustomerResource[]>();
+    readonly customerSelected = output<CustomerResource>();
 
     readonly vm: ViewModel = {
         customers: this.customers,

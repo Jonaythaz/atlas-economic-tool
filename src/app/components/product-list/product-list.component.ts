@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, input, output, Signal } from "@angular/core";
-import { ItemModule, ListModule, SpinnerComponent, IconComponent } from "@kirbydesign/designsystem";
-import { BadgeComponent } from "@kirbydesign/designsystem/badge";
-import { Product } from "../../types";
+import { ItemModule, ListModule } from "@kirbydesign/designsystem";
+import { ProductResource } from "../../types";
+import { StatusIndicatorComponent } from "../status-indicator";
 
 type ViewModel = {
-    products: Signal<Product[]>;
-    selectProduct: (product: Product) => void;
+    products: Signal<ProductResource[]>;
+    selectProduct: (product: ProductResource) => void;
 }
 
 @Component({
     selector: 'atlas-product-list',
     templateUrl: './product-list.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ListModule, ItemModule, SpinnerComponent, IconComponent, BadgeComponent]
+    imports: [ListModule, ItemModule, StatusIndicatorComponent]
 })
 export class ProductListComponent {
-    readonly products = input.required<Product[]>();
-    readonly productSelected = output<Product>();
+    readonly products = input.required<ProductResource[]>();
+    readonly productSelected = output<ProductResource>();
 
     readonly vm: ViewModel = {
         products: this.products,

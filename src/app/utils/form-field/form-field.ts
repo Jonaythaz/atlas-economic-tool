@@ -1,14 +1,15 @@
 import { computed, linkedSignal, Signal, signal, WritableSignal } from "@angular/core";
 
 export type FormField<T> = WritableSignal<T> & {
-    message(): string | null;
-    isDirty(): boolean;
-    isInvalid(): boolean;
+    message: Signal<string | null>;
+    isDirty: Signal<boolean>;
+    isInvalid: Signal<boolean>;
 };
+
 type Fn<T> = (value: T) => string | null;
 
 export function formField<T>(initialValue: T | (() => T), validationFn?: Fn<T>): FormField<T> {
-    const initialSignal = initialValue instanceof Function ? computed(initialValue) : signal(initialValue).asReadonly();
+    const initialSignal = isFunction(initialValue) ? computed(initialValue) : signal(initialValue).asReadonly();
     const value = linkedSignal(initialSignal);
     const validation = validationFn ? computed(() => validationFn(value())) : signal(null).asReadonly();
     const isDirty = signal(false);
@@ -32,3 +33,5 @@ export function formField<T>(initialValue: T | (() => T), validationFn?: Fn<T>):
         isInvalid,
     });
 }
+
+function isFunction<T>(v: T | (() => T)): v is () => T { return typeof v === 'function'; }

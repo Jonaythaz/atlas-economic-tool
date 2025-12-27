@@ -1,22 +1,22 @@
 import { ChangeDetectionStrategy, Component, input, output, Signal } from "@angular/core";
-import { ItemModule, ListModule, SpinnerComponent, IconComponent, SectionHeaderComponent } from "@kirbydesign/designsystem";
-import { CreditNote } from "../../types";
-import { BadgeComponent } from "@kirbydesign/designsystem/badge";
+import { ItemModule, ListModule, SectionHeaderComponent } from "@kirbydesign/designsystem";
+import { CreditNoteResource } from "../../types";
+import { StatusIndicatorComponent } from "../status-indicator/status-indicator.component";
 
 type ViewModel = {
-    creditNotes: Signal<CreditNote[]>;
-    selectCreditNote: (creditNote: CreditNote) => void;
+    creditNotes: Signal<CreditNoteResource[]>;
+    selectCreditNote: (creditNote: CreditNoteResource) => void;
 }
 
 @Component({
     selector: 'atlas-credit-note-list',
     templateUrl: './credit-note-list.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ListModule, ItemModule, SpinnerComponent, BadgeComponent, IconComponent, SectionHeaderComponent]
+    imports: [ListModule, ItemModule, SectionHeaderComponent, StatusIndicatorComponent]
 })
 export class CreditNoteListComponent {
-    readonly creditNotes = input.required<CreditNote[]>();
-    readonly creditNoteSelected = output<CreditNote>();
+    readonly creditNotes = input.required<CreditNoteResource[]>();
+    readonly creditNoteSelected = output<CreditNoteResource>();
 
     readonly vm: ViewModel = {
         creditNotes: this.creditNotes,

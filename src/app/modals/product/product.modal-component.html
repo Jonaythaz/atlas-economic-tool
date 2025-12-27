@@ -1,4 +1,4 @@
-<kirby-page-title>Product {{ vm.id }}</kirby-page-title>
+<kirby-page-title>Product {{ vm.id() }}</kirby-page-title>
 
 @if (vm.errorMessage(); as errorMessage) {
     <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
@@ -6,16 +6,15 @@
 
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     <kirby-card [hasPadding]="true">
-        @let regularFieldsUneditable = vm.uneditable;
         <kirby-form-field label="Name" [message]="vm.nameField.message()">
-            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="regularFieldsUneditable" />
+            <input kirby-input [(ngModel)]="vm.nameField" [hasError]="vm.nameField.message() !== null" [disabled]="vm.uneditable()" />
         </kirby-form-field>
         <kirby-form-field label="Group" [message]="vm.groupField.message()">
-            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="regularFieldsUneditable" />
+            <input kirby-input type="number" [(ngModel)]="vm.groupField" [hasError]="vm.groupField.message() !== null" [disabled]="vm.uneditable()" />
         </kirby-form-field>
     </kirby-card>
 </kirby-loading-overlay>
 
 <kirby-modal-footer>
-    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Save</button>
+    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Create</button>
 </kirby-modal-footer>

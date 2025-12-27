@@ -1,20 +1,19 @@
 import { computed, inject, Injectable, linkedSignal, Signal } from "@angular/core";
 import { createProduct, fetchProduct } from "../../commands";
-import { Defaults, NewProduct, Tokens } from "../../models";
-import { Product, ProductState } from "../../types";
-import { ProductModalService } from "../../modals/product";
+import { Defaults, NewProduct, Settings } from "../../models";
+import { Product, ProductResource } from "../../types";
 import { DocumentService } from "../document";
+import { createResources } from "../../functions/create-resources";
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
     readonly #documentService = inject(DocumentService);
-    readonly #productModalService = inject(ProductModalService);
 
     readonly #productMap = computed(() => new Map(this.#documentService.documents()?.flatMap(document => document.lines.map(line => [line.product.id, line.product]))));
-    readonly #products = linkedSignal<Product[]>(() => Array.from(this.#productMap().values()).map(product => ({ ...product, state: { status: 'pending' } })));
-    readonly #hasErrors = computed(() => this.#products().some(product => product.state.status === 'error'));
+    readonly #products = linkedSignal<ProductResource[]>(() => Array.from(this.#productMap().values()).map(product => ({ model: product, status: 'pending' })));
+    readonly #hasErrors = computed(() => this.#products().some(product => product.status === 'error'));
 
-    get products(): Signal<Product[]> {
+    get products(): Signal<ProductResource[]> {
         return this.#products;
     }
 
@@ -22,51 +21,45 @@ export class ProductService {
         return this.#hasErrors;
     }
 
-    async editProduct(product: Product): Promise<void> {
-        await this.#productModalService.open(product).then((updatedProduct) => {
-            if (updatedProduct) {
-                this.#products.update((products) => products.map((p) => p.id === updatedProduct.id ? updatedProduct : p));
+    async createProduct(product: Product, settings: Settings): Promise<void> {
+        await this.#createProduct(product, settings).then(
+            (createdProduct) => this.#updateProduct({ model: createdProduct, status: 'created' }),
+            (error) => {
+                const message = error instanceof Error ? error.message : 'Unexpected error occured.';
+                this.#updateProducts((p) => 
+                    p.model.id === product.id ? { ...p, status: 'error', message } : p
+                );
             }
+        );
+    }
+
+    async createProducts(settings: Settings): Promise<boolean> {
+        return createResources({
+            resources: this.#products,
+            createFn: (product) => this.#createProduct(product, settings),
+            equalFn: (p1, p2) => p1.id === p2.id
         });
     }
 
-    async createProducts(tokens: Tokens, defaults: Defaults): Promise<Product[]> {
-        this.#products.update((products) => products.map((product) => ({ ...product, state: product.state.status !== 'created' ? { status: 'creating' } : product.state })));
-        const productCreations = this.#products()
-            .filter((product) => product.state.status === 'creating')
-            .map((product) => this.#fetchProduct(product.id, tokens)
-                .then(async (fetchedProduct) => fetchedProduct ?? await this.#createProduct(product, tokens, defaults))
-                .catch((error: Error) => ({ ...product, state: { status: 'error', errorMessage: error.message }} satisfies Product))
-                .then((productResult) => {
-                    this.#products.update((products) => products.map((p) => p.id === productResult.id ? productResult : p));
-                    return productResult;
-                })
-            );
-        return Promise.all(productCreations);
+    async #createProduct(product: Product, settings: Settings): Promise<Product> {
+        const fetchedProduct = await fetchProduct(product.id, settings.tokens);
+        if (fetchedProduct) {
+            return fetchedProduct;
+        }
+        const newProduct = toNewProduct(product, settings.defaults);
+        await createProduct(newProduct, settings.tokens);
+        return newProduct;
     }
 
-    async #fetchProduct(id: string, tokens: Tokens): Promise<Product | null> {
-        return fetchProduct(id, tokens).then((fetchedProduct) => fetchedProduct ? ({
-            id,
-            name: fetchedProduct.name,
-            group: fetchedProduct.group,
-            state: { status: 'created' },
-        }) : null);
+    #updateProduct(updatedProduct: ProductResource): void {
+        this.#updateProducts((product) => 
+            updatedProduct.model.id === product.model.id ? updatedProduct : product
+        );
     }
 
-    async #createProduct(product: Product, tokens: Tokens, defaults: Defaults): Promise<Product> {
-        const newProduct = toNewProduct(product, defaults);
-        return createProduct(newProduct, tokens).then(() => fromNewProduct(newProduct, { status: 'created' }));
+    #updateProducts(updateFn: (resource: ProductResource) => ProductResource): void {
+        this.#products.update((products) => products.map(updateFn));
     }
-}
-
-function fromNewProduct(product: NewProduct, state: ProductState): Product {
-    return {
-        id: product.id,
-        name: product.name,
-        group: product.group,
-        state,
-    };
 }
 
 function toNewProduct(product: Product, defaults: Defaults): NewProduct {
