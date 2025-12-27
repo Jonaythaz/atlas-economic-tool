@@ -54,7 +54,8 @@ jobs:
 
       - name: install frontend dependencies
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
-        run: npm ci # change this to npm or pnpm depending on which one you use.
+        # TODO: remove force when it is no longer needed
+        run: npm ci --force # change this to npm or pnpm depending on which one you use.
 
       - uses: tauri-apps/tauri-action@v0
         env:
