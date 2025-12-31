@@ -1,6 +1,6 @@
 import { computed, Injectable, resource, type Signal } from "@angular/core";
-import { loadDocuments } from "../../commands";
-import type { DocumentModel } from "../../models";
+import { loadDocuments } from "@atlas/commands";
+import type { DocumentModel } from "@atlas/models";
 
 @Injectable({ providedIn: "root" })
 export class DocumentService {

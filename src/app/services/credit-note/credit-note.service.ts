@@ -1,10 +1,10 @@
 import { Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createInvoice } from "../../commands";
-import { createResources } from "../../functions/create-resources";
-import { CreditNoteModalService } from "../../modals/credit-note";
-import type { CreditNoteModel, NewInvoice, Settings } from "../../models";
-import type { CreditNoteResource } from "../../types";
-import { DocumentService } from "../document";
+import { createInvoice } from "@atlas/commands";
+import { DocumentService } from "@atlas/document";
+import { createResources } from "@atlas/functions/create-resources";
+import { CreditNoteModalService } from "@atlas/modals/credit-note";
+import type { CreditNoteModel, NewInvoice, Settings } from "@atlas/models";
+import type { CreditNoteResource } from "@atlas/types";
 
 @Injectable({ providedIn: "root" })
 export class CreditNoteService {

@@ -1,5 +1,5 @@
 import type { Routes } from "@angular/router";
-import { HomeComponent } from "./pages/home";
+import { HomeComponent } from "@atlas/pages/home";
 
 export const routes: Routes = [
 	{

@@ -1,7 +1,7 @@
 import { DecimalPipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, type Signal } from "@angular/core";
+import { UpdaterService } from "@atlas/services/updater";
 import { ButtonComponent, EmptyStateModule, Modal, ProgressCircleComponent } from "@kirbydesign/designsystem";
-import { UpdaterService } from "../../services/updater";
 
 type ViewModel = {
 	updateAvailable: Signal<boolean>;

@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, type Signal } from "@angular/core";
+import { DocumentOverviewComponent } from "@atlas/components/document-overview";
+import { SettingsModalService } from "@atlas/modals/settings";
+import { DocumentService } from "@atlas/services/document";
 import {
 	ActionGroupComponent,
 	ButtonComponent,
@@ -8,9 +11,6 @@ import {
 	LoadingOverlayComponent,
 	PageModule,
 } from "@kirbydesign/designsystem";
-import { DocumentOverviewComponent } from "../../components/document-overview";
-import { SettingsModalService } from "../../modals/settings";
-import { DocumentService } from "../../services/document";
 
 type ViewModel = {
 	hasDocuments: Signal<boolean>;

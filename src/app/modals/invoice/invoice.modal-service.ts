@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core";
+import type { InvoiceResource } from "@atlas/types";
 import { ModalController } from "@kirbydesign/designsystem";
-import type { InvoiceResource } from "../../types";
+
 import { InvoiceModalComponent } from "./invoice.modal-component";
 
 @Injectable({ providedIn: "root" })

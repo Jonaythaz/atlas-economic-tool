@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core";
+import type { CreditNoteResource } from "@atlas/types";
 import { ModalController } from "@kirbydesign/designsystem";
-import type { CreditNoteResource } from "../../types";
+
 import { CreditNoteModalComponent } from "./credit-note.modal-component";
 
 @Injectable({ providedIn: "root" })

@@ -1,6 +1,6 @@
 import { computed, Injectable, resource, type Signal } from "@angular/core";
-import { fetchSettings } from "../../commands";
-import type { Settings } from "../../models";
+import { fetchSettings } from "@atlas/commands";
+import type { Settings } from "@atlas/models";
 
 @Injectable({ providedIn: "root" })
 export class SettingsService {

@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, type Signal } from "@angular/core";
+import { CreditNoteListComponent } from "@atlas/components/credit-note-list";
+import { CustomerListComponent } from "@atlas/components/customer-list";
+import { InvoiceListComponent } from "@atlas/components/invoice-list";
+import { ProductListComponent } from "@atlas/components/product-list";
+import { CustomerModalService } from "@atlas/modals/customer";
+import { ProductModalService } from "@atlas/modals/product";
+import { CreditNoteService } from "@atlas/services/credit-note";
+import { CustomerService } from "@atlas/services/customer";
+import { InvoiceService } from "@atlas/services/invoice";
+import { OverviewService } from "@atlas/services/overview";
+import { ProductService } from "@atlas/services/product";
+import type { CreditNoteResource, CustomerResource, InvoiceResource, ProductResource } from "@atlas/types";
 import { ButtonComponent, IconComponent, SegmentedControlComponent, type SegmentItem } from "@kirbydesign/designsystem";
-import { CustomerModalService } from "../../modals/customer";
-import { ProductModalService } from "../../modals/product";
-import { CreditNoteService } from "../../services/credit-note";
-import { CustomerService } from "../../services/customer";
-import { InvoiceService } from "../../services/invoice";
-import { OverviewService } from "../../services/overview";
-import { ProductService } from "../../services/product";
-import type { CreditNoteResource, CustomerResource, InvoiceResource, ProductResource } from "../../types";
-import { CreditNoteListComponent } from "../credit-note-list";
-import { CustomerListComponent } from "../customer-list";
-import { InvoiceListComponent } from "../invoice-list";
-import { ProductListComponent } from "../product-list";
 
 type ViewModel = {
 	segments: Signal<SegmentItem[]>;

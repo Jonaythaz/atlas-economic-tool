@@ -1,5 +1,6 @@
 import { Injectable, inject } from "@angular/core";
 import { ModalController } from "@kirbydesign/designsystem";
+
 import { UpdaterModalComponent } from "./updater.modal-component";
 
 @Injectable({ providedIn: "root" })

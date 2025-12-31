@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import type { CreditNoteModel } from "@atlas/models";
+import type { CreditNoteResource } from "@atlas/types";
 import {
 	AccordionModule,
 	CardModule,
@@ -9,8 +11,6 @@ import {
 	PageModule,
 	SectionHeaderComponent,
 } from "@kirbydesign/designsystem";
-import type { CreditNoteModel } from "../../models";
-import type { CreditNoteResource } from "../../types";
 
 export type ComponentProps = {
 	creditNote: CreditNoteResource;

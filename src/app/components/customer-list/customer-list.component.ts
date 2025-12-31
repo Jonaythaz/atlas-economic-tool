@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output, type Signal } from "@angular/core";
+import { StatusIndicatorComponent } from "@atlas/components/status-indicator";
+import type { CustomerResource } from "@atlas/types";
 import { ItemModule, ListModule } from "@kirbydesign/designsystem";
-import type { CustomerResource } from "../../types";
-import { StatusIndicatorComponent } from "../status-indicator";
 
 type ViewModel = {
 	customers: Signal<CustomerResource[]>;

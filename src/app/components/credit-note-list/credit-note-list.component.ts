@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output, type Signal } from "@angular/core";
+import { StatusIndicatorComponent } from "@atlas/components/status-indicator";
+import type { CreditNoteResource } from "@atlas/types";
 import { ItemModule, ListModule, SectionHeaderComponent } from "@kirbydesign/designsystem";
-import type { CreditNoteResource } from "../../types";
-import { StatusIndicatorComponent } from "../status-indicator/status-indicator.component";
 
 type ViewModel = {
 	creditNotes: Signal<CreditNoteResource[]>;

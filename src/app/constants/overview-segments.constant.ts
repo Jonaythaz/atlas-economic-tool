@@ -1,5 +1,5 @@
+import { OverviewSegment } from "@atlas/types";
 import type { SegmentItem } from "@kirbydesign/designsystem";
-import { OverviewSegment } from "../types";
 
 export const OVERVIEW_SEGMENTS: Record<OverviewSegment, SegmentItem> = {
 	[OverviewSegment.Documents]: {

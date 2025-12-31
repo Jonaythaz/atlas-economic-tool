@@ -1,13 +1,13 @@
 import { computed, Injectable, inject, type Signal, signal } from "@angular/core";
+import { fetchSettings } from "@atlas/commands";
+import { OVERVIEW_SEGMENTS } from "@atlas/constants";
+import { CreditNoteService } from "@atlas/credit-note";
+import { CustomerService } from "@atlas/customer";
+import { InvoiceService } from "@atlas/invoice";
+import type { Settings } from "@atlas/models";
+import { ProductService } from "@atlas/product";
+import { type CustomerResource, OverviewSegment } from "@atlas/types";
 import { type SegmentItem, type ThemeColor, ToastController } from "@kirbydesign/designsystem";
-import { fetchSettings } from "../../commands";
-import { OVERVIEW_SEGMENTS } from "../../constants";
-import type { Settings } from "../../models";
-import { type CustomerResource, OverviewSegment } from "../../types";
-import { CreditNoteService } from "../credit-note";
-import { CustomerService } from "../customer";
-import { InvoiceService } from "../invoice";
-import { ProductService } from "../product";
 
 @Injectable({ providedIn: "root" })
 export class OverviewService {

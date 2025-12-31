@@ -1,7 +1,8 @@
 import { Injectable, inject } from "@angular/core";
+import { fetchSettings } from "@atlas/commands";
+import type { CustomerResource } from "@atlas/types";
 import { type ModalConfig, ModalController } from "@kirbydesign/designsystem";
-import { fetchSettings } from "../../commands";
-import type { CustomerResource } from "../../types";
+
 import { type ComponentProps, CustomerModalComponent } from "./customer.modal-component";
 
 @Injectable({ providedIn: "root" })

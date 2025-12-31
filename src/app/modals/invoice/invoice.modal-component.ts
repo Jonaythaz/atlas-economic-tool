@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import type { InvoiceModel } from "@atlas/models";
+import type { InvoiceResource } from "@atlas/types";
 import {
 	AccordionModule,
 	CardModule,
@@ -9,8 +11,6 @@ import {
 	PageModule,
 	SectionHeaderComponent,
 } from "@kirbydesign/designsystem";
-import type { InvoiceModel } from "../../models";
-import type { InvoiceResource } from "../../types";
 
 export type ComponentProps = {
 	invoice: InvoiceResource;

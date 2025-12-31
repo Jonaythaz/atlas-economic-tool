@@ -1,5 +1,5 @@
 import type { WritableSignal } from "@angular/core";
-import type { DocumentResource } from "../../types";
+import type { DocumentResource } from "@atlas/types";
 
 type CreateResourcesParams<T> = {
 	resources: WritableSignal<DocumentResource<T>[]>;

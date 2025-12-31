@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from "@angular/core";
+import type { DocumentResource } from "@atlas/types";
 import { IconComponent, SpinnerComponent } from "@kirbydesign/designsystem";
 import { BadgeComponent } from "@kirbydesign/designsystem/badge";
-import type { DocumentResource } from "../../types";
 
 @Component({
 	selector: "atlas-status-indicator",

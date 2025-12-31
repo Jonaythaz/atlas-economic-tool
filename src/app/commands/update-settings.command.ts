@@ -1,6 +1,6 @@
+import { parseError } from "@atlas/functions/parse-error";
+import type { Settings } from "@atlas/models";
 import { load } from "@tauri-apps/plugin-store";
-import { parseError } from "../functions/parse-error";
-import type { Settings } from "../models/settings.model";
 
 export async function updateSettings(settings: Settings): Promise<void> {
 	await load("store.json")

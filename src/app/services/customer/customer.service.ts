@@ -1,9 +1,9 @@
 import { computed, Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createCustomer, findCustomer, updateCustomer } from "../../commands";
-import { createResources } from "../../functions/create-resources";
-import type { Defaults, NewCustomer, Settings } from "../../models";
-import type { Customer, CustomerResource } from "../../types";
-import { DocumentService } from "../document";
+import { createCustomer, findCustomer, updateCustomer } from "@atlas/commands";
+import { DocumentService } from "@atlas/document";
+import { createResources } from "@atlas/functions/create-resources";
+import type { Defaults, NewCustomer, Settings } from "@atlas/models";
+import type { Customer, CustomerResource } from "@atlas/types";
 
 @Injectable({ providedIn: "root" })
 export class CustomerService {

@@ -1,7 +1,7 @@
 import { Component, effect, inject } from "@angular/core";
+import { UpdaterModalService } from "@atlas/modals/updater";
+import { UpdaterService } from "@atlas/services/updater";
 import { KirbyAppModule, RouterOutletModule } from "@kirbydesign/designsystem";
-import { UpdaterModalService } from "./modals/updater";
-import { UpdaterService } from "./services/updater";
 
 @Component({
 	selector: "app-root",

@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { disabled, Field, type FieldTree, form, readonly, required } from "@angular/forms/signals";
+import { DISMISS_ALERT_CONFIG } from "@atlas/constants";
+import type { Settings } from "@atlas/models";
+import { ProductService } from "@atlas/services/product";
+import type { Product, ProductResource } from "@atlas/types";
 import {
 	ButtonComponent,
 	CardModule,
@@ -14,10 +18,6 @@ import {
 	PageModule,
 	ToastController,
 } from "@kirbydesign/designsystem";
-import { DISMISS_ALERT_CONFIG } from "../../constants";
-import type { Settings } from "../../models";
-import { ProductService } from "../../services/product";
-import type { Product, ProductResource } from "../../types";
 
 export type ComponentProps = {
 	product: ProductResource;

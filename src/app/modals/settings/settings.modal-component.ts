@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, type Signal, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Field, type FieldTree, form, required } from "@angular/forms/signals";
+import { updateSettings } from "@atlas/commands";
+import { DEFAULT_SETTINGS, DISMISS_ALERT_CONFIG } from "@atlas/constants";
+import type { Defaults, Settings, Tokens } from "@atlas/models";
+import { SettingsService } from "@atlas/services/settings";
 import {
 	ButtonComponent,
 	CardModule,
@@ -14,10 +18,6 @@ import {
 	SectionHeaderComponent,
 	ToastController,
 } from "@kirbydesign/designsystem";
-import { updateSettings } from "../../commands";
-import { DEFAULT_SETTINGS, DISMISS_ALERT_CONFIG } from "../../constants";
-import type { Defaults, Settings, Tokens } from "../../models";
-import { SettingsService } from "../../services/settings";
 
 type ViewModel = {
 	form: FieldTree<SettingsModel>;

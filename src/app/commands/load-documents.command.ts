@@ -1,6 +1,6 @@
+import { parseError } from "@atlas/functions/parse-error";
+import type { DocumentModel } from "@atlas/models";
 import { invoke } from "@tauri-apps/api/core";
-import { parseError } from "../functions/parse-error";
-import type { DocumentModel } from "../models";
 
 export async function loadDocuments(): Promise<DocumentModel[]> {
 	return invoke<DocumentModel[]>("load_documents").catch((error) => {

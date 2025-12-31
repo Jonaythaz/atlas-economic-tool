@@ -1,9 +1,9 @@
 import { computed, Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createProduct, fetchProduct } from "../../commands";
-import { createResources } from "../../functions/create-resources";
-import type { Defaults, NewProduct, Settings } from "../../models";
-import type { Product, ProductResource } from "../../types";
-import { DocumentService } from "../document";
+import { createProduct, fetchProduct } from "@atlas/commands";
+import { DocumentService } from "@atlas/document";
+import { createResources } from "@atlas/functions/create-resources";
+import type { Defaults, NewProduct, Settings } from "@atlas/models";
+import type { Product, ProductResource } from "@atlas/types";
 
 @Injectable({ providedIn: "root" })
 export class ProductService {
