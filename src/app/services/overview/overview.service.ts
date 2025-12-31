@@ -1,11 +1,11 @@
 import { computed, Injectable, inject, type Signal, signal } from "@angular/core";
 import { fetchSettings } from "@atlas/commands";
 import { OVERVIEW_SEGMENTS } from "@atlas/constants";
-import { CreditNoteService } from "@atlas/credit-note";
-import { CustomerService } from "@atlas/customer";
-import { InvoiceService } from "@atlas/invoice";
 import type { Settings } from "@atlas/models";
-import { ProductService } from "@atlas/product";
+import { CreditNoteService } from "@atlas/services/credit-note";
+import { CustomerService } from "@atlas/services/customer";
+import { InvoiceService } from "@atlas/services/invoice";
+import { ProductService } from "@atlas/services/product";
 import { type CustomerResource, OverviewSegment } from "@atlas/types";
 import { type SegmentItem, type ThemeColor, ToastController } from "@kirbydesign/designsystem";
 

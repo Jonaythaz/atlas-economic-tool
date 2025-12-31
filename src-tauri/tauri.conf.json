@@ -4,9 +4,9 @@
 	"version": "0.2.6",
 	"identifier": "jonaythaz.atlas-economic-tool",
 	"build": {
-		"beforeDevCommand": "npm run start",
+		"beforeDevCommand": "pnpm start",
 		"devUrl": "http://localhost:1420",
-		"beforeBuildCommand": "npm run build",
+		"beforeBuildCommand": "pnpm build",
 		"frontendDist": "../dist/atlas-economic-tool/browser"
 	},
 	"app": {

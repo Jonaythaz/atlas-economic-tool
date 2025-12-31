@@ -1,9 +1,9 @@
 import { Injectable, inject, linkedSignal, type Signal } from "@angular/core";
 import { createInvoice } from "@atlas/commands";
-import { DocumentService } from "@atlas/document";
 import { createResources } from "@atlas/functions/create-resources";
 import { InvoiceModalService } from "@atlas/modals/invoice";
 import type { InvoiceModel, NewInvoice, Settings } from "@atlas/models";
+import { DocumentService } from "@atlas/services/document";
 import type { InvoiceResource } from "@atlas/types";
 
 @Injectable({ providedIn: "root" })

@@ -1,8 +1,8 @@
 import { computed, Injectable, inject, linkedSignal, type Signal } from "@angular/core";
 import { createCustomer, findCustomer, updateCustomer } from "@atlas/commands";
-import { DocumentService } from "@atlas/document";
 import { createResources } from "@atlas/functions/create-resources";
 import type { Defaults, NewCustomer, Settings } from "@atlas/models";
+import { DocumentService } from "@atlas/services/document";
 import type { Customer, CustomerResource } from "@atlas/types";
 
 @Injectable({ providedIn: "root" })
