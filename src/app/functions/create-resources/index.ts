@@ -1,1 +1,1 @@
-export * from './create-resources.function';
+export * from "./create-resources.function";

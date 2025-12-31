@@ -1,27 +1,27 @@
-import { computed, Injectable, resource, Signal } from "@angular/core";
+import { computed, Injectable, resource, type Signal } from "@angular/core";
 import { fetchSettings } from "../../commands";
-import { Settings } from "../../models";
+import type { Settings } from "../../models";
 
 @Injectable({ providedIn: "root" })
 export class SettingsService {
-    readonly #settingsResource = resource({ loader: fetchSettings });
+	readonly #settingsResource = resource({ loader: fetchSettings });
 
-    readonly #settings = computed(() => this.#settingsResource.hasValue() ? this.#settingsResource.value() : undefined);
-    readonly #error = computed(() => this.#settingsResource.error()?.message);
+	readonly #settings = computed(() => (this.#settingsResource.hasValue() ? this.#settingsResource.value() : undefined));
+	readonly #error = computed(() => this.#settingsResource.error()?.message);
 
-    get settings(): Signal<Settings | undefined> {
-        return this.#settings;
-    }
+	get settings(): Signal<Settings | undefined> {
+		return this.#settings;
+	}
 
-    get error(): Signal<string | undefined> {
-        return this.#error;
-    }
+	get error(): Signal<string | undefined> {
+		return this.#error;
+	}
 
-    get isLoading(): Signal<boolean> {
-        return this.#settingsResource.isLoading;
-    }
+	get isLoading(): Signal<boolean> {
+		return this.#settingsResource.isLoading;
+	}
 
-    load(): void {
-        this.#settingsResource.reload();
-    }
+	load(): void {
+		this.#settingsResource.reload();
+	}
 }

@@ -1,1 +1,1 @@
-export * from './updater.modal-service';
+export * from "./updater.modal-service";

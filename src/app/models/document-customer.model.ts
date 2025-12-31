@@ -1,4 +1,4 @@
 export type DocumentCustomer = {
-    id: string;
-    name: string;
+	id: string;
+	name: string;
 };
