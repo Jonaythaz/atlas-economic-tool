@@ -1,1 +1,1 @@
-export * from './settings.modal-service';
+export * from "./settings.modal-service";

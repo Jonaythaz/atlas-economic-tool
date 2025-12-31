@@ -1,17 +1,17 @@
-import { inject, Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ModalController } from "@kirbydesign/designsystem";
+import type { CreditNoteResource } from "../../types";
 import { CreditNoteModalComponent } from "./credit-note.modal-component";
-import { CreditNoteResource } from "../../types";
 
 @Injectable({ providedIn: "root" })
 export class CreditNoteModalService {
-    readonly #modalController = inject(ModalController);
+	readonly #modalController = inject(ModalController);
 
-    async openCreditNoteModal(creditNote: CreditNoteResource): Promise<void> {
-        await this.#modalController.showModal({
-            component: CreditNoteModalComponent,
-            componentProps: { creditNote },
-            size: 'full-height'
-        });
-    }
+	async openCreditNoteModal(creditNote: CreditNoteResource): Promise<void> {
+		await this.#modalController.showModal({
+			component: CreditNoteModalComponent,
+			componentProps: { creditNote },
+			size: "full-height",
+		});
+	}
 }

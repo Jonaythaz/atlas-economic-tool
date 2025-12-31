@@ -1,1 +1,1 @@
-export * from './document-overview.component';
+export * from "./document-overview.component";

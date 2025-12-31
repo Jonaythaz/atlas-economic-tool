@@ -1,7 +1,7 @@
-import { DocumentProduct } from "./document-product.model";
+import type { DocumentProduct } from "./document-product.model";
 
 export type DocumentLine = {
-    product: DocumentProduct;
-    price: number;
-    quantity: number;
+	product: DocumentProduct;
+	price: number;
+	quantity: number;
 };

@@ -1,5 +1,5 @@
 export enum OverviewSegment {
-    Documents = 'documents',
-    Customers = 'customers',
-    Products = 'products',
+	Documents = "documents",
+	Customers = "customers",
+	Products = "products",
 }

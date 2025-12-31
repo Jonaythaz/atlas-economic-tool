@@ -1,9 +1,9 @@
 import { invoke } from "@tauri-apps/api/core";
-import { DocumentModel } from "../models";
 import { parseError } from "../functions/parse-error";
+import type { DocumentModel } from "../models";
 
 export async function loadDocuments(): Promise<DocumentModel[]> {
-    return invoke<DocumentModel[]>("load_documents").catch((error) => {
-        throw parseError(error);
-    });
+	return invoke<DocumentModel[]>("load_documents").catch((error) => {
+		throw parseError(error);
+	});
 }

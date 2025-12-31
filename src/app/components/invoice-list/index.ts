@@ -1,1 +1,1 @@
-export * from './invoice-list.component';
+export * from "./invoice-list.component";

@@ -1,9 +1,9 @@
-import { Settings } from "../models";
+import type { Settings } from "../models";
 
 export const DEFAULT_SETTINGS: Settings = {
-    tokens: {
-        secret: '',
-        grant: '',
-    },
-    defaults: {}
+	tokens: {
+		secret: "",
+		grant: "",
+	},
+	defaults: {},
 };

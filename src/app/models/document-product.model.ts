@@ -1,4 +1,4 @@
 export type DocumentProduct = {
-    id: string;
-    name: string;
+	id: string;
+	name: string;
 };

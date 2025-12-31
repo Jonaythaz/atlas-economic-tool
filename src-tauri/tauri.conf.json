@@ -1,44 +1,36 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "atlas-economic-tool",
-  "version": "0.2.6",
-  "identifier": "jonaythaz.atlas-economic-tool",
-  "build": {
-    "beforeDevCommand": "npm run start",
-    "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build",
-    "frontendDist": "../dist/atlas-economic-tool/browser"
-  },
-  "app": {
-    "windows": [
-      {
-        "title": "atlas-economic-tool",
-        "width": 1280,
-        "height": 720
-      }
-    ],
-    "security": {
-      "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "createUpdaterArtifacts": true,
-    "targets": "all",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
-  },
-  "plugins": {
-    "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEM1MDI0QTU4OTRENjM5QkIKUldTN09kYVVXRW9DeFJ3L3h0ODV0N1hWWmJ3ZzRPbmhwZHJYUnZsUGd1cGx5bXFqVHRLbDVIWU4K",
-      "endpoints": [
-        "https://github.com/Jonaythaz/atlas-economic-tool/releases/latest/download/latest.json"
-      ]
-    }
-  }
+	"$schema": "https://schema.tauri.app/config/2",
+	"productName": "atlas-economic-tool",
+	"version": "0.2.6",
+	"identifier": "jonaythaz.atlas-economic-tool",
+	"build": {
+		"beforeDevCommand": "npm run start",
+		"devUrl": "http://localhost:1420",
+		"beforeBuildCommand": "npm run build",
+		"frontendDist": "../dist/atlas-economic-tool/browser"
+	},
+	"app": {
+		"windows": [
+			{
+				"title": "atlas-economic-tool",
+				"width": 1280,
+				"height": 720
+			}
+		],
+		"security": {
+			"csp": null
+		}
+	},
+	"bundle": {
+		"active": true,
+		"createUpdaterArtifacts": true,
+		"targets": "all",
+		"icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+	},
+	"plugins": {
+		"updater": {
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEM1MDI0QTU4OTRENjM5QkIKUldTN09kYVVXRW9DeFJ3L3h0ODV0N1hWWmJ3ZzRPbmhwZHJYUnZsUGd1cGx5bXFqVHRLbDVIWU4K",
+			"endpoints": ["https://github.com/Jonaythaz/atlas-economic-tool/releases/latest/download/latest.json"]
+		}
+	}
 }
