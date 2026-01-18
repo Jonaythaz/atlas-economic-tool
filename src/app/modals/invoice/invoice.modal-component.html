@@ -1,7 +1,11 @@
 <kirby-page-title>Invoice {{ vm.invoice.id }}</kirby-page-title>
 
 @if (vm.errorMessage; as errorMessage) {
-    <kirby-flag themeColor="danger" style="margin-bottom: 16px; white-space: pre-wrap;">{{ errorMessage }}</kirby-flag>
+<kirby-flag
+    themeColor="danger"
+    style="margin-bottom: 16px; white-space: pre-wrap"
+    >{{ errorMessage }}</kirby-flag
+>
 }
 
 <kirby-section-header>
@@ -24,13 +28,9 @@
         <p class="kirby-item-title">Customer</p>
         <data slot="end">{{ vm.invoice.customer.name }}</data>
     </kirby-item>
-    <kirby-item>
-        <p class="kirby-item-title">Recipient</p>
-        <data slot="end">{{ vm.invoice.recipient }}</data>
-    </kirby-item>
 </kirby-card>
 
-<br/>
+<br />
 
 <kirby-section-header>
     <h3 heading>Invoice Lines</h3>
@@ -38,24 +38,24 @@
 <kirby-card>
     <kirby-accordion>
         @for (line of vm.invoice.lines; track $index) {
-            <kirby-accordion-item [title]="($index + 1) + '. ' + line.product.name">
-                <kirby-item>
-                    <p class="kirby-item-title">Product ID</p>
-                    <data slot="end">{{ line.product.id }}</data>
-                </kirby-item>
-                <kirby-item>
-                    <p class="kirby-item-title">Product Name</p>
-                    <data slot="end">{{ line.product.name }}</data>
-                </kirby-item>
-                <kirby-item>
-                    <p class="kirby-item-title">Price</p>
-                    <data slot="end">{{ line.price }}DKK</data>
-                </kirby-item>
-                <kirby-item>
-                    <p class="kirby-item-title">Quantity</p>
-                    <data slot="end">{{ line.quantity }}</data>
-                </kirby-item>
-            </kirby-accordion-item>
+        <kirby-accordion-item [title]="($index + 1) + '. ' + line.product.name">
+            <kirby-item>
+                <p class="kirby-item-title">Product ID</p>
+                <data slot="end">{{ line.product.id }}</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Product Name</p>
+                <data slot="end">{{ line.product.name }}</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Price</p>
+                <data slot="end">{{ line.price }}DKK</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Quantity</p>
+                <data slot="end">{{ line.quantity }}</data>
+            </kirby-item>
+        </kirby-accordion-item>
         }
     </kirby-accordion>
 </kirby-card>

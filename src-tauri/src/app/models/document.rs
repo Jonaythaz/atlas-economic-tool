@@ -12,7 +12,6 @@ pub enum Document {
         damage_number: Option<String>,
         date: String,
         customer: DocumentCustomer,
-        recipient: String,
         lines: Vec<DocumentLine>,
     },
     #[serde(rename_all = "camelCase")]
@@ -46,7 +45,6 @@ impl From<crate::core::models::Invoice> for Document {
                 .then_some(invoice.order_reference.id),
             date: invoice.issue_date,
             customer: DocumentCustomer::from(invoice.accounting_customer_party),
-            recipient: invoice.delivery.delivery_location.address.mark_attention,
             lines: invoice
                 .invoice_lines
                 .into_iter()

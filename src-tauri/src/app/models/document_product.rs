@@ -4,6 +4,7 @@ use serde::Serialize;
 pub struct DocumentProduct {
     pub id: String,
     pub name: String,
+    pub description: String,
 }
 
 impl From<crate::core::models::Item> for DocumentProduct {
@@ -11,6 +12,7 @@ impl From<crate::core::models::Item> for DocumentProduct {
         Self {
             id: item.sellers_item_identification.id,
             name: item.name,
+            description: item.description,
         }
     }
 }

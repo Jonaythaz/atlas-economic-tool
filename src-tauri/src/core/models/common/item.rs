@@ -5,6 +5,9 @@ pub struct Item {
     #[serde(rename = "Name")]
     pub name: String,
 
+    #[serde(rename = "Description")]
+    pub description: String,
+
     #[serde(rename = "SellersItemIdentification")]
     pub sellers_item_identification: SellersItemIdentification,
 }

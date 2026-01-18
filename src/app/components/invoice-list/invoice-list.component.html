@@ -7,7 +7,7 @@
     <kirby-list [items]="invoices" (itemSelect)="vm.selectInvoice($event)">
         <kirby-item *kirbyListItemTemplate="let invoice" disclosure="arrow-more" [selectable]="true">
             <kirby-label>
-                <p class="kirby-item-title">{{ invoice.model.recipient }}</p>
+                <p class="kirby-item-title">{{ invoice.model.customer.name }}</p>
                 <p class="kirby-item-detail">ID: {{ invoice.model.id }}</p>
             </kirby-label>
             <atlas-status-indicator [status]="invoice.status" slot="end"></atlas-status-indicator>

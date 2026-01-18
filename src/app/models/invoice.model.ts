@@ -7,6 +7,5 @@ export type InvoiceModel = {
 	date: string;
 	damageNumber?: string;
 	customer: DocumentCustomer;
-	recipient: string;
 	lines: DocumentLine[];
 };
