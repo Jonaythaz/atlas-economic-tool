@@ -12,10 +12,12 @@ export class InvoiceService {
 	readonly #invoiceModalService = inject(InvoiceModalService);
 
 	readonly #invoices = linkedSignal<InvoiceResource[]>(() =>
-		this.#documentService
-			.documents()
-			.filter((document) => document.type === "invoice")
-			.map((model) => ({ model, status: "pending" })),
+		this.#documentService.documents.hasValue()
+			? this.#documentService.documents
+					.value()
+					.filter((document) => document.type === "invoice")
+					.map((model) => ({ model, status: "pending" }))
+			: [],
 	);
 
 	get invoices(): Signal<InvoiceResource[]> {

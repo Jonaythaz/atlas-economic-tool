@@ -12,10 +12,12 @@ export class CreditNoteService {
 	readonly #creditNoteModalService = inject(CreditNoteModalService);
 
 	readonly #creditNotes = linkedSignal<CreditNoteResource[]>(() =>
-		this.#documentService
-			.documents()
-			.filter((document) => document.type === "credit-note")
-			.map((model) => ({ model, status: "pending" })),
+		this.#documentService.documents.hasValue()
+			? this.#documentService.documents
+					.value()
+					.filter((document) => document.type === "credit-note")
+					.map((model) => ({ model, status: "pending" }))
+			: [],
 	);
 
 	get creditNotes(): Signal<CreditNoteResource[]> {

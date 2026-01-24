@@ -9,13 +9,14 @@ import type { Product, ProductResource } from "@atlas/types";
 export class ProductService {
 	readonly #documentService = inject(DocumentService);
 
-	readonly #productMap = computed(
-		() =>
-			new Map(
-				this.#documentService
-					.documents()
-					?.flatMap((document) => document.lines.map((line) => [line.product.id, line.product])),
-			),
+	readonly #productMap = computed(() =>
+		this.#documentService.documents.hasValue()
+			? new Map(
+					this.#documentService.documents
+						.value()
+						?.flatMap((document) => document.lines.map((line) => [line.product.id, line.product])),
+				)
+			: new Map(),
 	);
 	readonly #products = linkedSignal<ProductResource[]>(() =>
 		Array.from(this.#productMap().values()).map((product) => ({

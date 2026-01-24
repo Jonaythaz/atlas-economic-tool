@@ -3,52 +3,90 @@
 @let error = vm.error();
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     @if (error) {
-        <kirby-empty-state
-            iconName="warning"
-            themeColor="warning"
-            title="Unable to load settings"
-            [subtitle]="error"
-        >
-            <button kirby-button (click)="vm.reload()">Retry</button>
-        </kirby-empty-state>
+    <kirby-empty-state
+        iconName="warning"
+        themeColor="warning"
+        title="Unable to load settings"
+        [subtitle]="error"
+    >
+        <button kirby-button (click)="vm.reload()">Retry</button>
+    </kirby-empty-state>
     } @else {
-        <kirby-section-header>
-            <h3 heading>API Tokens</h3>
-        </kirby-section-header>
-        <kirby-card [hasPadding]="true">
-            <kirby-form-field label="Secret Token" [message]="vm.form.tokens.secret().errors().at(0)?.message">
-                <input kirby-input type="password" [field]="vm.form.tokens.secret" [hasError]="vm.form.tokens.secret().invalid()"/>
-            </kirby-form-field>
-            <kirby-form-field label="Grant Token" [message]="vm.form.tokens.grant().errors().at(0)?.message">
-                <input kirby-input type="password" [field]="vm.form.tokens.grant" [hasError]="vm.form.tokens.grant().invalid()" />
-            </kirby-form-field>
-        </kirby-card>
+    <kirby-section-header>
+        <h3 heading>API Tokens</h3>
+    </kirby-section-header>
+    <kirby-card [hasPadding]="true">
+        <kirby-form-field
+            label="Secret Token"
+            [message]="vm.form.tokens.secret().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                type="password"
+                [formField]="vm.form.tokens.secret"
+                [hasError]="vm.form.tokens.secret().invalid()"
+            />
+        </kirby-form-field>
+        <kirby-form-field
+            label="Grant Token"
+            [message]="vm.form.tokens.grant().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                type="password"
+                [formField]="vm.form.tokens.grant"
+                [hasError]="vm.form.tokens.grant().invalid()"
+            />
+        </kirby-form-field>
+    </kirby-card>
 
-        <br/>
+    <br />
 
-        <kirby-section-header>
-            <h3 heading>Default Values</h3>
-        </kirby-section-header>
-        <kirby-card [hasPadding]="true">
-            <kirby-form-field label="Customer Group">
-                <input kirby-input type="number" [field]="vm.form.defaults.customerGroup"/>
-            </kirby-form-field>
-            <kirby-form-field label="Product Group">
-                <input kirby-input type="number" [field]="vm.form.defaults.productGroup"/>
-            </kirby-form-field>
-            <kirby-form-field label="Invoice Layout">
-                <input kirby-input type="number" [field]="vm.form.defaults.layout"/>
-            </kirby-form-field>
-            <kirby-form-field label="Payment Terms">
-                <input kirby-input type="number" [field]="vm.form.defaults.paymentTerms"/>
-            </kirby-form-field>
-            <kirby-form-field label="Vat Zone">
-                <input kirby-input type="number" [field]="vm.form.defaults.vatZone"/>
-            </kirby-form-field>
-        </kirby-card>
+    <kirby-section-header>
+        <h3 heading>Default Values</h3>
+    </kirby-section-header>
+    <kirby-card [hasPadding]="true">
+        <kirby-form-field label="Customer Group">
+            <input
+                kirby-input
+                type="number"
+                [formField]="vm.form.defaults.customerGroup"
+            />
+        </kirby-form-field>
+        <kirby-form-field label="Product Group">
+            <input
+                kirby-input
+                type="number"
+                [formField]="vm.form.defaults.productGroup"
+            />
+        </kirby-form-field>
+        <kirby-form-field label="Invoice Layout">
+            <input
+                kirby-input
+                type="number"
+                [formField]="vm.form.defaults.layout"
+            />
+        </kirby-form-field>
+        <kirby-form-field label="Payment Terms">
+            <input
+                kirby-input
+                type="number"
+                [formField]="vm.form.defaults.paymentTerms"
+            />
+        </kirby-form-field>
+        <kirby-form-field label="Vat Zone">
+            <input
+                kirby-input
+                type="number"
+                [formField]="vm.form.defaults.vatZone"
+            />
+        </kirby-form-field>
+    </kirby-card>
     }
 </kirby-loading-overlay>
 
 <kirby-modal-footer>
-    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">Save</button>
+    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">
+        Save
+    </button>
 </kirby-modal-footer>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { disabled, Field, type FieldTree, form, readonly, required } from "@angular/forms/signals";
+import { disabled, type FieldTree, FormField, form, readonly, required } from "@angular/forms/signals";
 import { DISMISS_ALERT_CONFIG } from "@atlas/constants";
 import type { Settings } from "@atlas/models";
 import { ProductService } from "@atlas/services/product";
@@ -40,7 +40,7 @@ type ViewModel = {
 		CardModule,
 		FormFieldModule,
 		InputComponent,
-		Field,
+		FormField,
 		FormsModule,
 		ModalFooterComponent,
 		ButtonComponent,

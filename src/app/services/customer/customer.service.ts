@@ -9,8 +9,10 @@ import type { Customer, CustomerResource } from "@atlas/types";
 export class CustomerService {
 	readonly #documentService = inject(DocumentService);
 
-	readonly #customerMap = computed(
-		() => new Map(this.#documentService.documents()?.map((document) => [document.customer.id, document.customer])),
+	readonly #customerMap = computed(() =>
+		this.#documentService.documents.hasValue()
+			? new Map(this.#documentService.documents.value()?.map((document) => [document.customer.id, document.customer]))
+			: new Map(),
 	);
 	readonly #customers = linkedSignal<CustomerResource[]>(() =>
 		Array.from(this.#customerMap().values()).map((customer) => ({

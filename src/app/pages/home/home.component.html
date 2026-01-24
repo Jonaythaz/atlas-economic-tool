@@ -12,21 +12,22 @@
         </kirby-action-group>
     </kirby-header>
     <kirby-page-content>
-        <kirby-loading-overlay [isLoading]="vm.isLoading()">
-            @if (vm.hasDocuments()) {
+        <kirby-loading-overlay [isLoading]="vm.documents.isLoading()">
+            @if (vm.documents.error(); as error) {
+            <kirby-empty-state
+                iconName="warning"
+                themeColor="danger"
+                title="Loading Invoices Failed"
+                [subtitle]="error.message"
+            >
+                <button kirby-button (click)="vm.loadInvoices()">
+                    <kirby-icon name="upload"></kirby-icon>
+                    <span class="text">Retry</span>
+                </button>
+            </kirby-empty-state>
+            }
+            @else if (vm.documents.hasValue() && vm.documents.value().length > 0) {
                 <atlas-document-overview></atlas-document-overview>
-            } @else if (vm.error(); as error) {
-                <kirby-empty-state
-                    iconName="warning"
-                    themeColor="danger"
-                    title="Loading Invoices Failed"
-                    [subtitle]="error"
-                >
-                    <button kirby-button (click)="vm.loadInvoices()">
-                        <kirby-icon name="upload"></kirby-icon>
-                        <span class="text">Retry</span>
-                    </button>
-                </kirby-empty-state>
             } @else {
                 <kirby-empty-state
                     iconName="help"

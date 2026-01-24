@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, type Signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, type Resource } from "@angular/core";
 import { DocumentOverviewComponent } from "@atlas/components/document-overview";
 import { SettingsModalService } from "@atlas/modals/settings";
+import type { DocumentModel } from "@atlas/models";
 import { DocumentService } from "@atlas/services/document";
 import {
 	ActionGroupComponent,
@@ -13,9 +14,7 @@ import {
 } from "@kirbydesign/designsystem";
 
 type ViewModel = {
-	hasDocuments: Signal<boolean>;
-	error: Signal<string | undefined>;
-	isLoading: Signal<boolean>;
+	documents: Resource<DocumentModel[] | undefined>;
 	loadInvoices: () => void;
 	openSettings: () => Promise<void>;
 };
@@ -40,9 +39,7 @@ export class HomeComponent {
 	readonly #settingsModalService = inject(SettingsModalService);
 
 	readonly vm: ViewModel = {
-		hasDocuments: computed(() => this.#documentService.documents().length > 0),
-		error: this.#documentService.error,
-		isLoading: this.#documentService.isLoading,
+		documents: this.#documentService.documents,
 		loadInvoices: this.#documentService.load.bind(this.#documentService),
 		openSettings: this.#settingsModalService.open.bind(this.#settingsModalService),
 	};
