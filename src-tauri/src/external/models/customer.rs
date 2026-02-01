@@ -7,6 +7,9 @@ pub struct Customer {
     #[serde(rename = "customerNumber", skip_serializing)]
     pub id: Option<i32>,
 
+    #[serde(rename = "ean")]
+    pub ean: Option<String>,
+
     #[serde(rename = "name")]
     pub name: String,
 

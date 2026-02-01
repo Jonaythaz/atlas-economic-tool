@@ -45,9 +45,9 @@ export class InvoiceService {
 		if (layout === undefined || paymentTerms === undefined || vatZone === undefined) {
 			throw new Error("Missing default values for creating invoice.");
 		}
-		const customerId = customerMap.get(invoice.customer.id);
+		const customerId = customerMap.get(invoice.customer.ean);
 		if (customerId === undefined) {
-			throw new Error(`Missing external ID for customer with ID ${invoice.customer.id}`);
+			throw new Error(`Missing ID for customer with EAN: ${invoice.customer.ean}`);
 		}
 		const newInvoice = toNewInvoice(invoice, customerId, layout, paymentTerms, vatZone);
 		await createInvoice(newInvoice, settings.tokens);

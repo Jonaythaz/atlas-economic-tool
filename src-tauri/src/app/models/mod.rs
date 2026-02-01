@@ -11,12 +11,13 @@ mod new_product;
 mod product;
 mod tokens;
 
-pub use create_customer_request::{CreateCustomerRequest, NewCustomer};
+pub use create_customer_request::CreateCustomerRequest;
 pub use customer::Customer;
 pub use document::Document;
 pub use document_customer::DocumentCustomer;
 pub use document_line::DocumentLine;
 pub use document_product::DocumentProduct;
+pub use new_customer::NewCustomer;
 pub use new_invoice::NewInvoice;
 pub use new_invoice_line::NewInvoiceLine;
 pub use new_product::NewProduct;

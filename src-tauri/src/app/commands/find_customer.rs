@@ -6,9 +6,9 @@ use crate::{
 };
 
 #[tauri::command]
-pub fn find_customer(id: String, state: State<'_, AppState>) -> Result<Option<i32>, String> {
+pub fn find_customer(ean: String, state: State<'_, AppState>) -> Result<Option<i32>, String> {
     state
-        .db(|conn| persistence::find_customer(conn, &id))
+        .db(|conn| persistence::find_customer(conn, &ean))
         .map(|customer| customer.map(|c| c.external_id))
         .map_err(|error| error.to_string())
 }

@@ -10,14 +10,15 @@ pub async fn create_customer(
     request: CreateCustomerRequest,
     state: State<'_, AppState>,
 ) -> Result<i32, String> {
-    if let Some(external_id) = find_customer_locally(&request.local_id, &state)? {
-        return Ok(external_id);
+    if let Some(id) = find_customer_locally(&request.customer.ean, &state)? {
+        return Ok(id);
     }
 
-    let external_id = create_customer_externally(request.new_customer, request.tokens).await?;
-    create_customer_locally(request.local_id, external_id, &state)?;
+    let ean = request.customer.ean.clone();
+    let id = create_customer_externally(request.customer, request.tokens).await?;
+    create_customer_locally(ean, id, &state)?;
 
-    Ok(external_id)
+    Ok(id)
 }
 
 fn find_customer_locally(id: &str, state: &State<'_, AppState>) -> Result<Option<i32>, String> {

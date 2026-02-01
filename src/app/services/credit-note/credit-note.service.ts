@@ -45,9 +45,9 @@ export class CreditNoteService {
 		if (layout === undefined || paymentTerms === undefined || vatZone === undefined) {
 			throw new Error("Missing default values for creating creditNote.");
 		}
-		const customerId = customerMap.get(creditNote.customer.id);
+		const customerId = customerMap.get(creditNote.customer.ean);
 		if (customerId === undefined) {
-			return Promise.reject(new Error(`Missing external ID for customer with ID ${creditNote.customer.id}`));
+			return Promise.reject(new Error(`Missing ID for customer with EAN: ${creditNote.customer.ean}`));
 		}
 		const newCreditNote = toNewInvoice(creditNote, customerId, layout, paymentTerms, vatZone);
 		await createInvoice(newCreditNote, settings.tokens);

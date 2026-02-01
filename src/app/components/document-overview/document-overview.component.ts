@@ -65,6 +65,6 @@ export class DocumentOverviewComponent {
 		viewCreditNote: this.#creditNoteService.viewCreditNote.bind(this.#creditNoteService),
 		editCustomer: this.#customerModalService.open.bind(this.#customerModalService),
 		editProduct: this.#productModalService.open.bind(this.#productModalService),
-		createInvoices: this.#overviewService.createInvoices.bind(this),
+		createInvoices: this.#overviewService.createInvoices.bind(this.#overviewService),
 	};
 }

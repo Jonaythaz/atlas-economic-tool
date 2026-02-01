@@ -11,7 +11,7 @@ export class CustomerService {
 
 	readonly #customerMap = computed(() =>
 		this.#documentService.documents.hasValue()
-			? new Map(this.#documentService.documents.value()?.map((document) => [document.customer.id, document.customer]))
+			? new Map(this.#documentService.documents.value()?.map((document) => [document.customer.ean, document.customer]))
 			: new Map(),
 	);
 	readonly #customers = linkedSignal<CustomerResource[]>(() =>
@@ -36,21 +36,23 @@ export class CustomerService {
 			(error) => {
 				const message = error instanceof Error ? error.message : "Unexpected error occured.";
 				this.#updateCustomers((c) => (c.model.id === customer.id ? { ...c, status: "error", message } : c));
+				throw new Error(message);
 			},
 		);
 	}
 
-	async updateCustomer(id: string, externalId: number): Promise<void> {
-		await updateCustomer(id, externalId).then(
+	async updateCustomer(ean: string, id: number): Promise<void> {
+		await updateCustomer(ean, id).then(
 			() =>
 				this.#updateCustomers((customer) =>
-					customer.model.id === id ? { model: { ...customer.model, externalId }, status: "created" } : customer,
+					customer.model.ean === ean ? { model: { ...customer.model, id }, status: "created" } : customer,
 				),
 			(error) => {
 				const message = error instanceof Error ? error.message : "Unexpected error occured.";
 				this.#updateCustomers((customer) =>
-					customer.model.id === id ? { ...customer, status: "error", message } : customer,
+					customer.model.ean === ean ? { ...customer, status: "error", message } : customer,
 				);
+				throw new Error(message);
 			},
 		);
 	}
@@ -59,23 +61,23 @@ export class CustomerService {
 		return createResources({
 			resources: this.#customers,
 			createFn: (model) => this.#createCustomer(model, settings),
-			equalFn: (c1, c2) => c1.id === c2.id,
+			equalFn: (c1, c2) => c1.ean === c2.ean,
 		});
 	}
 
 	async #createCustomer(customer: Customer, settings: Settings): Promise<Customer> {
-		const externalId = await findCustomer(customer.id);
-		if (externalId) {
-			return { ...customer, externalId };
+		const id = await findCustomer(customer.ean);
+		if (id) {
+			return { ...customer, id };
 		}
 		const newCustomer = toNewCustomer(customer, settings.defaults);
-		return createCustomer(customer.id, newCustomer, settings.tokens).then((externalId) =>
-			fromNewCustomer(newCustomer, customer.id, externalId),
-		);
+		return createCustomer(newCustomer, settings.tokens).then((id) => fromNewCustomer(newCustomer, id));
 	}
 
 	#updateCustomer(updatedCustomer: CustomerResource): void {
-		this.#updateCustomers((customer) => (customer.model.id === updatedCustomer.model.id ? updatedCustomer : customer));
+		this.#updateCustomers((customer) =>
+			customer.model.ean === updatedCustomer.model.ean ? updatedCustomer : customer,
+		);
 	}
 
 	#updateCustomers(updateFn: (resource: CustomerResource) => CustomerResource): void {
@@ -83,23 +85,23 @@ export class CustomerService {
 	}
 }
 
-function fromNewCustomer(customer: NewCustomer, id: string, externalId: number): Customer {
+function fromNewCustomer(customer: NewCustomer, id: number): Customer {
 	return {
-		id,
+		id: id,
+		ean: customer.ean,
 		name: customer.name,
 		group: customer.group,
 		vatZone: customer.vatZone,
 		paymentTerms: customer.paymentTerms,
-		externalId,
 	};
 }
 
 function toNewCustomer(customer: Customer, defaults: Defaults): NewCustomer {
-	const group = customer.group ?? defaults.customerGroup;
-	const vatZone = customer.vatZone ?? defaults.vatZone;
-	const paymentTerms = customer.paymentTerms ?? defaults.paymentTerms;
-	if (group === undefined || vatZone === undefined || paymentTerms === undefined) {
-		throw new Error("Could not create customer because of missing default value.");
+	const group = customer.group ?? defaults.customerGroup ?? null;
+	const vatZone = customer.vatZone ?? defaults.vatZone ?? null;
+	const paymentTerms = customer.paymentTerms ?? defaults.paymentTerms ?? null;
+	if (group === null || vatZone === null || paymentTerms === null) {
+		throw new Error("Missing required fields.");
 	}
-	return { name: customer.name, group, vatZone, paymentTerms };
+	return { ean: customer.ean, name: customer.name, group, vatZone, paymentTerms };
 }

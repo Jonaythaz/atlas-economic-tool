@@ -1,8 +1,8 @@
 export type Customer = {
-	id: string;
+	id?: number;
+	ean: string;
 	name: string;
 	group?: number;
 	vatZone?: number;
 	paymentTerms?: number;
-	externalId?: number;
 };

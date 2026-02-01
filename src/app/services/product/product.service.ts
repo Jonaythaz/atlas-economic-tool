@@ -40,6 +40,7 @@ export class ProductService {
 			(error) => {
 				const message = error instanceof Error ? error.message : "Unexpected error occured.";
 				this.#updateProducts((p) => (p.model.id === product.id ? { ...p, status: "error", message } : p));
+				throw new Error(message);
 			},
 		);
 	}

@@ -1,15 +1,21 @@
-<kirby-page-title>Customer {{ vm.form.id().value() }}</kirby-page-title>
+<kirby-page-title>{{ vm.form.name().value() }}</kirby-page-title>
 
-@if (vm.errorMessage) {
+@if (vm.errorMessage(); as errorMessage) {
 <kirby-flag
     themeColor="danger"
     style="margin-bottom: 16px; white-space: pre-wrap"
-    >{{ vm.errorMessage }}</kirby-flag
+    >{{ errorMessage }}</kirby-flag
 >
 }
 
 <kirby-loading-overlay [isLoading]="vm.isLoading()">
     <kirby-card [hasPadding]="true">
+        <kirby-form-field label="ID">
+            <input kirby-input type="number" [formField]="vm.form.id" />
+        </kirby-form-field>
+        <kirby-form-field label="EAN">
+            <input kirby-input [formField]="vm.form.ean" />
+        </kirby-form-field>
         <kirby-form-field
             label="Name"
             [message]="vm.form.name().errors().at(0)?.message"
@@ -52,9 +58,6 @@
                 [formField]="vm.form.vatZone"
                 [hasError]="vm.form.vatZone().invalid()"
             />
-        </kirby-form-field>
-        <kirby-form-field label="External ID">
-            <input kirby-input type="number" [formField]="vm.form.externalId" />
         </kirby-form-field>
     </kirby-card>
 </kirby-loading-overlay>

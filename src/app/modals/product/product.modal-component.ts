@@ -16,7 +16,6 @@ import {
 	Modal,
 	ModalFooterComponent,
 	PageModule,
-	ToastController,
 } from "@kirbydesign/designsystem";
 
 export type ComponentProps = {
@@ -26,7 +25,7 @@ export type ComponentProps = {
 
 type ViewModel = {
 	form: FieldTree<Required<Product>>;
-	errorMessage: string | null;
+	errorMessage: Signal<string | null>;
 	isLoading: Signal<boolean>;
 	unsubmittable: Signal<boolean>;
 	submit: () => Promise<void>;
@@ -52,10 +51,9 @@ export class ProductModalComponent {
 	readonly #modal = inject(Modal);
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
 	readonly #productService = inject(ProductService);
-	readonly #toastController = inject(ToastController);
 
 	readonly #uneditable = this.#props.product.status === "created";
-	readonly #errorMessage = this.#props.product.status === "error" ? this.#props.product.message : null;
+	readonly #errorMessage = signal(this.#props.product.status === "error" ? this.#props.product.message : null);
 
 	readonly #isLoading = signal(false);
 	readonly #model = signal<Required<Product>>({
@@ -80,12 +78,7 @@ export class ProductModalComponent {
 		await this.#productService
 			.createProduct(this.#form().value(), this.#props.settings)
 			.then(this.#closeModal.bind(this))
-			.catch((error) =>
-				this.#toastController.showToast({
-					message: error instanceof Error ? error.message : "Unexpected error occured",
-					messageType: "warning",
-				}),
-			)
+			.catch((error) => this.#errorMessage.set(error.message))
 			.finally(() => this.#isLoading.set(false));
 	}
 

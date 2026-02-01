@@ -1,10 +1,10 @@
 <kirby-page-title>Product {{ vm.form.id().value() }}</kirby-page-title>
 
-@if (vm.errorMessage) {
+@if (vm.errorMessage(); as errorMessage) {
 <kirby-flag
     themeColor="danger"
     style="margin-bottom: 16px; white-space: pre-wrap"
-    >{{ vm.errorMessage }}</kirby-flag
+    >{{ errorMessage }}</kirby-flag
 >
 }
 

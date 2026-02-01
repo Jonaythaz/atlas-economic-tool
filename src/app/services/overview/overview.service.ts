@@ -64,7 +64,7 @@ export class OverviewService {
 		await Promise.all([invoicesPromise, creditNotesPromise]).finally(() => this.#creating.set(false));
 	}
 
-	#createCustomersAndProducts(settings: Settings): Promise<boolean> {
+	async #createCustomersAndProducts(settings: Settings): Promise<boolean> {
 		return Promise.all([
 			this.#customerService.createCustomers(settings),
 			this.#productService.createProducts(settings),
@@ -74,8 +74,8 @@ export class OverviewService {
 
 function createCustomerMap(customers: CustomerResource[]): Map<string, number> {
 	return customers.reduce((map, customer) => {
-		if (customer.model.externalId) {
-			map.set(customer.model.id, customer.model.externalId);
+		if (customer.model.id) {
+			map.set(customer.model.ean, customer.model.id);
 		}
 		return map;
 	}, new Map<string, number>());

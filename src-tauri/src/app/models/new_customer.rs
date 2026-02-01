@@ -5,6 +5,7 @@ use crate::external::models::{CustomerGroup, PaymentTerms, VatZone};
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NewCustomer {
+    pub ean: String,
     pub name: String,
     pub group: i32,
     pub vat_zone: i32,
@@ -15,6 +16,7 @@ impl Into<crate::external::models::Customer> for NewCustomer {
     fn into(self) -> crate::external::models::Customer {
         crate::external::models::Customer {
             id: None,
+            ean: Some(self.ean),
             name: self.name,
             group: CustomerGroup { id: self.group },
             vat_zone: VatZone { id: self.vat_zone },
