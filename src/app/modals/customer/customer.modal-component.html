@@ -27,6 +27,46 @@
             />
         </kirby-form-field>
         <kirby-form-field
+            label="Street"
+            [message]="vm.form.street().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                [formField]="vm.form.street"
+                [hasError]="vm.form.street().invalid()"
+            />
+        </kirby-form-field>
+        <kirby-form-field
+            label="City"
+            [message]="vm.form.city().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                [formField]="vm.form.city"
+                [hasError]="vm.form.city().invalid()"
+            />
+        </kirby-form-field>
+        <kirby-form-field
+            label="Postal Code"
+            [message]="vm.form.postalCode().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                [formField]="vm.form.postalCode"
+                [hasError]="vm.form.postalCode().invalid()"
+            />
+        </kirby-form-field>
+        <kirby-form-field
+            label="Country"
+            [message]="vm.form.country().errors().at(0)?.message"
+        >
+            <input
+                kirby-input
+                [formField]="vm.form.country"
+                [hasError]="vm.form.country().invalid()"
+            />
+        </kirby-form-field>
+        <kirby-form-field
             label="Group"
             [message]="vm.form.group().errors().at(0)?.message"
         >

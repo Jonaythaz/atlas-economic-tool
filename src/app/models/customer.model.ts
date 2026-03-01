@@ -1,8 +1,12 @@
 export type CustomerModel = {
-  id: number;
-  ean?: string;
-  name: string;
-  group: number;
-  vatZone: number;
-  paymentTerms: number;
+	id: number;
+	ean?: string;
+	name: string;
+	street: string;
+	city: string;
+	postalCode: string;
+	country: string;
+	group: number;
+	vatZone: number;
+	paymentTerms: number;
 };

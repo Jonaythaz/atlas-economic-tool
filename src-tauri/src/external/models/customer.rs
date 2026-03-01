@@ -13,6 +13,18 @@ pub struct Customer {
     #[serde(rename = "name")]
     pub name: String,
 
+    #[serde(rename = "address")]
+    pub street: String,
+
+    #[serde(rename = "city")]
+    pub city: String,
+
+    #[serde(rename = "zip")]
+    pub postal_code: String,
+
+    #[serde(rename = "country")]
+    pub country: String,
+
     #[serde(rename = "customerGroup")]
     pub group: CustomerGroup,
 

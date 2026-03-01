@@ -7,6 +7,10 @@ use crate::external::models::{CustomerGroup, PaymentTerms, VatZone};
 pub struct NewCustomer {
     pub ean: String,
     pub name: String,
+    pub street: String,
+    pub city: String,
+    pub postal_code: String,
+    pub country: String,
     pub group: i32,
     pub vat_zone: i32,
     pub payment_terms: i32,
@@ -18,6 +22,10 @@ impl Into<crate::external::models::Customer> for NewCustomer {
             id: None,
             ean: Some(self.ean),
             name: self.name,
+            street: self.street,
+            city: self.city,
+            postal_code: self.postal_code,
+            country: self.country,
             group: CustomerGroup { id: self.group },
             vat_zone: VatZone { id: self.vat_zone },
             payment_terms: PaymentTerms {

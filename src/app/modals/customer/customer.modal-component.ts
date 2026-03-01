@@ -59,6 +59,10 @@ export class CustomerModalComponent {
 	readonly #model = signal<Required<Customer>>({
 		...this.#props.customer.model,
 		id: this.#props.customer.model.id ?? NaN,
+		street: this.#props.customer.model.street,
+		city: this.#props.customer.model.city,
+		postalCode: this.#props.customer.model.postalCode,
+		country: this.#props.customer.model.country,
 		group: this.#props.customer.model.group ?? this.#props.settings.defaults.customerGroup ?? NaN,
 		paymentTerms: this.#props.customer.model.paymentTerms ?? this.#props.settings.defaults.paymentTerms ?? NaN,
 		vatZone: this.#props.customer.model.vatZone ?? this.#props.settings.defaults.vatZone ?? NaN,
@@ -67,6 +71,14 @@ export class CustomerModalComponent {
 		readonly(schema.ean);
 		required(schema.name, { message: "Customer name is required" });
 		disabled(schema.name, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
+		required(schema.street, { message: "Street is required" });
+		disabled(schema.street, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
+		required(schema.city, { message: "City is required" });
+		disabled(schema.city, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
+		required(schema.postalCode, { message: "Postal code is required" });
+		disabled(schema.postalCode, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
+		required(schema.country, { message: "Country is required" });
+		disabled(schema.country, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
 		required(schema.group, { message: "Customer group is required" });
 		disabled(schema.group, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
 		required(schema.paymentTerms, { message: "Payment terms is required" });

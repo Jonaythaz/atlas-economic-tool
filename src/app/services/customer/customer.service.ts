@@ -90,6 +90,10 @@ function fromNewCustomer(customer: NewCustomer, id: number): Customer {
 		id: id,
 		ean: customer.ean,
 		name: customer.name,
+		street: customer.street,
+		city: customer.city,
+		postalCode: customer.postalCode,
+		country: customer.country,
 		group: customer.group,
 		vatZone: customer.vatZone,
 		paymentTerms: customer.paymentTerms,
@@ -103,5 +107,15 @@ function toNewCustomer(customer: Customer, defaults: Defaults): NewCustomer {
 	if (group === null || vatZone === null || paymentTerms === null) {
 		throw new Error("Missing required fields.");
 	}
-	return { ean: customer.ean, name: customer.name, group, vatZone, paymentTerms };
+	return {
+		ean: customer.ean,
+		name: customer.name,
+		street: customer.street,
+		city: customer.city,
+		postalCode: customer.postalCode,
+		country: customer.country,
+		group,
+		vatZone,
+		paymentTerms,
+	};
 }
