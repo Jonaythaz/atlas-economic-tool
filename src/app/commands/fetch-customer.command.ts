@@ -1,9 +1,9 @@
-import { parseError } from "@atlas/functions/parse-error";
-import type { CustomerModel, Tokens } from "@atlas/models";
-import { invoke } from "@tauri-apps/api/core";
+import { parseError } from '@atlas/functions/parse-error';
+import type { CustomerModel, Tokens } from '@atlas/models';
+import { invoke } from '@tauri-apps/api/core';
 
 export async function fetchCustomer(id: number, tokens: Tokens): Promise<CustomerModel | null> {
-	return invoke<CustomerModel | null>("fetch_customer", { id, tokens }).catch((error) => {
+	return invoke<CustomerModel | null>('fetch_customer', { id, tokens }).catch((error) => {
 		throw parseError(error);
 	});
 }

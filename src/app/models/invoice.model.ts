@@ -1,8 +1,8 @@
-import type { DocumentCustomer } from "./document-customer.model";
-import type { DocumentLine } from "./document-line.model";
+import type { DocumentCustomer } from './document-customer.model';
+import type { DocumentLine } from './document-line.model';
 
 export type InvoiceModel = {
-	type: "invoice";
+	type: 'invoice';
 	id: string;
 	date: string;
 	damageNumber?: string;

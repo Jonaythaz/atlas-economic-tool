@@ -1,10 +1,10 @@
-import { Injectable, inject } from "@angular/core";
-import type { InvoiceResource } from "@atlas/types";
-import { ModalController } from "@kirbydesign/designsystem";
+import { Injectable, inject } from '@angular/core';
+import type { InvoiceResource } from '@atlas/types';
+import { ModalController } from '@kirbydesign/designsystem';
 
-import { InvoiceModalComponent } from "./invoice.modal-component";
+import { InvoiceModalComponent } from './invoice.modal-component';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class InvoiceModalService {
 	readonly #modalController = inject(ModalController);
 
@@ -12,7 +12,7 @@ export class InvoiceModalService {
 		await this.#modalController.showModal({
 			component: InvoiceModalComponent,
 			componentProps: { invoice },
-			size: "full-height",
+			size: 'full-height',
 		});
 	}
 }

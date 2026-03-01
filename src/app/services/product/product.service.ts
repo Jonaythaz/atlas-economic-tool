@@ -1,11 +1,11 @@
-import { computed, Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createProduct, fetchProduct } from "@atlas/commands";
-import { createResources } from "@atlas/functions/create-resources";
-import type { Defaults, NewProduct, Settings } from "@atlas/models";
-import { DocumentService } from "@atlas/services/document";
-import type { Product, ProductResource } from "@atlas/types";
+import { computed, Injectable, inject, linkedSignal, type Signal } from '@angular/core';
+import { createProduct, fetchProduct } from '@atlas/commands';
+import { createResources } from '@atlas/functions/create-resources';
+import type { Defaults, NewProduct, Settings } from '@atlas/models';
+import { DocumentService } from '@atlas/services/document';
+import type { Product, ProductResource } from '@atlas/types';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class ProductService {
 	readonly #documentService = inject(DocumentService);
 
@@ -21,10 +21,10 @@ export class ProductService {
 	readonly #products = linkedSignal<ProductResource[]>(() =>
 		Array.from(this.#productMap().values()).map((product) => ({
 			model: product,
-			status: "pending",
+			status: 'pending',
 		})),
 	);
-	readonly #hasErrors = computed(() => this.#products().some((product) => product.status === "error"));
+	readonly #hasErrors = computed(() => this.#products().some((product) => product.status === 'error'));
 
 	get products(): Signal<ProductResource[]> {
 		return this.#products;
@@ -36,10 +36,10 @@ export class ProductService {
 
 	async createProduct(product: Product, settings: Settings): Promise<void> {
 		await this.#createProduct(product, settings).then(
-			(createdProduct) => this.#updateProduct({ model: createdProduct, status: "created" }),
+			(createdProduct) => this.#updateProduct({ model: createdProduct, status: 'created' }),
 			(error) => {
-				const message = error instanceof Error ? error.message : "Unexpected error occured.";
-				this.#updateProducts((p) => (p.model.id === product.id ? { ...p, status: "error", message } : p));
+				const message = error instanceof Error ? error.message : 'Unexpected error occured.';
+				this.#updateProducts((p) => (p.model.id === product.id ? { ...p, status: 'error', message } : p));
 				throw new Error(message);
 			},
 		);
@@ -75,7 +75,7 @@ export class ProductService {
 function toNewProduct(product: Product, defaults: Defaults): NewProduct {
 	const group = product.group ?? defaults.productGroup;
 	if (group === undefined) {
-		throw new Error("Could not create product because of missing default value.");
+		throw new Error('Could not create product because of missing default value.');
 	}
 	return {
 		id: product.id,

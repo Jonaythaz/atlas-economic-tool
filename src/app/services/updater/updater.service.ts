@@ -1,7 +1,7 @@
-import { computed, Injectable, resource, type Signal, signal } from "@angular/core";
-import { check } from "@tauri-apps/plugin-updater";
+import { computed, Injectable, resource, type Signal, signal } from '@angular/core';
+import { check } from '@tauri-apps/plugin-updater';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class UpdaterService {
 	readonly #downloadSize = signal<number | null>(null);
 	readonly #downloadProgress = signal<number>(0);
@@ -27,14 +27,14 @@ export class UpdaterService {
 	async performUpdate(): Promise<void> {
 		const update = this.#updateResource.value();
 		if (update === null) {
-			throw new Error("No update available");
+			throw new Error('No update available');
 		}
 		await update.downloadAndInstall((download) => {
 			switch (download.event) {
-				case "Started":
+				case 'Started':
 					this.#downloadSize.set(download.data.contentLength ?? null);
 					break;
-				case "Progress":
+				case 'Progress':
 					this.#downloadProgress.update((current) => current + download.data.chunkLength);
 					break;
 			}

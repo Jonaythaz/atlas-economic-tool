@@ -9,7 +9,7 @@
         title="Unable to load settings"
         [subtitle]="error"
     >
-        <button kirby-button (click)="vm.reload()">Retry</button>
+        <button kirby-button type="button" (click)="vm.reload()">Retry</button>
     </kirby-empty-state>
     } @else {
     <kirby-section-header>
@@ -86,7 +86,12 @@
 </kirby-loading-overlay>
 
 <kirby-modal-footer>
-    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">
+    <button
+        kirby-button
+        type="submit"
+        [disabled]="vm.unsubmittable()"
+        (click)="vm.submit()"
+    >
         Save
     </button>
 </kirby-modal-footer>

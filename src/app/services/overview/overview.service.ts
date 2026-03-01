@@ -1,15 +1,15 @@
-import { computed, Injectable, inject, type Signal, signal } from "@angular/core";
-import { fetchSettings } from "@atlas/commands";
-import { OVERVIEW_SEGMENTS } from "@atlas/constants";
-import type { Settings } from "@atlas/models";
-import { CreditNoteService } from "@atlas/services/credit-note";
-import { CustomerService } from "@atlas/services/customer";
-import { InvoiceService } from "@atlas/services/invoice";
-import { ProductService } from "@atlas/services/product";
-import { type CustomerResource, OverviewSegment } from "@atlas/types";
-import { type SegmentItem, type ThemeColor, ToastController } from "@kirbydesign/designsystem";
+import { computed, Injectable, inject, type Signal, signal } from '@angular/core';
+import { fetchSettings } from '@atlas/commands';
+import { OVERVIEW_SEGMENTS } from '@atlas/constants';
+import type { Settings } from '@atlas/models';
+import { CreditNoteService } from '@atlas/services/credit-note';
+import { CustomerService } from '@atlas/services/customer';
+import { InvoiceService } from '@atlas/services/invoice';
+import { ProductService } from '@atlas/services/product';
+import { type CustomerResource, OverviewSegment } from '@atlas/types';
+import { type SegmentItem, type ThemeColor, ToastController } from '@kirbydesign/designsystem';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class OverviewService {
 	readonly #invoiceService = inject(InvoiceService);
 	readonly #creditNoteService = inject(CreditNoteService);
@@ -52,8 +52,8 @@ export class OverviewService {
 		const succesful = await this.#createCustomersAndProducts(settings);
 		if (!succesful) {
 			this.#toastController.showToast({
-				message: "One or more errors occured while creating customers and products",
-				messageType: "warning",
+				message: 'One or more errors occured while creating customers and products',
+				messageType: 'warning',
 			});
 			this.#creating.set(false);
 			return;
@@ -88,7 +88,7 @@ type SegmentItemBadge = {
 	themeColor: ThemeColor;
 };
 const ERRORS_BADGE: SegmentItemBadge = {
-	icon: "warning",
-	description: "Errors present",
-	themeColor: "danger",
+	icon: 'warning',
+	description: 'Errors present',
+	themeColor: 'danger',
 };

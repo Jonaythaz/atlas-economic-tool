@@ -1,9 +1,9 @@
-import type { Settings } from "@atlas/models";
+import type { Settings } from '@atlas/models';
 
 export const DEFAULT_SETTINGS: Settings = {
 	tokens: {
-		secret: "",
-		grant: "",
+		secret: '',
+		grant: '',
 	},
 	defaults: {},
 };

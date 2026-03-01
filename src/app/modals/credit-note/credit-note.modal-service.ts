@@ -1,10 +1,10 @@
-import { Injectable, inject } from "@angular/core";
-import type { CreditNoteResource } from "@atlas/types";
-import { ModalController } from "@kirbydesign/designsystem";
+import { Injectable, inject } from '@angular/core';
+import type { CreditNoteResource } from '@atlas/types';
+import { ModalController } from '@kirbydesign/designsystem';
 
-import { CreditNoteModalComponent } from "./credit-note.modal-component";
+import { CreditNoteModalComponent } from './credit-note.modal-component';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class CreditNoteModalService {
 	readonly #modalController = inject(ModalController);
 
@@ -12,7 +12,7 @@ export class CreditNoteModalService {
 		await this.#modalController.showModal({
 			component: CreditNoteModalComponent,
 			componentProps: { creditNote },
-			size: "full-height",
+			size: 'full-height',
 		});
 	}
 }

@@ -1,4 +1,4 @@
-import type { NewInvoiceLine } from "./new-invoice-line.model";
+import type { NewInvoiceLine } from './new-invoice-line.model';
 
 export type NewInvoice = {
 	date: string;

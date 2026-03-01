@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, type Signal, signal } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { type FieldTree, FormField, form, required } from "@angular/forms/signals";
-import { updateSettings } from "@atlas/commands";
-import { DEFAULT_SETTINGS, DISMISS_ALERT_CONFIG } from "@atlas/constants";
-import type { Defaults, Settings, Tokens } from "@atlas/models";
-import { SettingsService } from "@atlas/services/settings";
+import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, type Signal, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { type FieldTree, FormField, form, required } from '@angular/forms/signals';
+import { updateSettings } from '@atlas/commands';
+import { DEFAULT_SETTINGS, DISMISS_ALERT_CONFIG } from '@atlas/constants';
+import type { Defaults, Settings, Tokens } from '@atlas/models';
+import { SettingsService } from '@atlas/services/settings';
 import {
 	ButtonComponent,
 	CardModule,
@@ -17,7 +17,7 @@ import {
 	PageModule,
 	SectionHeaderComponent,
 	ToastController,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 type ViewModel = {
 	form: FieldTree<SettingsModel>;
@@ -29,8 +29,8 @@ type ViewModel = {
 };
 
 @Component({
-	selector: "atlas-settings-modal",
-	templateUrl: "./settings.modal-component.html",
+	selector: 'atlas-settings-modal',
+	templateUrl: './settings.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
@@ -66,8 +66,8 @@ export class SettingsModalComponent {
 		};
 	});
 	readonly #form = form(this.#model, (schema) => {
-		required(schema.tokens.secret, { message: "Secret token is required" });
-		required(schema.tokens.grant, { message: "Grant token is required" });
+		required(schema.tokens.secret, { message: 'Secret token is required' });
+		required(schema.tokens.grant, { message: 'Grant token is required' });
 	});
 
 	readonly #unsubmittable = computed(() => !this.#form().dirty() || this.#form().invalid() || this.#saving());
@@ -88,7 +88,7 @@ export class SettingsModalComponent {
 			.catch((error) =>
 				this.#toastController.showToast({
 					message: `Was unable to save settings: ${error.message}`,
-					messageType: "warning",
+					messageType: 'warning',
 				}),
 			)
 			.finally(() => this.#saving.set(false));

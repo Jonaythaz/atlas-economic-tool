@@ -1,11 +1,11 @@
 <kirby-page>
     <kirby-header title="Atlas Economic Tool" subtitle1="Invoice Management">
         <kirby-action-group *kirbyHeaderActions>
-            <button kirby-button (click)="vm.loadInvoices()">
+            <button kirby-button type="button" (click)="vm.loadInvoices()">
                 <kirby-icon name="upload"></kirby-icon>
                 <span class="text">Load Invoices</span>
             </button>
-            <button kirby-button attentionLevel="3" (click)="vm.openSettings()">
+            <button kirby-button attentionLevel="3" type="button" (click)="vm.openSettings()">
                 <kirby-icon name="cog"></kirby-icon>
                 <span class="text">Settings</span>
             </button>
@@ -20,7 +20,7 @@
                 title="Loading Invoices Failed"
                 [subtitle]="error.message"
             >
-                <button kirby-button (click)="vm.loadInvoices()">
+                <button kirby-button type="button" (click)="vm.loadInvoices()">
                     <kirby-icon name="upload"></kirby-icon>
                     <span class="text">Retry</span>
                 </button>
@@ -34,7 +34,7 @@
                     title="No Invoices Loaded"
                     subtitle="Load some invoices to get started."
                 >
-                    <button kirby-button (click)="vm.loadInvoices()">
+                    <button kirby-button type="button" (click)="vm.loadInvoices()">
                         <kirby-icon name="upload"></kirby-icon>
                         <span class="text">Load Invoices</span>
                     </button>

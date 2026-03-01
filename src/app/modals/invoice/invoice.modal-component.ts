@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
-import type { InvoiceModel } from "@atlas/models";
-import type { InvoiceResource } from "@atlas/types";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import type { InvoiceModel } from '@atlas/models';
+import type { InvoiceResource } from '@atlas/types';
 import {
 	AccordionModule,
 	CardModule,
@@ -10,7 +10,7 @@ import {
 	ItemModule,
 	PageModule,
 	SectionHeaderComponent,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
 	invoice: InvoiceResource;
@@ -22,7 +22,7 @@ type ViewModel = {
 };
 
 @Component({
-	templateUrl: "./invoice.modal-component.html",
+	templateUrl: './invoice.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
@@ -38,7 +38,7 @@ export class InvoiceModalComponent {
 	readonly #invoice = inject<ComponentProps>(COMPONENT_PROPS).invoice;
 
 	readonly vm: ViewModel = {
-		errorMessage: this.#invoice.status === "error" ? this.#invoice.message : undefined,
+		errorMessage: this.#invoice.status === 'error' ? this.#invoice.message : undefined,
 		invoice: this.#invoice.model,
 	};
 }

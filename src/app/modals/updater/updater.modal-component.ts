@@ -1,7 +1,7 @@
-import { DecimalPipe } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, type Signal } from "@angular/core";
-import { UpdaterService } from "@atlas/services/updater";
-import { ButtonComponent, EmptyStateModule, Modal, ProgressCircleComponent } from "@kirbydesign/designsystem";
+import { DecimalPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, type Signal } from '@angular/core';
+import { UpdaterService } from '@atlas/services/updater';
+import { ButtonComponent, EmptyStateModule, Modal, ProgressCircleComponent } from '@kirbydesign/designsystem';
 
 type ViewModel = {
 	updateAvailable: Signal<boolean>;
@@ -11,8 +11,8 @@ type ViewModel = {
 };
 
 @Component({
-	selector: "app-updater-modal",
-	templateUrl: "./updater.modal-component.html",
+	selector: 'app-updater-modal',
+	templateUrl: './updater.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [ProgressCircleComponent, EmptyStateModule, ButtonComponent, DecimalPipe],
 })

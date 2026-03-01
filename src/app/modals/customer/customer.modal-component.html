@@ -103,7 +103,12 @@
 </kirby-loading-overlay>
 
 <kirby-modal-footer>
-    <button kirby-button [disabled]="vm.unsubmittable()" (click)="vm.submit()">
+    <button
+        kirby-button
+        type="submit"
+        [disabled]="vm.unsubmittable()"
+        (click)="vm.submit()"
+    >
         {{ vm.submitMessage() }}
     </button>
 </kirby-modal-footer>

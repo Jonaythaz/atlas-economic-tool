@@ -2,21 +2,21 @@ export type DocumentResource<T> = PendingResource<T> | LoadingResource<T> | Erro
 
 type PendingResource<T> = {
 	model: T;
-	status: "pending";
+	status: 'pending';
 };
 
 type LoadingResource<T> = {
 	model: T;
-	status: "loading";
+	status: 'loading';
 };
 
 type ErroredResource<T> = {
 	model: T;
-	status: "error";
+	status: 'error';
 	message: string;
 };
 
 type CreatedResource<T> = {
 	model: T;
-	status: "created";
+	status: 'created';
 };

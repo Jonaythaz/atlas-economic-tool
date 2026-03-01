@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output, type Signal } from "@angular/core";
-import { StatusIndicatorComponent } from "@atlas/components/status-indicator";
-import type { ProductResource } from "@atlas/types";
-import { ItemModule, ListModule } from "@kirbydesign/designsystem";
+import { ChangeDetectionStrategy, Component, input, output, type Signal } from '@angular/core';
+import { StatusIndicatorComponent } from '@atlas/components/status-indicator';
+import type { ProductResource } from '@atlas/types';
+import { ItemModule, ListModule } from '@kirbydesign/designsystem';
 
 type ViewModel = {
 	products: Signal<ProductResource[]>;
@@ -9,8 +9,8 @@ type ViewModel = {
 };
 
 @Component({
-	selector: "atlas-product-list",
-	templateUrl: "./product-list.component.html",
+	selector: 'atlas-product-list',
+	templateUrl: './product-list.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [ListModule, ItemModule, StatusIndicatorComponent],
 })

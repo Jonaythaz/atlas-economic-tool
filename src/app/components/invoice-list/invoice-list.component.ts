@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output, type Signal } from "@angular/core";
-import { StatusIndicatorComponent } from "@atlas/components/status-indicator";
-import type { InvoiceResource } from "@atlas/types";
-import { ItemModule, ListModule, SectionHeaderComponent } from "@kirbydesign/designsystem";
+import { ChangeDetectionStrategy, Component, input, output, type Signal } from '@angular/core';
+import { StatusIndicatorComponent } from '@atlas/components/status-indicator';
+import type { InvoiceResource } from '@atlas/types';
+import { ItemModule, ListModule, SectionHeaderComponent } from '@kirbydesign/designsystem';
 
 type ViewModel = {
 	invoices: Signal<InvoiceResource[]>;
@@ -9,8 +9,8 @@ type ViewModel = {
 };
 
 @Component({
-	selector: "atlas-invoice-list",
-	templateUrl: "./invoice-list.component.html",
+	selector: 'atlas-invoice-list',
+	templateUrl: './invoice-list.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [ListModule, ItemModule, SectionHeaderComponent, StatusIndicatorComponent],
 })

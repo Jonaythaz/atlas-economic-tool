@@ -1,12 +1,12 @@
-import { Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createInvoice } from "@atlas/commands";
-import { createResources } from "@atlas/functions/create-resources";
-import { CreditNoteModalService } from "@atlas/modals/credit-note";
-import type { CreditNoteModel, NewInvoice, Settings } from "@atlas/models";
-import { DocumentService } from "@atlas/services/document";
-import type { CreditNoteResource } from "@atlas/types";
+import { Injectable, inject, linkedSignal, type Signal } from '@angular/core';
+import { createInvoice } from '@atlas/commands';
+import { createResources } from '@atlas/functions/create-resources';
+import { CreditNoteModalService } from '@atlas/modals/credit-note';
+import type { CreditNoteModel, NewInvoice, Settings } from '@atlas/models';
+import { DocumentService } from '@atlas/services/document';
+import type { CreditNoteResource } from '@atlas/types';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class CreditNoteService {
 	readonly #documentService = inject(DocumentService);
 	readonly #creditNoteModalService = inject(CreditNoteModalService);
@@ -15,8 +15,8 @@ export class CreditNoteService {
 		this.#documentService.documents.hasValue()
 			? this.#documentService.documents
 					.value()
-					.filter((document) => document.type === "credit-note")
-					.map((model) => ({ model, status: "pending" }))
+					.filter((document) => document.type === 'credit-note')
+					.map((model) => ({ model, status: 'pending' }))
 			: [],
 	);
 
@@ -43,7 +43,7 @@ export class CreditNoteService {
 	): Promise<CreditNoteModel> {
 		const { layout, paymentTerms, vatZone } = settings.defaults;
 		if (layout === undefined || paymentTerms === undefined || vatZone === undefined) {
-			throw new Error("Missing default values for creating creditNote.");
+			throw new Error('Missing default values for creating creditNote.');
 		}
 		const customerId = customerMap.get(creditNote.customer.ean);
 		if (customerId === undefined) {

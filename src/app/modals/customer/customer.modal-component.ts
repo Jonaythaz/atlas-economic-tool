@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { disabled, type FieldTree, FormField, form, readonly, required } from "@angular/forms/signals";
-import { DISMISS_ALERT_CONFIG } from "@atlas/constants";
-import type { Settings } from "@atlas/models";
-import { CustomerService } from "@atlas/services/customer";
-import type { Customer, CustomerResource } from "@atlas/types";
+import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { disabled, type FieldTree, FormField, form, readonly, required } from '@angular/forms/signals';
+import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
+import type { Settings } from '@atlas/models';
+import { CustomerService } from '@atlas/services/customer';
+import type { Customer, CustomerResource } from '@atlas/types';
 import {
 	ButtonComponent,
 	CardModule,
@@ -16,7 +16,7 @@ import {
 	Modal,
 	ModalFooterComponent,
 	PageModule,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
 	customer: CustomerResource;
@@ -33,7 +33,7 @@ type ViewModel = {
 };
 
 @Component({
-	templateUrl: "./customer.modal-component.html",
+	templateUrl: './customer.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
@@ -53,7 +53,7 @@ export class CustomerModalComponent {
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
 	readonly #customerService = inject(CustomerService);
 
-	readonly #errorMessage = signal(this.#props.customer.status === "error" ? this.#props.customer.message : null);
+	readonly #errorMessage = signal(this.#props.customer.status === 'error' ? this.#props.customer.message : null);
 
 	readonly #isLoading = signal(false);
 	readonly #model = signal<Required<Customer>>({
@@ -69,25 +69,25 @@ export class CustomerModalComponent {
 	});
 	readonly #form = form(this.#model, (schema) => {
 		readonly(schema.ean);
-		required(schema.name, { message: "Customer name is required" });
+		required(schema.name, { message: 'Customer name is required' });
 		disabled(schema.name, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.street, { message: "Street is required" });
+		required(schema.street, { message: 'Street is required' });
 		disabled(schema.street, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.city, { message: "City is required" });
+		required(schema.city, { message: 'City is required' });
 		disabled(schema.city, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.postalCode, { message: "Postal code is required" });
+		required(schema.postalCode, { message: 'Postal code is required' });
 		disabled(schema.postalCode, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.country, { message: "Country is required" });
+		required(schema.country, { message: 'Country is required' });
 		disabled(schema.country, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.group, { message: "Customer group is required" });
+		required(schema.group, { message: 'Customer group is required' });
 		disabled(schema.group, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.paymentTerms, { message: "Payment terms is required" });
+		required(schema.paymentTerms, { message: 'Payment terms is required' });
 		disabled(schema.paymentTerms, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.vatZone, { message: "VAT zone is required" });
+		required(schema.vatZone, { message: 'VAT zone is required' });
 		disabled(schema.vatZone, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
 	});
 	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#isLoading());
-	readonly #submitMessage = computed(() => (Number.isNaN(this.#form.id().value()) ? "Create" : "Update"));
+	readonly #submitMessage = computed(() => (Number.isNaN(this.#form.id().value()) ? 'Create' : 'Update'));
 
 	constructor() {
 		this.#modal.canDismiss = computed(() => (this.#form().dirty() ? DISMISS_ALERT_CONFIG : true));

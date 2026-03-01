@@ -1,8 +1,8 @@
-import type { DocumentCustomer } from "./document-customer.model";
-import type { DocumentLine } from "./document-line.model";
+import type { DocumentCustomer } from './document-customer.model';
+import type { DocumentLine } from './document-line.model';
 
 export type CreditNoteModel = {
-	type: "credit-note";
+	type: 'credit-note';
 	id: string;
 	invoiceId: string;
 	damageNumber?: string;

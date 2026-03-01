@@ -1,8 +1,8 @@
-import { computed, Injectable, resource, type Signal } from "@angular/core";
-import { fetchSettings } from "@atlas/commands";
-import type { Settings } from "@atlas/models";
+import { computed, Injectable, resource, type Signal } from '@angular/core';
+import { fetchSettings } from '@atlas/commands';
+import type { Settings } from '@atlas/models';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class SettingsService {
 	readonly #settingsResource = resource({ loader: fetchSettings });
 

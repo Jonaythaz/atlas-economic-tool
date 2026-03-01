@@ -1,12 +1,12 @@
-import { Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createInvoice } from "@atlas/commands";
-import { createResources } from "@atlas/functions/create-resources";
-import { InvoiceModalService } from "@atlas/modals/invoice";
-import type { InvoiceModel, NewInvoice, Settings } from "@atlas/models";
-import { DocumentService } from "@atlas/services/document";
-import type { InvoiceResource } from "@atlas/types";
+import { Injectable, inject, linkedSignal, type Signal } from '@angular/core';
+import { createInvoice } from '@atlas/commands';
+import { createResources } from '@atlas/functions/create-resources';
+import { InvoiceModalService } from '@atlas/modals/invoice';
+import type { InvoiceModel, NewInvoice, Settings } from '@atlas/models';
+import { DocumentService } from '@atlas/services/document';
+import type { InvoiceResource } from '@atlas/types';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class InvoiceService {
 	readonly #documentService = inject(DocumentService);
 	readonly #invoiceModalService = inject(InvoiceModalService);
@@ -15,8 +15,8 @@ export class InvoiceService {
 		this.#documentService.documents.hasValue()
 			? this.#documentService.documents
 					.value()
-					.filter((document) => document.type === "invoice")
-					.map((model) => ({ model, status: "pending" }))
+					.filter((document) => document.type === 'invoice')
+					.map((model) => ({ model, status: 'pending' }))
 			: [],
 	);
 
@@ -43,7 +43,7 @@ export class InvoiceService {
 	): Promise<InvoiceModel> {
 		const { layout, paymentTerms, vatZone } = settings.defaults;
 		if (layout === undefined || paymentTerms === undefined || vatZone === undefined) {
-			throw new Error("Missing default values for creating invoice.");
+			throw new Error('Missing default values for creating invoice.');
 		}
 		const customerId = customerMap.get(invoice.customer.ean);
 		if (customerId === undefined) {

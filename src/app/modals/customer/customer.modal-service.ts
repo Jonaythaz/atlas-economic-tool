@@ -1,11 +1,11 @@
-import { Injectable, inject } from "@angular/core";
-import { fetchSettings } from "@atlas/commands";
-import type { CustomerResource } from "@atlas/types";
-import { type ModalConfig, ModalController } from "@kirbydesign/designsystem";
+import { Injectable, inject } from '@angular/core';
+import { fetchSettings } from '@atlas/commands';
+import type { CustomerResource } from '@atlas/types';
+import { type ModalConfig, ModalController } from '@kirbydesign/designsystem';
 
-import { type ComponentProps, CustomerModalComponent } from "./customer.modal-component";
+import { type ComponentProps, CustomerModalComponent } from './customer.modal-component';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class CustomerModalService {
 	readonly #modalController = inject(ModalController);
 
@@ -19,7 +19,7 @@ export class CustomerModalService {
 function createConfig(componentProps: ComponentProps): ModalConfig {
 	return {
 		component: CustomerModalComponent,
-		size: "full-height",
+		size: 'full-height',
 		componentProps,
 	};
 }

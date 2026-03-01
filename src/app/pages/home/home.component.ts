@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, type Resource } from "@angular/core";
-import { DocumentOverviewComponent } from "@atlas/components/document-overview";
-import { SettingsModalService } from "@atlas/modals/settings";
-import type { DocumentModel } from "@atlas/models";
-import { DocumentService } from "@atlas/services/document";
+import { ChangeDetectionStrategy, Component, inject, type Resource } from '@angular/core';
+import { DocumentOverviewComponent } from '@atlas/components/document-overview';
+import { SettingsModalService } from '@atlas/modals/settings';
+import type { DocumentModel } from '@atlas/models';
+import { DocumentService } from '@atlas/services/document';
 import {
 	ActionGroupComponent,
 	ButtonComponent,
@@ -11,7 +11,7 @@ import {
 	IconModule,
 	LoadingOverlayComponent,
 	PageModule,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 type ViewModel = {
 	documents: Resource<DocumentModel[] | undefined>;
@@ -20,8 +20,8 @@ type ViewModel = {
 };
 
 @Component({
-	selector: "atlas-home",
-	templateUrl: "./home.component.html",
+	selector: 'atlas-home',
+	templateUrl: './home.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,

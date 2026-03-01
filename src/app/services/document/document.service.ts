@@ -1,11 +1,11 @@
-import { Injectable, type Resource, resource } from "@angular/core";
-import { loadDocuments } from "@atlas/commands";
-import type { DocumentModel } from "@atlas/models";
+import { Injectable, type Resource, resource } from '@angular/core';
+import { loadDocuments } from '@atlas/commands';
+import type { DocumentModel } from '@atlas/models';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class DocumentService {
 	readonly #documents = resource({
-		loader: ({ previous }) => (previous.status === "idle" ? Promise.resolve(undefined) : loadDocuments()),
+		loader: ({ previous }) => (previous.status === 'idle' ? Promise.resolve(undefined) : loadDocuments()),
 	});
 
 	get documents(): Resource<DocumentModel[] | undefined> {

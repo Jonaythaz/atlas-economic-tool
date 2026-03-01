@@ -1,11 +1,11 @@
-import { computed, Injectable, inject, linkedSignal, type Signal } from "@angular/core";
-import { createCustomer, findCustomer, updateCustomer } from "@atlas/commands";
-import { createResources } from "@atlas/functions/create-resources";
-import type { Defaults, NewCustomer, Settings } from "@atlas/models";
-import { DocumentService } from "@atlas/services/document";
-import type { Customer, CustomerResource } from "@atlas/types";
+import { computed, Injectable, inject, linkedSignal, type Signal } from '@angular/core';
+import { createCustomer, findCustomer, updateCustomer } from '@atlas/commands';
+import { createResources } from '@atlas/functions/create-resources';
+import type { Defaults, NewCustomer, Settings } from '@atlas/models';
+import { DocumentService } from '@atlas/services/document';
+import type { Customer, CustomerResource } from '@atlas/types';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class CustomerService {
 	readonly #documentService = inject(DocumentService);
 
@@ -17,10 +17,10 @@ export class CustomerService {
 	readonly #customers = linkedSignal<CustomerResource[]>(() =>
 		Array.from(this.#customerMap().values()).map((customer) => ({
 			model: customer,
-			status: "pending",
+			status: 'pending',
 		})),
 	);
-	readonly #hasErrors = computed(() => this.#customers().some((customer) => customer.status === "error"));
+	readonly #hasErrors = computed(() => this.#customers().some((customer) => customer.status === 'error'));
 
 	get customers(): Signal<CustomerResource[]> {
 		return this.#customers;
@@ -32,10 +32,10 @@ export class CustomerService {
 
 	async createCustomer(customer: Customer, settings: Settings): Promise<void> {
 		await this.#createCustomer(customer, settings).then(
-			(createdCustomer) => this.#updateCustomer({ model: createdCustomer, status: "created" }),
+			(createdCustomer) => this.#updateCustomer({ model: createdCustomer, status: 'created' }),
 			(error) => {
-				const message = error instanceof Error ? error.message : "Unexpected error occured.";
-				this.#updateCustomers((c) => (c.model.id === customer.id ? { ...c, status: "error", message } : c));
+				const message = error instanceof Error ? error.message : 'Unexpected error occured.';
+				this.#updateCustomers((c) => (c.model.id === customer.id ? { ...c, status: 'error', message } : c));
 				throw new Error(message);
 			},
 		);
@@ -45,12 +45,12 @@ export class CustomerService {
 		await updateCustomer(ean, id).then(
 			() =>
 				this.#updateCustomers((customer) =>
-					customer.model.ean === ean ? { model: { ...customer.model, id }, status: "created" } : customer,
+					customer.model.ean === ean ? { model: { ...customer.model, id }, status: 'created' } : customer,
 				),
 			(error) => {
-				const message = error instanceof Error ? error.message : "Unexpected error occured.";
+				const message = error instanceof Error ? error.message : 'Unexpected error occured.';
 				this.#updateCustomers((customer) =>
-					customer.model.ean === ean ? { ...customer, status: "error", message } : customer,
+					customer.model.ean === ean ? { ...customer, status: 'error', message } : customer,
 				);
 				throw new Error(message);
 			},
@@ -105,7 +105,7 @@ function toNewCustomer(customer: Customer, defaults: Defaults): NewCustomer {
 	const vatZone = customer.vatZone ?? defaults.vatZone ?? null;
 	const paymentTerms = customer.paymentTerms ?? defaults.paymentTerms ?? null;
 	if (group === null || vatZone === null || paymentTerms === null) {
-		throw new Error("Missing required fields.");
+		throw new Error('Missing required fields.');
 	}
 	return {
 		ean: customer.ean,

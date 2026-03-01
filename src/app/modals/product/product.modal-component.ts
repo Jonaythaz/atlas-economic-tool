@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { disabled, type FieldTree, FormField, form, readonly, required } from "@angular/forms/signals";
-import { DISMISS_ALERT_CONFIG } from "@atlas/constants";
-import type { Settings } from "@atlas/models";
-import { ProductService } from "@atlas/services/product";
-import type { Product, ProductResource } from "@atlas/types";
+import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { disabled, type FieldTree, FormField, form, readonly, required } from '@angular/forms/signals';
+import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
+import type { Settings } from '@atlas/models';
+import { ProductService } from '@atlas/services/product';
+import type { Product, ProductResource } from '@atlas/types';
 import {
 	ButtonComponent,
 	CardModule,
@@ -16,7 +16,7 @@ import {
 	Modal,
 	ModalFooterComponent,
 	PageModule,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
 	product: ProductResource;
@@ -32,7 +32,7 @@ type ViewModel = {
 };
 
 @Component({
-	templateUrl: "./product.modal-component.html",
+	templateUrl: './product.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
@@ -52,8 +52,8 @@ export class ProductModalComponent {
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
 	readonly #productService = inject(ProductService);
 
-	readonly #uneditable = this.#props.product.status === "created";
-	readonly #errorMessage = signal(this.#props.product.status === "error" ? this.#props.product.message : null);
+	readonly #uneditable = this.#props.product.status === 'created';
+	readonly #errorMessage = signal(this.#props.product.status === 'error' ? this.#props.product.message : null);
 
 	readonly #isLoading = signal(false);
 	readonly #model = signal<Required<Product>>({
@@ -62,9 +62,9 @@ export class ProductModalComponent {
 	});
 	readonly #form = form(this.#model, (schema) => {
 		readonly(schema.id);
-		required(schema.name, { message: "Product name is required" });
+		required(schema.name, { message: 'Product name is required' });
 		disabled(schema.name, () => this.#uneditable);
-		required(schema.group, { message: "Product group is required" });
+		required(schema.group, { message: 'Product group is required' });
 		disabled(schema.group, () => this.#uneditable);
 	});
 	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#isLoading());

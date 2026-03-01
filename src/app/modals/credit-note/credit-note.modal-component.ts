@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
-import type { CreditNoteModel } from "@atlas/models";
-import type { CreditNoteResource } from "@atlas/types";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import type { CreditNoteModel } from '@atlas/models';
+import type { CreditNoteResource } from '@atlas/types';
 import {
 	AccordionModule,
 	CardModule,
@@ -10,7 +10,7 @@ import {
 	ItemModule,
 	PageModule,
 	SectionHeaderComponent,
-} from "@kirbydesign/designsystem";
+} from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
 	creditNote: CreditNoteResource;
@@ -22,7 +22,7 @@ type ViewModel = {
 };
 
 @Component({
-	templateUrl: "./credit-note.modal-component.html",
+	templateUrl: './credit-note.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
@@ -38,7 +38,7 @@ export class CreditNoteModalComponent {
 	readonly #creditNote = inject<ComponentProps>(COMPONENT_PROPS).creditNote;
 
 	readonly vm: ViewModel = {
-		errorMessage: this.#creditNote.status === "error" ? this.#creditNote.message : undefined,
+		errorMessage: this.#creditNote.status === 'error' ? this.#creditNote.message : undefined,
 		creditNote: this.#creditNote.model,
 	};
 }
