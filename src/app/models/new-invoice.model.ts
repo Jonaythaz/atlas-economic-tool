@@ -4,7 +4,12 @@ export type NewInvoice = {
 	date: string;
 	layout: number;
 	customer: number;
-	recipient: string;
+	recipientEan: string;
+	recipientName: string;
+	recipientStreet: string;
+	recipientCity: string;
+	recipientPostalCode: string;
+	recipientCountry: string;
 	paymentTerms: number;
 	vatZone: number;
 	damageNumber?: string;
