@@ -99,11 +99,11 @@ export class SettingsModalComponent {
 		return {
 			tokens: tokens,
 			defaults: {
-				customerGroup: Number.isNaN(defaults.customerGroup) ? undefined : defaults.customerGroup,
-				productGroup: Number.isNaN(defaults.productGroup) ? undefined : defaults.productGroup,
-				paymentTerms: Number.isNaN(defaults.paymentTerms) ? undefined : defaults.paymentTerms,
-				vatZone: Number.isNaN(defaults.vatZone) ? undefined : defaults.vatZone,
-				layout: Number.isNaN(defaults.layout) ? undefined : defaults.layout,
+				customerGroup: Number.isNaN(defaults.customerGroup) ? null : defaults.customerGroup,
+				productGroup: Number.isNaN(defaults.productGroup) ? null : defaults.productGroup,
+				paymentTerms: Number.isNaN(defaults.paymentTerms) ? null : defaults.paymentTerms,
+				vatZone: Number.isNaN(defaults.vatZone) ? null : defaults.vatZone,
+				layout: Number.isNaN(defaults.layout) ? null : defaults.layout,
 			},
 		};
 	}

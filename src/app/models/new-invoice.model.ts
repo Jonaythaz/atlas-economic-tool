@@ -1,17 +1,12 @@
 import type { NewInvoiceLine } from './new-invoice-line.model';
+import type { NewInvoiceRecipient } from './new-invoice-recipient.model';
 
 export type NewInvoice = {
 	date: string;
 	layout: number;
-	customer: number;
-	recipientEan: string;
-	recipientName: string;
-	recipientStreet: string;
-	recipientCity: string;
-	recipientPostalCode: string;
-	recipientCountry: string;
+	customerId: number;
+	recipient: NewInvoiceRecipient;
 	paymentTerms: number;
-	vatZone: number;
-	damageNumber?: string;
+	damageNumber: string | null;
 	lines: NewInvoiceLine[];
 };

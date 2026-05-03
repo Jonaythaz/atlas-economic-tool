@@ -24,6 +24,7 @@ pub fn insert_customer(conn: &Connection, customer: &Customer) -> Result<()> {
     .map(|_| ())
 }
 
+#[allow(dead_code)]
 pub fn update_customer(conn: &Connection, customer: &Customer) -> Result<bool> {
     conn.execute(
         "UPDATE customer SET external_id = ?1 WHERE id = ?2",

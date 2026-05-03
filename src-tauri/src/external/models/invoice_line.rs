@@ -4,16 +4,22 @@ use serde::{Deserialize, Serialize};
 pub struct InvoiceLine {
     #[serde(rename = "description")]
     description: String,
+
     #[serde(rename = "product")]
     product: Product,
+
     #[serde(rename = "quantity")]
     quantity: f64,
+
     #[serde(rename = "unitNetPrice")]
     unit_net_price: f64,
+
     #[serde(rename = "discountPercentage")]
     discount_percentage: f64,
+
     #[serde(rename = "unitCostPrice")]
     unit_cost_price: f64,
+
     #[serde(rename = "totalNetAmount")]
     total_net_amount: f64,
 }

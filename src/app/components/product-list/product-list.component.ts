@@ -1,25 +1,27 @@
-import { ChangeDetectionStrategy, Component, input, output, type Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type Resource } from '@angular/core';
 import { StatusIndicatorComponent } from '@atlas/components/status-indicator';
-import type { ProductResource } from '@atlas/types';
-import { ItemModule, ListModule } from '@kirbydesign/designsystem';
+import { ProductModalService } from '@atlas/modals/product';
+import { DocumentService } from '@atlas/services/document';
+import type { ProductPipelineItem } from '@atlas/utils/product-pipeline-item';
+import { ItemComponent, LabelComponent, ListComponent, ListItemTemplateDirective } from '@kirbydesign/designsystem';
 
 type ViewModel = {
-	products: Signal<ProductResource[]>;
-	selectProduct: (product: ProductResource) => void;
+	products: Resource<ProductPipelineItem[] | undefined>;
+	selectProduct: (product: ProductPipelineItem) => Promise<void>;
 };
 
 @Component({
 	selector: 'atlas-product-list',
 	templateUrl: './product-list.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [ListModule, ItemModule, StatusIndicatorComponent],
+	imports: [ListComponent, ItemComponent, LabelComponent, StatusIndicatorComponent, ListItemTemplateDirective],
 })
 export class ProductListComponent {
-	readonly products = input.required<ProductResource[]>();
-	readonly productSelected = output<ProductResource>();
+	readonly #pipelineStep = inject(DocumentService).productPipelineStep;
+	readonly #modalService = inject(ProductModalService);
 
 	readonly vm: ViewModel = {
-		products: this.products,
-		selectProduct: this.productSelected.emit.bind(this.productSelected),
+		products: this.#pipelineStep.items,
+		selectProduct: this.#modalService.open.bind(this.#modalService),
 	};
 }

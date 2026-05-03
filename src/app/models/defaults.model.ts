@@ -1,7 +1,7 @@
 export type Defaults = {
-	customerGroup?: number;
-	productGroup?: number;
-	layout?: number;
-	paymentTerms?: number;
-	vatZone?: number;
+	customerGroup: number | null;
+	productGroup: number | null;
+	layout: number | null;
+	paymentTerms: number | null;
+	vatZone: number | null;
 };

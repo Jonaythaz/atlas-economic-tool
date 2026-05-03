@@ -1,22 +1,19 @@
 <kirby-segmented-control
     [items]="vm.segments()"
-    [value]="vm.selectedSegment()"
-    (segmentSelect)="vm.selectSegment($event)"
+    [(selectedIndex)]="vm.selectedSegmentIndex"
 ></kirby-segmented-control>
 
 <br/>
 
-@switch (vm.selectedSegment().id) {
-    @case ('documents') {
-        <atlas-invoice-list [invoices]="vm.invoices()" (invoiceSelected)="vm.viewInvoice($event)"></atlas-invoice-list>
-        <br/>
-        <atlas-credit-note-list [creditNotes]="vm.creditNotes()" (creditNoteSelected)="vm.viewCreditNote($event)"></atlas-credit-note-list>
+@switch (vm.selectedSegmentIndex()) {
+    @case (0) {
+        <atlas-document-list></atlas-document-list>
     }
-    @case ('customers') {
-        <atlas-customer-list [customers]="vm.customers()" (customerSelected)="vm.editCustomer($event)"></atlas-customer-list>
+    @case (1) {
+        <atlas-customer-list></atlas-customer-list>
     }
-    @case ('products') {
-        <atlas-product-list [products]="vm.products()" (productSelected)="vm.editProduct($event)"></atlas-product-list>
+    @case (2) {
+        <atlas-product-list></atlas-product-list>
     }
 }
 

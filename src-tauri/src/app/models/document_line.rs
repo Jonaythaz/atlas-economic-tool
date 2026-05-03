@@ -1,40 +1,19 @@
-use super::DocumentProduct;
 use serde::Serialize;
 
 #[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct DocumentLine {
-    pub product: DocumentProduct,
+    pub product_id: String,
     pub price: f64,
     pub quantity: f64,
 }
 
-impl From<crate::core::models::InvoiceLine> for DocumentLine {
-    fn from(line: crate::core::models::InvoiceLine) -> Self {
+impl From<crate::core::models::DocumentLine> for DocumentLine {
+    fn from(line: crate::core::models::DocumentLine) -> Self {
         Self {
-            product: DocumentProduct::from(line.item),
-            price: line.price.price_amount,
-            quantity: line.price.base_quantity,
+            product_id: line.product.id,
+            price: line.price,
+            quantity: line.quantity,
         }
-    }
-}
-
-impl From<crate::core::models::CreditNoteLine> for DocumentLine {
-    fn from(line: crate::core::models::CreditNoteLine) -> Self {
-        Self {
-            product: DocumentProduct::from(line.item),
-            price: line.price.price_amount,
-            quantity: line.price.base_quantity,
-        }
-    }
-}
-
-impl Into<crate::external::models::InvoiceLine> for DocumentLine {
-    fn into(self) -> crate::external::models::InvoiceLine {
-        crate::external::models::InvoiceLine::new(
-            self.product.name,
-            self.product.id,
-            self.quantity,
-            self.price,
-        )
     }
 }

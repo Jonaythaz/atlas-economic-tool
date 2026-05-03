@@ -1,13 +1,12 @@
-@let products = vm.products();
-
-@if (products.length > 0) {
-    <kirby-list [items]="products" (itemSelect)="vm.selectProduct($event)">
-        <kirby-item *kirbyListItemTemplate="let product" [selectable]="product.status !== 'creating'" disclosure="arrow-more">
+@if (vm.products.hasValue() && vm.products.value().length > 0) {
+    <kirby-list [items]="vm.products.value()" (itemSelect)="vm.selectProduct($event)">
+        <kirby-item *kirbyListItemTemplate="let productItem" [selectable]="true" disclosure="arrow-more">
+            @let product = productItem.input();
             <kirby-label>
-                <p class="kirby-item-title">{{ product.model.name }}</p>
-                <p class="kirby-item-subtitle">{{ product.model.id }}</p>
+                <p class="kirby-item-title">{{ product.name }}</p>
+                <p class="kirby-item-subtitle">{{ product.id }}</p>
             </kirby-label>
-            <atlas-status-indicator [status]="product.status" slot="end"></atlas-status-indicator>
+            <atlas-status-indicator slot="end" [status]="productItem.status()"></atlas-status-indicator>
         </kirby-item>
     </kirby-list>
 } @else {

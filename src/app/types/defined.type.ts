@@ -1,0 +1,1 @@
+export type Defined<T> = { [P in keyof T]-?: Defined<NonNullable<T[P]>> };

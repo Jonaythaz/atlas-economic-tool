@@ -1,0 +1,25 @@
+@let f = form();
+
+<kirby-card [hasPadding]="true">
+    <kirby-form-field
+        label="Name"
+        [message]="f.name().errors().at(0)?.message"
+    >
+        <input
+            kirby-input
+            [formField]="f.name"
+            [hasError]="f.name().invalid()"
+        />
+    </kirby-form-field>
+    <kirby-form-field
+        label="Group"
+        [message]="f.group().errors().at(0)?.message"
+    >
+        <input
+            kirby-input
+            type="number"
+            [formField]="f.group"
+            [hasError]="f.group().invalid()"
+        />
+    </kirby-form-field>
+</kirby-card>

@@ -4,11 +4,14 @@ use super::{PaymentTerms, VatZone};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Customer {
-    #[serde(rename = "customerNumber", skip_serializing)]
-    pub id: Option<i32>,
+    #[serde(rename = "customerNumber")]
+    pub id: i32,
 
     #[serde(rename = "ean")]
     pub ean: Option<String>,
+
+    #[serde(rename = "email")]
+    pub email: Option<String>,
 
     #[serde(rename = "name")]
     pub name: String,

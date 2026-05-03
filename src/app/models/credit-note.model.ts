@@ -1,12 +1,12 @@
-import type { DocumentCustomer } from './document-customer.model';
+import type { CustomerReferenceModel } from './customer-reference.model';
 import type { DocumentLine } from './document-line.model';
 
 export type CreditNoteModel = {
 	type: 'credit-note';
 	id: string;
 	invoiceId: string;
-	damageNumber?: string;
 	date: string;
-	customer: DocumentCustomer;
+	customer: CustomerReferenceModel;
+	damageNumber: string | null;
 	lines: DocumentLine[];
 };

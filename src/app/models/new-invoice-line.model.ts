@@ -1,6 +1,6 @@
 export type NewInvoiceLine = {
-	product: string;
+	productId: string;
 	description: string;
-	price: number;
 	quantity: number;
+	price: number;
 };

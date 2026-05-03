@@ -1,17 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, type Signal, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { disabled, type FieldTree, FormField, form, readonly, required } from '@angular/forms/signals';
+import type { FieldTree } from '@angular/forms/signals';
+import { CustomerFormComponent } from '@atlas/components/customer-form';
 import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
+import { customerForm } from '@atlas/forms/customer';
 import type { Settings } from '@atlas/models';
-import { CustomerService } from '@atlas/services/customer';
-import type { Customer, CustomerResource } from '@atlas/types';
+import type { Customer, Defined } from '@atlas/types';
+import type { CustomerPipelineItem } from '@atlas/utils/customer-pipeline-item';
 import {
 	ButtonComponent,
-	CardModule,
 	COMPONENT_PROPS,
 	FlagComponent,
-	FormFieldModule,
-	InputComponent,
 	LoadingOverlayComponent,
 	Modal,
 	ModalFooterComponent,
@@ -19,16 +17,15 @@ import {
 } from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
-	customer: CustomerResource;
+	customer: CustomerPipelineItem;
 	settings: Settings;
 };
 
 type ViewModel = {
-	form: FieldTree<Required<Customer>>;
-	errorMessage: Signal<string | null>;
+	errorMessage: Signal<string | undefined>;
 	isLoading: Signal<boolean>;
+	form: FieldTree<Defined<Customer>>;
 	unsubmittable: Signal<boolean>;
-	submitMessage: Signal<string>;
 	submit: () => Promise<void>;
 };
 
@@ -37,57 +34,23 @@ type ViewModel = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
-		CardModule,
-		FormFieldModule,
-		InputComponent,
-		FormField,
-		ModalFooterComponent,
-		FormsModule,
-		ButtonComponent,
 		LoadingOverlayComponent,
+		CustomerFormComponent,
+		ModalFooterComponent,
+		ButtonComponent,
 		FlagComponent,
 	],
 })
 export class CustomerModalComponent {
-	readonly #modal = inject(Modal);
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
-	readonly #customerService = inject(CustomerService);
+	readonly #modal = inject(Modal);
 
-	readonly #errorMessage = signal(this.#props.customer.status === 'error' ? this.#props.customer.message : null);
+	readonly #errorMessage = signal<string | undefined>(this.#props.customer.error()?.message);
+	readonly #form = customerForm(this.#props.customer.input(), this.#props.settings.defaults);
 
 	readonly #isLoading = signal(false);
-	readonly #model = signal<Required<Customer>>({
-		...this.#props.customer.model,
-		id: this.#props.customer.model.id ?? NaN,
-		street: this.#props.customer.model.street,
-		city: this.#props.customer.model.city,
-		postalCode: this.#props.customer.model.postalCode,
-		country: this.#props.customer.model.country,
-		group: this.#props.customer.model.group ?? this.#props.settings.defaults.customerGroup ?? NaN,
-		paymentTerms: this.#props.customer.model.paymentTerms ?? this.#props.settings.defaults.paymentTerms ?? NaN,
-		vatZone: this.#props.customer.model.vatZone ?? this.#props.settings.defaults.vatZone ?? NaN,
-	});
-	readonly #form = form(this.#model, (schema) => {
-		readonly(schema.ean);
-		required(schema.name, { message: 'Customer name is required' });
-		disabled(schema.name, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.street, { message: 'Street is required' });
-		disabled(schema.street, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.city, { message: 'City is required' });
-		disabled(schema.city, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.postalCode, { message: 'Postal code is required' });
-		disabled(schema.postalCode, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.country, { message: 'Country is required' });
-		disabled(schema.country, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.group, { message: 'Customer group is required' });
-		disabled(schema.group, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.paymentTerms, { message: 'Payment terms is required' });
-		disabled(schema.paymentTerms, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-		required(schema.vatZone, { message: 'VAT zone is required' });
-		disabled(schema.vatZone, ({ valueOf }) => !Number.isNaN(valueOf(schema.id)));
-	});
+
 	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#isLoading());
-	readonly #submitMessage = computed(() => (Number.isNaN(this.#form.id().value()) ? 'Create' : 'Update'));
 
 	constructor() {
 		this.#modal.canDismiss = computed(() => (this.#form().dirty() ? DISMISS_ALERT_CONFIG : true));
@@ -95,19 +58,13 @@ export class CustomerModalComponent {
 
 	async #submit(): Promise<void> {
 		this.#isLoading.set(true);
-		this.#submitCustomer()
-			.then(this.#closeModal.bind(this))
-			.catch((error) => this.#errorMessage.set(error.message))
-			.finally(() => this.#isLoading.set(false));
-	}
-
-	async #submitCustomer(): Promise<void> {
-		const formValue = this.#form().value();
-		if (Number.isNaN(formValue.id)) {
-			await this.#customerService.createCustomer(formValue, this.#props.settings);
+		if (this.#form().invalid()) {
+			this.#errorMessage.set('form is invalid');
 		} else {
-			await this.#customerService.updateCustomer(formValue.ean, formValue.id);
+			this.#props.customer.input = this.#form().value();
+			await this.#closeModal();
 		}
+		this.#isLoading.set(false);
 	}
 
 	async #closeModal(): Promise<void> {
@@ -116,11 +73,10 @@ export class CustomerModalComponent {
 	}
 
 	readonly vm: ViewModel = {
-		form: this.#form,
+		errorMessage: this.#errorMessage.asReadonly(),
 		isLoading: this.#isLoading.asReadonly(),
-		errorMessage: this.#errorMessage,
+		form: this.#form,
 		unsubmittable: this.#unsubmittable,
-		submitMessage: this.#submitMessage,
 		submit: this.#submit.bind(this),
 	};
 }

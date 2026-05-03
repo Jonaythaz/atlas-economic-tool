@@ -1,0 +1,22 @@
+@if (vm.documents.hasValue() && vm.documents.value().length > 0) {
+    <kirby-list [items]="vm.documents.value()" [getSectionName]="vm.getSectionName" (itemSelect)="vm.selectDocument($event)">
+        <kirby-list-section-header
+            *kirbyListSectionHeader="let section"
+            [title]="section">
+        </kirby-list-section-header>
+        <kirby-item *kirbyListItemTemplate="let documentItem" [selectable]="true" disclosure="arrow-more">
+            @let document = documentItem.input();
+            <kirby-label>
+                <p class="kirby-item-title">{{ document.id }}</p>
+                <p class="kirby-item-subtitle">{{
+                    document.customer.type === 'business'
+                        ? `EAN: ${document.customer.ean}`
+                        : `CPR: ${document.customer.cpr}`
+                }}</p>
+            </kirby-label>
+            <atlas-status-indicator slot="end" [status]="documentItem.status()"></atlas-status-indicator>
+        </kirby-item>
+    </kirby-list>
+} @else {
+    <p>No documents found</p>
+}

@@ -5,98 +5,77 @@ use crate::external::models::{InvoiceLine, PaymentTerms, VatZone};
 #[derive(Debug, Clone, Serialize)]
 pub struct Invoice {
     #[serde(rename = "currency")]
-    currency: String,
+    pub currency: String,
+
     #[serde(rename = "customer")]
-    customer: Customer,
+    pub customer: InvoiceCustomer,
+
     #[serde(rename = "date")]
-    date: String,
+    pub date: String,
+
     #[serde(rename = "layout")]
-    layout: Layout,
+    pub layout: InvoiceLayout,
+
     #[serde(rename = "paymentTerms")]
-    payment_terms: PaymentTerms,
+    pub payment_terms: PaymentTerms,
+
     #[serde(rename = "recipient")]
-    recipient: Recipient,
+    pub recipient: InvoiceRecipient,
+
     #[serde(rename = "references", skip_serializing_if = "Option::is_none")]
-    references: Option<References>,
+    pub references: Option<InvoiceReferences>,
+
     #[serde(rename = "lines")]
-    lines: Vec<InvoiceLine>,
+    pub lines: Vec<InvoiceLine>,
 }
 
 #[derive(Debug, Clone, Serialize)]
-struct Customer {
+pub struct InvoiceCustomer {
     #[serde(rename = "customerNumber")]
-    number: i32,
+    pub number: i32,
 }
 
 #[derive(Debug, Clone, Serialize)]
-struct Layout {
+pub struct InvoiceLayout {
     #[serde(rename = "layoutNumber")]
-    number: i32,
+    pub number: i32,
 }
 
 #[derive(Debug, Clone, Serialize)]
-struct Recipient {
-    #[serde(rename = "ean")]
-    ean: String,
+pub struct InvoiceRecipient {
+    #[serde(rename = "ean", skip_serializing_if = "Option::is_none")]
+    pub ean: Option<String>,
+
+    #[serde(rename = "nemHandelType", skip_serializing_if = "Option::is_none")]
+    pub recieval_method: Option<InvoiceRecievalMethod>,
 
     #[serde(rename = "name")]
-    name: String,
+    pub name: String,
 
     #[serde(rename = "address")]
-    street: String,
+    pub street: String,
 
     #[serde(rename = "city")]
-    city: String,
+    pub city: String,
 
     #[serde(rename = "zip")]
-    postal_code: String,
+    pub postal_code: String,
 
     #[serde(rename = "country")]
-    country: String,
+    pub country: String,
 
     #[serde(rename = "vatZone")]
-    vat_zone: VatZone,
+    pub vat_zone: VatZone,
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub enum InvoiceRecievalMethod {
+    #[serde(rename = "ean")]
+    EAN,
 }
 
 #[derive(Debug, Default, Clone, Serialize)]
-struct References {
+pub struct InvoiceReferences {
     #[serde(rename = "other")]
-    other: String,
-}
-
-impl Invoice {
-    pub fn new(
-        date: String,
-        layout: i32,
-        customer: i32,
-        recipient_ean: String,
-        recipient_name: String,
-        recipient_street: String,
-        recipient_city: String,
-        recipient_postal_code: String,
-        recipient_country: String,
-        payment_terms: i32,
-        vat_zone: i32,
-        damage_number: Option<String>,
-        lines: Vec<InvoiceLine>,
-    ) -> Self {
-        Self {
-            currency: "DKK".to_string(),
-            customer: Customer { number: customer },
-            date,
-            layout: Layout { number: layout },
-            payment_terms: PaymentTerms { id: payment_terms },
-            recipient: Recipient {
-                ean: recipient_ean,
-                name: recipient_name,
-                street: recipient_street,
-                city: recipient_city,
-                postal_code: recipient_postal_code,
-                country: recipient_country,
-                vat_zone: VatZone { id: vat_zone },
-            },
-            references: damage_number.map(|dn| References { other: dn }),
-            lines,
-        }
-    }
+    pub other: String,
 }

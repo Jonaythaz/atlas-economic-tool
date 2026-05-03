@@ -5,5 +5,11 @@ export const DEFAULT_SETTINGS: Settings = {
 		secret: '',
 		grant: '',
 	},
-	defaults: {},
+	defaults: {
+		layout: null,
+		paymentTerms: null,
+		customerGroup: null,
+		vatZone: null,
+		productGroup: null,
+	},
 };

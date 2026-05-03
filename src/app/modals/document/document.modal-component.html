@@ -1,0 +1,71 @@
+<kirby-page-title>Document {{ vm.document.id }}</kirby-page-title>
+
+@if (vm.errorMessage; as errorMessage) {
+<kirby-flag
+    themeColor="danger"
+    style="margin-bottom: 16px; white-space: pre-wrap"
+    >{{ errorMessage }}</kirby-flag
+>
+<br />
+}
+
+<kirby-section-header>
+    <h3 heading>Document Details</h3>
+</kirby-section-header>
+<kirby-card [hasPadding]="true">
+    <kirby-item>
+        <p class="kirby-item-title">ID</p>
+        <data slot="end">{{ vm.document.id }}</data>
+    </kirby-item>
+    @if (vm.document.type === 'credit-note') {
+    <kirby-item>
+        <p class="kirby-item-title">Invoice ID</p>
+        <data slot="end">{{ vm.document.invoiceId }}</data>
+    </kirby-item>
+    }
+    <kirby-item>
+        <p class="kirby-item-title">Damage number</p>
+        <data slot="end">{{ vm.document.damageNumber ?? 'None' }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Date</p>
+        <data slot="end">{{ vm.document.date }}</data>
+    </kirby-item>
+    @switch (vm.document.customer.type) { @case ('business') {
+    <kirby-item>
+        <p class="kirby-item-title">Customer EAN</p>
+        <data slot="end">{{ vm.document.customer.ean }}</data>
+    </kirby-item>
+    } @case ('private') {
+    <kirby-item>
+        <p class="kirby-item-title">Customer CPR</p>
+        <data slot="end">{{ vm.document.customer.cpr }}</data>
+    </kirby-item>
+    } }
+</kirby-card>
+
+<br />
+
+<kirby-section-header>
+    <h3 heading>Document Lines</h3>
+</kirby-section-header>
+<kirby-card>
+    <kirby-accordion>
+        @for (line of vm.document.lines; track $index) {
+        <kirby-accordion-item [title]="($index + 1) + '. ' + line.productId">
+            <kirby-item>
+                <p class="kirby-item-title">Product ID</p>
+                <data slot="end">{{ line.productId }}</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Price</p>
+                <data slot="end">{{ line.price }}DKK</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Quantity</p>
+                <data slot="end">{{ line.quantity }}</data>
+            </kirby-item>
+        </kirby-accordion-item>
+        }
+    </kirby-accordion>
+</kirby-card>

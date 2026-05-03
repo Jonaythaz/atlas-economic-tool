@@ -26,7 +26,7 @@
                 </button>
             </kirby-empty-state>
             }
-            @else if (vm.documents.hasValue() && vm.documents.value().length > 0) {
+            @else if (vm.documents.hasValue()) {
                 <atlas-document-overview></atlas-document-overview>
             } @else {
                 <kirby-empty-state
