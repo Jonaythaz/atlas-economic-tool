@@ -1,4 +1,3 @@
-export * from './created-customer.model';
 export * from './credit-note.model';
 export * from './customer.model';
 export * from './defaults.model';

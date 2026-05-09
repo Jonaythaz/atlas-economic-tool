@@ -1,17 +1,16 @@
-import { createProduct, fetchProduct } from '@atlas/commands';
-import type { Defaults, NewProduct, ProductModel, Settings } from '@atlas/models';
-import type { Product } from '@atlas/types';
+import { createProduct } from '@atlas/commands';
+import type { Defaults, NewProduct, Settings } from '@atlas/models';
+import type { CreatedProduct, Product } from '@atlas/types';
 import { PipelineItem } from '@atlas/utils/pipeline-item';
 
-export class ProductPipelineItem extends PipelineItem<Product, ProductModel, Settings> {
-	protected async processInternal(dependencies: Settings): Promise<ProductModel> {
+export class ProductPipelineItem extends PipelineItem<Product, CreatedProduct, Settings> {
+	protected async processInternal(dependencies: Settings): Promise<CreatedProduct> {
 		const product = this.input();
-		const existingProduct = await fetchProduct(product.id, dependencies.tokens);
-		if (existingProduct) {
-			return existingProduct;
-		}
 		const newProduct = toNewProduct(product, dependencies.defaults);
-		return createProduct(newProduct, dependencies.tokens);
+		return createProduct(newProduct, dependencies.tokens).then((createdProduct) => ({
+			...createdProduct,
+			description: product.description,
+		}));
 	}
 }
 

@@ -10,7 +10,7 @@ pub struct Customer {
     #[serde(rename = "ean")]
     pub ean: Option<String>,
 
-    #[serde(rename = "email")]
+    #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
 
     #[serde(rename = "name")]
@@ -27,6 +27,9 @@ pub struct Customer {
 
     #[serde(rename = "country")]
     pub country: String,
+
+    #[serde(rename = "currency")]
+    pub currency: String,
 
     #[serde(rename = "customerGroup")]
     pub group: CustomerGroup,

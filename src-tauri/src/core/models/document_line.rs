@@ -1,3 +1,5 @@
+use std::ops::Neg;
+
 use crate::core::{
     models::Product,
     types::{CreditNoteLine, InvoiceLine},
@@ -24,7 +26,7 @@ impl From<CreditNoteLine> for DocumentLine {
         Self {
             product: line.item.into(),
             price: line.price.price_amount,
-            quantity: line.price.base_quantity.abs(),
+            quantity: line.price.base_quantity.abs().neg(),
         }
     }
 }

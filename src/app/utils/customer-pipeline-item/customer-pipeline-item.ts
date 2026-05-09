@@ -1,12 +1,29 @@
 import { createCustomer } from '@atlas/commands';
-import type { CreatedCustomerModel, Defaults, NewCustomer, Settings } from '@atlas/models';
-import type { Customer } from '@atlas/types';
+import type { Defaults, NewCustomer, Settings } from '@atlas/models';
+import type { CreatedCustomer, Customer } from '@atlas/types';
 import { PipelineItem } from '@atlas/utils/pipeline-item';
 
-export class CustomerPipelineItem extends PipelineItem<Customer, CreatedCustomerModel, Settings> {
-	protected async processInternal(dependencies: Settings): Promise<CreatedCustomerModel> {
-		const newCustomer = toNewCustomer(this.input(), dependencies.defaults);
-		return createCustomer(newCustomer, dependencies.tokens);
+export class CustomerPipelineItem extends PipelineItem<Customer, CreatedCustomer, Settings> {
+	protected async processInternal(dependencies: Settings): Promise<CreatedCustomer> {
+		const customer = this.input();
+		const newCustomer = toNewCustomer(customer, dependencies.defaults);
+		return createCustomer(newCustomer, dependencies.tokens).then((createdCustomer) => {
+			if (createdCustomer.type === 'business') {
+				return createdCustomer;
+			}
+			if (customer.type === 'business') {
+				throw new Error('Created customer is a person but input customer is a business');
+			}
+			const email = createdCustomer.email;
+			if (email === null) {
+				throw new Error('External customer is missing email, please update the customer in e-conomic and try again');
+			}
+			return {
+				...createdCustomer,
+				cpr: customer.cpr,
+				email,
+			};
+		});
 	}
 }
 

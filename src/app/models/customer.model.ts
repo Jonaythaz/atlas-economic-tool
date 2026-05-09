@@ -1,6 +1,6 @@
-export type CustomerModel = BusinessCustomer | PrivateCustomer;
+export type CustomerModel = BusinessCustomerModel | PrivateCustomerModel;
 
-type BusinessCustomer = {
+type BusinessCustomerModel = {
 	type: 'business';
 	id: number;
 	ean: string;
@@ -14,7 +14,7 @@ type BusinessCustomer = {
 	paymentTerms: number;
 };
 
-type PrivateCustomer = {
+type PrivateCustomerModel = {
 	type: 'private';
 	id: number;
 	email: string | null;

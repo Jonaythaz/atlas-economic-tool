@@ -1,7 +1,14 @@
-<kirby-segmented-control
-    [items]="vm.segments()"
-    [(selectedIndex)]="vm.selectedSegmentIndex"
-></kirby-segmented-control>
+<div class="controls">
+    <kirby-segmented-control
+        [items]="vm.segments()"
+        [(selectedIndex)]="vm.selectedSegmentIndex"
+    ></kirby-segmented-control>
+
+    <button kirby-button attentionLevel="1" type="submit" (click)="vm.createInvoices()" [disabled]="vm.creating()">
+        <kirby-icon name="foreign-payment"></kirby-icon>
+        Send
+    </button>
+</div>
 
 <br/>
 
@@ -16,12 +23,3 @@
         <atlas-product-list></atlas-product-list>
     }
 }
-
-<br/>
-
-<div style="display: flex; flex-direction: row; justify-content: flex-end;">
-    <button kirby-button attentionLevel="1" type="submit" (click)="vm.createInvoices()" [disabled]="vm.creating()">
-        <kirby-icon name="foreign-payment"></kirby-icon>
-        Send
-    </button>
-</div>

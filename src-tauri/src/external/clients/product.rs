@@ -1,7 +1,7 @@
 use super::{get, parse_response, post, ClientError};
-use crate::external::{ClientResult, models::Product};
+use crate::external::{models::Product, ClientResult};
 
-pub async fn get_product(id: String, secret: &str, grant: &str) -> ClientResult<Option<Product>> {
+pub async fn get_product(id: &str, secret: &str, grant: &str) -> ClientResult<Option<Product>> {
     let response = get(
         format!("https://restapi.e-conomic.com/products/{id}"),
         secret,
@@ -21,7 +21,7 @@ pub async fn get_product(id: String, secret: &str, grant: &str) -> ClientResult<
     }
 }
 
-pub async fn post_product(product: &Product, secret: &str, grant: &str) -> ClientResult<()> {
+pub async fn post_product(product: &Product, secret: &str, grant: &str) -> ClientResult<Product> {
     let response = post(
         "https://restapi.e-conomic.com/products",
         product,

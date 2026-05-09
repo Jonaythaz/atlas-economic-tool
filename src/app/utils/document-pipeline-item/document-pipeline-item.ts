@@ -1,27 +1,19 @@
 import { createInvoice } from '@atlas/commands';
 import { toCustomerMapKey } from '@atlas/functions/to-customer-map-key';
-import type {
-	CustomerModel,
-	DocumentLine,
-	NewInvoice,
-	NewInvoiceLine,
-	NewInvoiceRecipient,
-	ProductModel,
-	Settings,
-} from '@atlas/models';
-import type { Document } from '@atlas/types';
+import type { DocumentLine, NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
+import type { CreatedCustomer, CreatedProduct, Document } from '@atlas/types';
 import { PipelineItem } from '@atlas/utils/pipeline-item';
 
 type Dependencies = {
-	customerMap: Map<string, CustomerModel>;
-	productMap: Map<string, ProductModel>;
+	customerMap: Map<string, CreatedCustomer>;
+	productMap: Map<string, CreatedProduct>;
 	settings: Settings;
 };
 
-export class DocumentPipelineItem extends PipelineItem<Document, unknown, Dependencies> {
-	protected async processInternal(dependencies: Dependencies): Promise<unknown> {
+export class DocumentPipelineItem extends PipelineItem<Document, void, Dependencies> {
+	protected async processInternal(dependencies: Dependencies): Promise<void> {
 		const newInvoice = toNewInvoice(this.input(), dependencies);
-		return createInvoice(newInvoice, dependencies.settings.tokens);
+		await createInvoice(newInvoice, dependencies.settings.tokens);
 	}
 }
 
@@ -46,7 +38,7 @@ function toNewInvoice(document: Document, deps: Dependencies): NewInvoice {
 	};
 }
 
-function toNewInvoiceRecipient(customer: CustomerModel): NewInvoiceRecipient {
+function toNewInvoiceRecipient(customer: CreatedCustomer): NewInvoiceRecipient {
 	return customer.type === 'business'
 		? {
 				type: 'business',
@@ -69,14 +61,14 @@ function toNewInvoiceRecipient(customer: CustomerModel): NewInvoiceRecipient {
 			};
 }
 
-function toNewInvoiceLine(line: DocumentLine, productMap: Map<string, ProductModel>): NewInvoiceLine {
+function toNewInvoiceLine(line: DocumentLine, productMap: Map<string, CreatedProduct>): NewInvoiceLine {
 	const product = productMap.get(line.productId);
 	if (!product) {
 		throw new Error('Missing product for line');
 	}
 	return {
 		productId: product.id,
-		description: product.name,
+		description: product.description,
 		price: line.price,
 		quantity: line.quantity,
 	};

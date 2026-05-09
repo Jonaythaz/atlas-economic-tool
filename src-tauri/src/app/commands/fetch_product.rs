@@ -14,7 +14,7 @@ pub async fn fetch_product(
     if let Some(product) = find_product_locally(&id, &state)? {
         return Ok(Some(product));
     }
-    if let Some(product) = fetch_product_externally(id, tokens).await? {
+    if let Some(product) = fetch_product_externally(&id, &tokens).await? {
         state
             .db(|conn| insert_product(conn, &product.clone().into()))
             .map_err(|error| error.to_string())?;
@@ -30,7 +30,7 @@ fn find_product_locally(id: &str, state: &State<'_, AppState>) -> Result<Option<
         .map_err(|error| error.to_string())
 }
 
-async fn fetch_product_externally(id: String, tokens: Tokens) -> Result<Option<Product>, String> {
+async fn fetch_product_externally(id: &str, tokens: &Tokens) -> Result<Option<Product>, String> {
     get_product(id, &tokens.secret, &tokens.grant)
         .await
         .map(|product| product.map(Product::from))

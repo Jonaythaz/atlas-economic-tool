@@ -6,7 +6,7 @@ pub struct CSVCustomer {
     #[serde(rename = "Recnum")]
     pub id: i32,
 
-    #[serde(rename = "Cpr")]
+    #[serde(rename = "Cprnr")]
     pub cpr: String,
 
     #[serde(rename = "Kaldenavn")]

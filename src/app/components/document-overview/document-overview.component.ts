@@ -15,6 +15,7 @@ type ViewModel = {
 @Component({
 	selector: 'atlas-document-overview',
 	templateUrl: './document-overview.component.html',
+	styleUrl: './document-overview.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		DocumentListComponent,

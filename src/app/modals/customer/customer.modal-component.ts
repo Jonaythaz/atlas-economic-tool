@@ -45,26 +45,33 @@ export class CustomerModalComponent {
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
 	readonly #modal = inject(Modal);
 
-	readonly #errorMessage = signal<string | undefined>(this.#props.customer.error()?.message);
-	readonly #form = customerForm(this.#props.customer.input(), this.#props.settings.defaults);
+	readonly #saving = signal(false);
+	readonly #errorMessage = signal(this.#props.customer.error()?.message);
+	readonly #form = customerForm(
+		this.#props.customer.output() ?? this.#props.customer.input(),
+		this.#props.settings.defaults,
+	);
 
-	readonly #isLoading = signal(false);
-
-	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#isLoading());
+	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#saving());
 
 	constructor() {
-		this.#modal.canDismiss = computed(() => (this.#form().dirty() ? DISMISS_ALERT_CONFIG : true));
+		this.#modal.canDismiss = computed(() => {
+			if (this.#saving()) {
+				return false;
+			}
+			return this.#form().dirty() ? DISMISS_ALERT_CONFIG : true;
+		});
 	}
 
 	async #submit(): Promise<void> {
-		this.#isLoading.set(true);
+		this.#saving.set(true);
 		if (this.#form().invalid()) {
 			this.#errorMessage.set('form is invalid');
 		} else {
 			this.#props.customer.input = this.#form().value();
 			await this.#closeModal();
 		}
-		this.#isLoading.set(false);
+		this.#saving.set(false);
 	}
 
 	async #closeModal(): Promise<void> {
@@ -74,7 +81,7 @@ export class CustomerModalComponent {
 
 	readonly vm: ViewModel = {
 		errorMessage: this.#errorMessage.asReadonly(),
-		isLoading: this.#isLoading.asReadonly(),
+		isLoading: this.#saving.asReadonly(),
 		form: this.#form,
 		unsubmittable: this.#unsubmittable,
 		submit: this.#submit.bind(this),
