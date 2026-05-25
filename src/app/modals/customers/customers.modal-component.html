@@ -1,0 +1,32 @@
+<kirby-page-title>Create Customers</kirby-page-title>
+
+@if (vm.customers().length > 0) {
+<atlas-customer-list
+    [customers]="vm.customers()"
+    (selected)="vm.view($event)"
+></atlas-customer-list>
+} @else if (vm.state() === 'idle') {
+<kirby-empty-state
+    iconName="help"
+    title="Idle"
+    subtitle="The workflow hasn't reached this step yet"
+></kirby-empty-state>
+} @else {
+<kirby-empty-state
+    iconName="verify"
+    themeColor="success"
+    title="Success"
+    subtitle="No customers to create"
+></kirby-empty-state>
+}
+
+<kirby-modal-footer>
+    <button
+        kirby-button
+        type="submit"
+        [disabled]="vm.unrunnable()"
+        (click)="vm.run()"
+    >
+        Run Step
+    </button>
+</kirby-modal-footer>

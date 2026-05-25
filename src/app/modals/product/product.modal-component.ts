@@ -4,8 +4,8 @@ import { ProductFormComponent } from '@atlas/components/product-form';
 import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
 import { productForm } from '@atlas/forms/product';
 import type { Settings } from '@atlas/models';
-import type { Product } from '@atlas/types';
-import type { ProductPipelineItem } from '@atlas/utils/product-pipeline-item';
+import type { Defined, Product } from '@atlas/types';
+import type { ProductWorkflowItem } from '@atlas/workflow-items/product';
 import {
 	ButtonComponent,
 	COMPONENT_PROPS,
@@ -17,14 +17,14 @@ import {
 } from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
-	product: ProductPipelineItem;
+	product: ProductWorkflowItem;
 	settings: Settings;
 };
 
 type ViewModel = {
-	form: FieldTree<Required<Product>>;
 	errorMessage: Signal<string | undefined>;
 	isLoading: Signal<boolean>;
+	form: FieldTree<Defined<Product>>;
 	unsubmittable: Signal<boolean>;
 	submit: () => Promise<void>;
 };
@@ -34,25 +34,21 @@ type ViewModel = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
+		LoadingOverlayComponent,
 		ProductFormComponent,
 		ModalFooterComponent,
 		ButtonComponent,
-		LoadingOverlayComponent,
 		FlagComponent,
 	],
 })
 export class ProductModalComponent {
-	readonly #modal = inject(Modal);
 	readonly #props = inject<ComponentProps>(COMPONENT_PROPS);
+	readonly #modal = inject(Modal);
 
 	readonly #saving = signal(false);
-	readonly #errorMessage = signal(this.#props.product.error()?.message);
-	readonly #form = productForm(
-		this.#props.product.output() ?? this.#props.product.input(),
-		this.#props.settings.defaults,
-	);
+	readonly #form = productForm(this.#props.product.value(), this.#props.settings.defaults);
 
-	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#saving());
+	readonly #unsubmittable = computed(() => !this.#form().dirty() || this.#form().invalid() || this.#saving());
 
 	constructor() {
 		this.#modal.canDismiss = computed(() => {
@@ -65,12 +61,8 @@ export class ProductModalComponent {
 
 	async #submit(): Promise<void> {
 		this.#saving.set(true);
-		if (this.#form().invalid()) {
-			this.#errorMessage.set('form is invalid');
-		} else {
-			this.#props.product.input = this.#form().value();
-			await this.#closeModal();
-		}
+		this.#props.product.value = this.#form().value();
+		await this.#closeModal();
 		this.#saving.set(false);
 	}
 
@@ -80,9 +72,9 @@ export class ProductModalComponent {
 	}
 
 	readonly vm: ViewModel = {
-		form: this.#form,
-		errorMessage: this.#errorMessage,
+		errorMessage: this.#props.product.errorMessage,
 		isLoading: this.#saving.asReadonly(),
+		form: this.#form,
 		unsubmittable: this.#unsubmittable,
 		submit: this.#submit.bind(this),
 	};

@@ -1,5 +1,5 @@
+import type { BillingLine } from './billing-line.type';
 import type { CustomerReference } from './customer-reference.type';
-import type { DocumentLine } from './document-line.type';
 
 export type CreditNoteDocument = {
 	type: 'credit-note';
@@ -8,5 +8,5 @@ export type CreditNoteDocument = {
 	date: string;
 	customer: CustomerReference;
 	damageNumber: string | null;
-	lines: DocumentLine[];
+	lines: BillingLine[];
 };

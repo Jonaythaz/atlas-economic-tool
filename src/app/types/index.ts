@@ -1,3 +1,5 @@
+export * from './billing-document.type';
+export * from './billing-line.type';
 export * from './business-customer.type';
 export * from './created-customer.type';
 export * from './created-product.type';
@@ -5,10 +7,7 @@ export * from './credit-note-document.type';
 export * from './customer.type';
 export * from './customer-reference.type';
 export * from './defined.type';
-export * from './document.type';
-export * from './document-line.type';
 export * from './invoice-document.type';
-export * from './overview-segment.type';
-export * from './pipeline-status.type';
 export * from './private-customer.type';
 export * from './product.type';
+export * from './workflow-state.type';

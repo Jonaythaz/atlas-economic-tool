@@ -1,0 +1,18 @@
+<kirby-list [items]="vm.documents()" [getSectionName]="vm.getSectionName" (itemSelect)="vm.selectDocument($event)">
+    <kirby-list-section-header
+        *kirbyListSectionHeader="let section"
+        [title]="section">
+    </kirby-list-section-header>
+    <kirby-item *kirbyListItemTemplate="let document" [selectable]="true" disclosure="arrow-more">
+        @let documentValue = document.value();
+        <kirby-label>
+            <p class="kirby-item-title">{{ documentValue.id }}</p>
+            <p class="kirby-item-subtitle">{{
+                documentValue.customer.type === 'business'
+                    ? `EAN: ${documentValue.customer.ean}`
+                    : `CPR: ${documentValue.customer.cpr}`
+            }}</p>
+        </kirby-label>
+        <atlas-workflow-state-indicator slot="end" [state]="document.state()"></atlas-workflow-state-indicator>
+    </kirby-item>
+</kirby-list>

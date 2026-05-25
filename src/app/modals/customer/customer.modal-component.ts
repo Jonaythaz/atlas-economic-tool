@@ -5,7 +5,7 @@ import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
 import { customerForm } from '@atlas/forms/customer';
 import type { Settings } from '@atlas/models';
 import type { Customer, Defined } from '@atlas/types';
-import type { CustomerPipelineItem } from '@atlas/utils/customer-pipeline-item';
+import type { CustomerWorkflowItem } from '@atlas/workflow-items/customer';
 import {
 	ButtonComponent,
 	COMPONENT_PROPS,
@@ -17,7 +17,7 @@ import {
 } from '@kirbydesign/designsystem';
 
 export type ComponentProps = {
-	customer: CustomerPipelineItem;
+	customer: CustomerWorkflowItem;
 	settings: Settings;
 };
 
@@ -46,13 +46,9 @@ export class CustomerModalComponent {
 	readonly #modal = inject(Modal);
 
 	readonly #saving = signal(false);
-	readonly #errorMessage = signal(this.#props.customer.error()?.message);
-	readonly #form = customerForm(
-		this.#props.customer.output() ?? this.#props.customer.input(),
-		this.#props.settings.defaults,
-	);
+	readonly #form = customerForm(this.#props.customer.value(), this.#props.settings.defaults);
 
-	readonly #unsubmittable = computed(() => this.#form().invalid() || this.#saving());
+	readonly #unsubmittable = computed(() => !this.#form().dirty() || this.#form().invalid() || this.#saving());
 
 	constructor() {
 		this.#modal.canDismiss = computed(() => {
@@ -65,12 +61,8 @@ export class CustomerModalComponent {
 
 	async #submit(): Promise<void> {
 		this.#saving.set(true);
-		if (this.#form().invalid()) {
-			this.#errorMessage.set('form is invalid');
-		} else {
-			this.#props.customer.input = this.#form().value();
-			await this.#closeModal();
-		}
+		this.#props.customer.value = this.#form().value();
+		await this.#closeModal();
 		this.#saving.set(false);
 	}
 
@@ -80,7 +72,7 @@ export class CustomerModalComponent {
 	}
 
 	readonly vm: ViewModel = {
-		errorMessage: this.#errorMessage.asReadonly(),
+		errorMessage: this.#props.customer.errorMessage,
 		isLoading: this.#saving.asReadonly(),
 		form: this.#form,
 		unsubmittable: this.#unsubmittable,

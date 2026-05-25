@@ -1,0 +1,72 @@
+@let formValue = form();
+
+<kirby-section-header>
+    <h3 heading>API Tokens</h3>
+</kirby-section-header>
+<kirby-card [hasPadding]="true">
+    <kirby-form-field
+        label="Secret Token"
+        [message]="formValue.tokens.secret().errors().at(0)?.message"
+    >
+        <input
+            kirby-input
+            type="password"
+            [formField]="formValue.tokens.secret"
+            [hasError]="formValue.tokens.secret().invalid()"
+        />
+    </kirby-form-field>
+    <kirby-form-field
+        label="Grant Token"
+        [message]="formValue.tokens.grant().errors().at(0)?.message"
+    >
+        <input
+            kirby-input
+            type="password"
+            [formField]="formValue.tokens.grant"
+            [hasError]="formValue.tokens.grant().invalid()"
+        />
+    </kirby-form-field>
+</kirby-card>
+
+<br />
+
+<kirby-section-header>
+    <h3 heading>Default Values</h3>
+</kirby-section-header>
+<kirby-card [hasPadding]="true">
+    <kirby-form-field label="Customer Group">
+        <input
+            kirby-input
+            type="number"
+            [formField]="formValue.defaults.customerGroup"
+        />
+    </kirby-form-field>
+    <kirby-form-field label="Product Group">
+        <input
+            kirby-input
+            type="number"
+            [formField]="formValue.defaults.productGroup"
+        />
+    </kirby-form-field>
+    <kirby-form-field label="Invoice Layout">
+        <input
+            kirby-input
+            type="number"
+            [formField]="formValue.defaults.layout"
+        />
+    </kirby-form-field>
+    <kirby-form-field label="Payment Terms">
+        <input
+            kirby-input
+            type="number"
+            [formField]="formValue.defaults.paymentTerms"
+        />
+    </kirby-form-field>
+    <kirby-form-field label="Vat Zone">
+        <input
+            kirby-input
+            type="number"
+            [formField]="formValue.defaults.vatZone"
+        />
+    </kirby-form-field>
+</kirby-card>

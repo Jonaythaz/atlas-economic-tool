@@ -1,0 +1,225 @@
+// n8n-inspired workflow item card styling with comprehensive state management
+
+// Color variables
+$color-idle: #9ca3af;
+$color-idle-light: #f3f4f6;
+$color-running: #3b82f6;
+$color-running-light: #eff6ff;
+$color-blocked: #f59e0b;
+$color-blocked-light: #fffbeb;
+$color-completed: #10b981;
+$color-completed-light: #ecfdf5;
+$color-failed: #ef4444;
+$color-failed-light: #fef2f2;
+$color-text-primary: #1f2937;
+$color-text-secondary: #6b7280;
+$color-shadow: rgba(0, 0, 0, 0.1);
+$color-shadow-hover: rgba(0, 0, 0, 0.15);
+
+// Card container
+.workflow-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 1.5rem 1rem;
+    background: white;
+    border-radius: 0.75rem;
+    border: 2px solid #e5e7eb;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px $color-shadow;
+    min-width: 140px;
+    min-height: 180px;
+    position: relative;
+
+    &:hover {
+        box-shadow: 0 4px 12px $color-shadow-hover;
+        transform: translateY(-2px);
+
+        .workflow-card__title {
+            color: $color-text-primary;
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px $color-shadow;
+    }
+
+    // State-specific border colors
+    &--idle {
+        border-color: $color-idle;
+    }
+
+    &--running {
+        border-color: $color-running;
+    }
+
+    &--blocked {
+        border-color: $color-blocked;
+    }
+
+    &--completed {
+        border-color: $color-completed;
+    }
+
+    &--failed {
+        border-color: $color-failed;
+    }
+}
+
+// Card container for different states
+.workflow-card__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+}
+
+// Icon wrapper with state indicator
+.workflow-card__icon-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Icon background - changes based on state
+.workflow-card__icon-background {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    // Default (idle) background
+    background-color: $color-idle-light;
+
+    // state-specific backgrounds
+    .workflow-card--running & {
+        background-color: $color-running-light;
+    }
+
+    .workflow-card--blocked & {
+        background-color: $color-blocked-light;
+    }
+
+    .workflow-card--completed & {
+        background-color: $color-completed-light;
+    }
+
+    .workflow-card--failed & {
+        background-color: $color-failed-light;
+    }
+}
+
+// Icon styling
+.workflow-card__icon {
+    color: $color-text-primary;
+    transition: all 0.2s ease;
+
+    .workflow-card--idle & {
+        color: $color-idle;
+        opacity: 0.7;
+    }
+
+    .workflow-card--running & {
+        color: $color-running;
+    }
+
+    .workflow-card--blocked & {
+        color: $color-blocked;
+    }
+
+    .workflow-card--completed & {
+        color: $color-completed;
+    }
+
+    .workflow-card--failed & {
+        color: $color-failed;
+    }
+}
+
+// State indicator positioning within workflow card
+.workflow-card__state-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 3px solid white;
+}
+
+// Title styling
+.workflow-card__title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: $color-text-secondary;
+    text-align: center;
+    line-height: 1.4;
+    word-wrap: break-word;
+    max-width: 100%;
+    transition: color 0.2s ease;
+
+    .workflow-card--idle & {
+        color: $color-text-secondary;
+    }
+
+    .workflow-card--running & {
+        color: $color-text-primary;
+    }
+
+    .workflow-card--blocked & {
+        color: $color-text-primary;
+    }
+
+    .workflow-card--completed & {
+        color: $color-text-primary;
+    }
+
+    .workflow-card--failed & {
+        color: $color-text-primary;
+    }
+}
+
+// Responsive design for smaller screens
+@media (max-width: 768px) {
+    .workflow-card {
+        min-width: 120px;
+        min-height: 160px;
+        padding: 1rem 0.75rem;
+
+        .workflow-card__icon-wrapper {
+            width: 70px;
+            height: 70px;
+        }
+
+        .workflow-card__title {
+            font-size: 0.85rem;
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .workflow-card {
+        min-width: 100px;
+        min-height: 140px;
+        padding: 0.75rem 0.5rem;
+
+        .workflow-card__icon-wrapper {
+            width: 60px;
+            height: 60px;
+        }
+
+        .workflow-card__title {
+            font-size: 0.75rem;
+        }
+    }
+}

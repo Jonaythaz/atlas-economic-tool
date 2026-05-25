@@ -1,0 +1,13 @@
+<kirby-page>
+    <kirby-header title="Atlas Economic Tool" subtitle1="Invoice Booking">
+        <kirby-action-group *kirbyHeaderActions>
+            <button kirby-button type="button" (click)="vm.start()">
+                <kirby-icon name="flash"></kirby-icon>
+                <span class="text">Start Workflow</span>
+            </button>
+        </kirby-action-group>
+    </kirby-header>
+    <kirby-page-content>
+        <atlas-invoice-booking-workflow></atlas-invoice-booking-workflow>
+    </kirby-page-content>
+</kirby-page>

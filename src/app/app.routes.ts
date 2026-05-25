@@ -1,9 +1,9 @@
 import type { Routes } from '@angular/router';
-import { HomeComponent } from '@atlas/pages/home';
+import { InvoiceBookingComponent } from '@atlas/pages/invoice-booking';
 
 export const routes: Routes = [
 	{
 		path: '',
-		component: HomeComponent,
+		component: InvoiceBookingComponent,
 	},
 ];

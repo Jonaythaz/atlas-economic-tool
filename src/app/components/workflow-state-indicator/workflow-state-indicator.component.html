@@ -1,0 +1,17 @@
+@switch(state()) {
+  @case('idle') {
+    <span class="idle-dot"></span>
+  }
+  @case('running') {
+    <span class="spinner"></span>
+  }
+  @case('blocked') {
+    <span class="blocked-icon">⊘</span>
+  }
+  @case('completed') {
+    <span class="checkmark">✓</span>
+  }
+  @case('failed') {
+    <span class="error-icon">✕</span>
+  }
+}

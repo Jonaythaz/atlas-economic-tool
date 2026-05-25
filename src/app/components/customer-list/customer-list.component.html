@@ -1,14 +1,10 @@
-@if (vm.customers.hasValue() && vm.customers.value().length > 0) {
-    <kirby-list [items]="vm.customers.value()" [getSectionName]="vm.getSectionName" (itemSelect)="vm.selectCustomer($event)">
-        <kirby-list-section-header
-            *kirbyListSectionHeader="let section"
-            [title]="section">
-        </kirby-list-section-header>
-        <kirby-item *kirbyListItemTemplate="let customerItem" [selectable]="true" disclosure="arrow-more">
-            <p class="kirby-item-title">{{ customerItem.input().name }}</p>
-            <atlas-status-indicator slot="end" [status]="customerItem.status()"></atlas-status-indicator>
-        </kirby-item>
-    </kirby-list>
-} @else {
-    <p>No customers found</p>
-}
+<kirby-list [items]="vm.customers()" [getSectionName]="vm.getSectionName" (itemSelect)="vm.selectCustomer($event)">
+    <kirby-list-section-header
+        *kirbyListSectionHeader="let section"
+        [title]="section">
+    </kirby-list-section-header>
+    <kirby-item *kirbyListItemTemplate="let customer" [selectable]="true" disclosure="arrow-more">
+        <p class="kirby-item-title">{{ customer.value().name }}</p>
+        <atlas-workflow-state-indicator slot="end" [state]="customer.state()"></atlas-workflow-state-indicator>
+    </kirby-item>
+</kirby-list>

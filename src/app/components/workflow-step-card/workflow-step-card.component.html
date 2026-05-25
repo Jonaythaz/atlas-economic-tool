@@ -1,0 +1,17 @@
+<div class="workflow-card" [class]="'workflow-card--' + state()" (click)="selected.emit()">
+  <div class="workflow-card__container">
+    <div class="workflow-card__icon-wrapper">
+      <div class="workflow-card__icon-background">
+        <kirby-icon
+          [name]="icon()"
+          class="workflow-card__icon"
+          size="lg">
+        </kirby-icon>
+      </div>
+
+      <atlas-workflow-state-indicator class="workflow-card__state-indicator" [state]="state()"></atlas-workflow-state-indicator>
+    </div>
+
+    <h3 class="workflow-card__title">{{ title() }}</h3>
+  </div>
+</div>

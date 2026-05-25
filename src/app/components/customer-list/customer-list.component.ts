@@ -1,20 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, type Resource } from '@angular/core';
-import { StatusIndicatorComponent } from '@atlas/components/status-indicator';
-import { CustomerModalService } from '@atlas/modals/customer';
-import { DocumentService } from '@atlas/services/document';
-import type { CustomerPipelineItem } from '@atlas/utils/customer-pipeline-item';
+import { ChangeDetectionStrategy, Component, input, output, type Signal } from '@angular/core';
+import type { CustomerWorkflowItem } from '@atlas/workflow-items/customer';
+import { ItemComponent } from '@kirbydesign/designsystem/item';
 import {
-	ItemComponent,
 	ListComponent,
 	ListItemTemplateDirective,
 	ListSectionHeaderComponent,
 	ListSectionHeaderDirective,
-} from '@kirbydesign/designsystem';
+} from '@kirbydesign/designsystem/list';
+
+import { WorkflowStateIndicatorComponent } from '../workflow-state-indicator/workflow-state-indicator.component';
 
 type ViewModel = {
-	customers: Resource<CustomerPipelineItem[] | undefined>;
-	getSectionName: (customer: CustomerPipelineItem) => string;
-	selectCustomer: (customer: CustomerPipelineItem) => Promise<void>;
+	customers: Signal<CustomerWorkflowItem[]>;
+	getSectionName: (customer: CustomerWorkflowItem) => string;
+	selectCustomer: (customer: CustomerWorkflowItem) => void;
 };
 
 @Component({
@@ -25,19 +24,18 @@ type ViewModel = {
 		ListComponent,
 		ListSectionHeaderComponent,
 		ItemComponent,
-		StatusIndicatorComponent,
+		WorkflowStateIndicatorComponent,
 		ListSectionHeaderDirective,
 		ListItemTemplateDirective,
 	],
 })
 export class CustomerListComponent {
-	readonly #pipelineStep = inject(DocumentService).customerPipelineStep;
-	readonly #modalService = inject(CustomerModalService);
+	readonly customers = input.required<CustomerWorkflowItem[]>();
+	readonly selected = output<CustomerWorkflowItem>();
 
 	readonly vm: ViewModel = {
-		customers: this.#pipelineStep.items,
-		getSectionName: (item: CustomerPipelineItem) =>
-			item.input().type === 'private' ? 'Private Customers' : 'Business Customers',
-		selectCustomer: this.#modalService.open.bind(this.#modalService),
+		customers: this.customers,
+		getSectionName: (customer) => (customer.value().type === 'private' ? 'Private Customers' : 'Business Customers'),
+		selectCustomer: this.selected.emit.bind(this.selected),
 	};
 }

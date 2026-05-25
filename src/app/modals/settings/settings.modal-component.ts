@@ -1,30 +1,26 @@
-import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, type Signal, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { type FieldTree, FormField, form, required } from '@angular/forms/signals';
-import { updateSettings } from '@atlas/commands';
-import { DEFAULT_SETTINGS, DISMISS_ALERT_CONFIG } from '@atlas/constants';
-import type { Defaults, Settings, Tokens } from '@atlas/models';
+import { ChangeDetectionStrategy, Component, computed, inject, resource, type Signal, signal } from '@angular/core';
+import type { FieldTree } from '@angular/forms/signals';
+import { SettingsFormComponent } from '@atlas/components/settings-form';
+import { DISMISS_ALERT_CONFIG } from '@atlas/constants';
+import { settingsForm } from '@atlas/forms/settings';
+import type { Settings } from '@atlas/models';
 import { SettingsService } from '@atlas/services/settings';
+import type { Defined } from '@atlas/types';
 import {
 	ButtonComponent,
-	CardModule,
-	EmptyStateModule,
-	FormFieldModule,
-	InputComponent,
+	FlagComponent,
 	LoadingOverlayComponent,
 	Modal,
 	ModalFooterComponent,
 	PageModule,
-	SectionHeaderComponent,
 	ToastController,
 } from '@kirbydesign/designsystem';
 
 type ViewModel = {
-	form: FieldTree<SettingsModel>;
 	isLoading: Signal<boolean>;
-	error: Signal<string | undefined>;
+	errorMessage: Signal<string | undefined>;
+	form: FieldTree<Defined<Settings>>;
 	unsubmittable: Signal<boolean>;
-	reload: () => void;
 	submit: () => Promise<void>;
 };
 
@@ -34,42 +30,27 @@ type ViewModel = {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	imports: [
 		PageModule,
-		ButtonComponent,
-		CardModule,
-		FormFieldModule,
-		InputComponent,
-		FormField,
-		FormsModule,
-		ModalFooterComponent,
 		LoadingOverlayComponent,
-		EmptyStateModule,
-		SectionHeaderComponent,
+		FlagComponent,
+		ButtonComponent,
+		SettingsFormComponent,
+		ModalFooterComponent,
 	],
 })
 export class SettingsModalComponent {
 	readonly #modal = inject(Modal);
-	readonly #settingsService = inject(SettingsService);
+
 	readonly #toastController = inject(ToastController);
+	readonly #settingsService = inject(SettingsService);
 
 	readonly #saving = signal(false);
-	readonly #model = linkedSignal<SettingsModel>(() => {
-		const { tokens, defaults } = this.#settingsService.settings() ?? DEFAULT_SETTINGS;
-		return {
-			tokens: tokens,
-			defaults: {
-				customerGroup: defaults.customerGroup ?? NaN,
-				productGroup: defaults.productGroup ?? NaN,
-				paymentTerms: defaults.paymentTerms ?? NaN,
-				vatZone: defaults.vatZone ?? NaN,
-				layout: defaults.layout ?? NaN,
-			},
-		};
-	});
-	readonly #form = form(this.#model, (schema) => {
-		required(schema.tokens.secret, { message: 'Secret token is required' });
-		required(schema.tokens.grant, { message: 'Grant token is required' });
-	});
 
+	readonly #settings = resource({ loader: () => this.#settingsService.loadSettings() });
+
+	readonly #form = settingsForm(() => (this.#settings.hasValue() ? this.#settings.value() : null));
+
+	readonly #isLoading = computed(() => this.#settings.isLoading() || this.#saving());
+	readonly #errorMessage = computed(() => this.#settings.error()?.message);
 	readonly #unsubmittable = computed(() => !this.#form().dirty() || this.#form().invalid() || this.#saving());
 
 	constructor() {
@@ -83,11 +64,12 @@ export class SettingsModalComponent {
 
 	async #save(): Promise<void> {
 		this.#saving.set(true);
-		await updateSettings(this.#formValue())
+		await this.#settingsService
+			.saveSettings(this.#formValue())
 			.then(this.#closeModal.bind(this))
 			.catch((error) =>
 				this.#toastController.showToast({
-					message: `Was unable to save settings: ${error.message}`,
+					message: `Was unable to persist changes to settings: ${error.message}`,
 					messageType: 'warning',
 				}),
 			)
@@ -114,16 +96,10 @@ export class SettingsModalComponent {
 	}
 
 	readonly vm: ViewModel = {
+		isLoading: this.#isLoading,
+		errorMessage: this.#errorMessage,
 		form: this.#form,
-		isLoading: computed(() => this.#settingsService.isLoading() || this.#saving()),
-		error: this.#settingsService.error,
 		unsubmittable: this.#unsubmittable,
-		reload: this.#settingsService.load.bind(this.#settingsService),
 		submit: this.#save.bind(this),
 	};
 }
-
-type SettingsModel = {
-	tokens: Tokens;
-	defaults: Required<Defaults>;
-};

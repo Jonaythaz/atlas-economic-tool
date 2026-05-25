@@ -21,7 +21,7 @@ export function customerForm(customer: Customer, defaults: Defaults): FieldTree<
 			(s) => {
 				readonly(s.cpr);
 				required(s.email, { message: 'Email is required' });
-				email(s.email);
+				email(s.email, { message: 'Invalid email address' });
 			},
 		);
 		readonly(schema.type);

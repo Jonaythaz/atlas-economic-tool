@@ -1,0 +1,176 @@
+// Color variables
+$color-idle: #9ca3af;
+$color-running: #3b82f6;
+$color-blocked: #f59e0b;
+$color-completed: #10b981;
+$color-failed: #ef4444;
+$color-shadow: rgba(0, 0, 0, 0.1);
+
+// State indicator host styling
+:host {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px $color-shadow;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    // Idle state - subtle pulse with dot
+    &.idle {
+        background-color: $color-idle;
+        color: white;
+        animation: pulse-idle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    // Running state - blue with animation
+    &.running {
+        background-color: $color-running;
+        color: white;
+        animation: pulse-running 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    // Blocked state - amber/orange with pulse
+    &.blocked {
+        background-color: $color-blocked;
+        color: white;
+        animation: pulse-blocked 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    // Completed state - green
+    &.completed {
+        background-color: $color-completed;
+        color: white;
+    }
+
+    // Failed state - red with shake animation
+    &.failed {
+        background-color: $color-failed;
+        color: white;
+        animation: shake-indicator 0.5s ease-in-out infinite;
+    }
+}
+
+// Idle dot indicator
+.idle-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+// Spinner animation for running state
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+// Blocked icon
+.blocked-icon {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+// Checkmark for completed state
+.checkmark {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+// Error icon for failed state
+.error-icon {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+// Animations
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-idle {
+    0%,
+    100% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 0 rgba(156, 163, 175, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 6px rgba(156, 163, 175, 0);
+    }
+}
+
+@keyframes pulse-running {
+    0%,
+    100% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 6px rgba(59, 130, 246, 0);
+    }
+}
+
+@keyframes pulse-blocked {
+    0%,
+    100% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+    50% {
+        box-shadow:
+            0 2px 4px $color-shadow,
+            0 0 0 6px rgba(245, 158, 11, 0);
+    }
+}
+
+@keyframes shake-indicator {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-3px);
+    }
+    75% {
+        transform: translateX(3px);
+    }
+}
+
+// Responsive design for smaller screens
+@media (max-width: 480px) {
+    :host {
+        width: 24px;
+        height: 24px;
+        border-width: 2px;
+    }
+
+    .idle-dot {
+        width: 6px;
+        height: 6px;
+    }
+}
