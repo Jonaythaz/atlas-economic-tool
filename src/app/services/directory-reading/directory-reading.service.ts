@@ -9,6 +9,7 @@ export class DirectoryReadingService {
 	readonly #eventBus = inject(EventBusService);
 
 	readonly #state = signal<WorkflowState>('idle');
+	readonly #errorMessage = signal<string | undefined>(undefined);
 
 	constructor() {
 		this.#eventBus.startEvents.subscribe(async () => {
@@ -18,8 +19,9 @@ export class DirectoryReadingService {
 					this.#eventBus.emitDocuments(documents);
 					this.#state.set('completed');
 				},
-				() => {
+				(error) => {
 					this.#state.set('failed');
+					this.#errorMessage.set(error.message);
 				},
 			);
 		});
@@ -27,5 +29,9 @@ export class DirectoryReadingService {
 
 	get state(): Signal<WorkflowState> {
 		return this.#state.asReadonly();
+	}
+
+	get errorMessage(): Signal<string | undefined> {
+		return this.#errorMessage.asReadonly();
 	}
 }

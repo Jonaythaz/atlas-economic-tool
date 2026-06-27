@@ -24,8 +24,10 @@ pub fn read_csv_data<T>(file: PathBuf) -> Result<Vec<T>, ReadError>
 where
     T: serde::de::DeserializeOwned,
 {
-    let mut rdr =
-        csv::Reader::from_path(&file).map_err(|e| ReadError::LoadError(format!("{:?}", e)))?;
+    let mut rdr = csv::ReaderBuilder::new()
+        .delimiter(b';')
+        .from_path(&file)
+        .map_err(|e| ReadError::LoadError(format!("{:?}", e)))?;
     let mut vec = Vec::new();
     for result in rdr.deserialize() {
         let row: T = result.map_err(|e| ReadError::ParseError(format!("{:?}", e)))?;
