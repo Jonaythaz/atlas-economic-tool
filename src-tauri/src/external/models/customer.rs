@@ -7,7 +7,7 @@ pub struct Customer {
     #[serde(rename = "customerNumber")]
     pub id: i32,
 
-    #[serde(rename = "ean")]
+    #[serde(rename = "ean", skip_serializing_if = "Option::is_none")]
     pub ean: Option<String>,
 
     #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
@@ -16,17 +16,17 @@ pub struct Customer {
     #[serde(rename = "name")]
     pub name: String,
 
-    #[serde(rename = "address")]
-    pub street: String,
+    #[serde(rename = "address", skip_serializing_if = "Option::is_none")]
+    pub street: Option<String>,
 
-    #[serde(rename = "city")]
-    pub city: String,
+    #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
+    pub city: Option<String>,
 
-    #[serde(rename = "zip")]
-    pub postal_code: String,
+    #[serde(rename = "zip", skip_serializing_if = "Option::is_none")]
+    pub postal_code: Option<String>,
 
-    #[serde(rename = "country")]
-    pub country: String,
+    #[serde(rename = "country", skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
 
     #[serde(rename = "currency")]
     pub currency: String,

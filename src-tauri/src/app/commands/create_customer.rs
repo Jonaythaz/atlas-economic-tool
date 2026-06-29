@@ -2,7 +2,7 @@ use tauri::State;
 
 use crate::app::models::{Customer, NewCustomer, Tokens};
 use crate::app::{AppState, DatabaseAccess};
-use crate::external::{get_customer, post_customer};
+use crate::external::{get_customer, post_customer, put_customer};
 use crate::persistence::insert_customer;
 
 #[tauri::command]
@@ -22,7 +22,46 @@ pub async fn create_customer(
     };
 
     let external_customer = match fetch_existing_customer(customer_id, &tokens).await? {
-        Some(existing) => existing,
+        Some(mut existing) => {
+            let mut is_dirty = false;
+            if existing.city.is_none() {
+                is_dirty = true;
+                let _ = existing.city.insert(match &customer {
+                    NewCustomer::Business { city, .. } => city.clone(),
+                    NewCustomer::Private { city, .. } => city.clone(),
+                });
+            }
+            if existing.street.is_none() {
+                is_dirty = true;
+                let _ = existing.street.insert(match &customer {
+                    NewCustomer::Business { street, .. } => street.clone(),
+                    NewCustomer::Private { street, .. } => street.clone(),
+                });
+            }
+            if existing.postal_code.is_none() {
+                is_dirty = true;
+                let _ = existing.postal_code.insert(match &customer {
+                    NewCustomer::Business { postal_code, .. } => postal_code.clone(),
+                    NewCustomer::Private { postal_code, .. } => postal_code.clone(),
+                });
+            }
+            if existing.country.is_none() {
+                is_dirty = true;
+                let _ = existing.country.insert(match &customer {
+                    NewCustomer::Business { country, .. } => country.clone(),
+                    NewCustomer::Private { country, .. } => country.clone(),
+                });
+            }
+            if is_dirty {
+                put_customer(&existing, &tokens.secret, &tokens.grant)
+                    .await
+                    .map_err(|err| {
+                        format!("Was unable to update existing customer. Cause: {}", err)
+                    })?
+            } else {
+                existing
+            }
+        }
         None => create_customer_externally(customer, &tokens).await?,
     };
 
@@ -37,7 +76,7 @@ pub async fn create_customer(
             .unwrap_or(());
     }
 
-    Ok(external_customer.into())
+    external_customer.try_into()
 }
 
 async fn fetch_existing_customer(

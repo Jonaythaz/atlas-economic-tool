@@ -4,7 +4,7 @@ mod external;
 mod persistence;
 
 use app::commands::{
-    create_customer, create_invoice, create_product, fetch_customer, fetch_product, load_documents,
+    create_customer, create_invoice, create_product, fetch_product, load_documents,
 };
 use tauri::Manager;
 
@@ -24,7 +24,6 @@ pub fn run() {
             create_customer,
             create_invoice,
             create_product,
-            fetch_customer,
             fetch_product,
             load_documents,
         ])
