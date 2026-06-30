@@ -73,7 +73,7 @@ function toNewInvoice(
 	if (layout === null || paymentTerms === null) {
 		return Result.error('Missing default values');
 	}
-	return Result.all(billingDocument.lines.map((line) => toNewInvoiceLine(line, productMap))).map((lines) => ({
+	return Result.all(...billingDocument.lines.map((line) => toNewInvoiceLine(line, productMap))).map((lines) => ({
 		layout,
 		paymentTerms,
 		customerId: customer.id,
