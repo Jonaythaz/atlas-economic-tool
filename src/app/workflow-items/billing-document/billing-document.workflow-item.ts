@@ -114,7 +114,7 @@ function toNewInvoiceLine(line: BillingLine, productMap: Map<string, CreatedProd
 	}
 	return Result.ok({
 		productId: product.id,
-		description: product.description,
+		description: line.description,
 		price: line.price,
 		quantity: line.quantity,
 	});

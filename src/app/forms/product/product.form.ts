@@ -11,7 +11,6 @@ export function productForm(product: Product, defaults: Defaults): FieldTree<Def
 	return form(model, (schema) => {
 		readonly(schema.id);
 		required(schema.name, { message: 'Product name is required' });
-		required(schema.description, { message: 'Product description is required' });
 		required(schema.group, { message: 'Product group is required' });
 	});
 }

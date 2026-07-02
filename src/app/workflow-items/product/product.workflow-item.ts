@@ -48,23 +48,18 @@ export class ProductWorkflowItem {
 			throw new Error('Missing required field');
 		}
 
-		return createProduct(newProduct, settings.tokens)
-			.then((createdProduct) => ({
-				...createdProduct,
-				description: product.description,
-			}))
-			.then(
-				(createdProduct) => {
-					this.#createdProduct.set(createdProduct);
-					this.#state.set('completed');
-					return createdProduct;
-				},
-				(error) => {
-					this.#errorMessage.set(error.message ?? 'Unexpected error occured');
-					this.#state.set('failed');
-					throw error;
-				},
-			);
+		return createProduct(newProduct, settings.tokens).then(
+			(createdProduct) => {
+				this.#createdProduct.set(createdProduct);
+				this.#state.set('completed');
+				return createdProduct;
+			},
+			(error) => {
+				this.#errorMessage.set(error.message ?? 'Unexpected error occured');
+				this.#state.set('failed');
+				throw error;
+			},
+		);
 	}
 }
 

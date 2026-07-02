@@ -148,7 +148,6 @@ fn extract_products(
             crate::app::models::DocumentProduct {
                 id: product.id.clone(),
                 name: product.name.clone(),
-                description: product.description.clone(),
             },
         );
     }

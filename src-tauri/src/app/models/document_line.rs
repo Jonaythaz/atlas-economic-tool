@@ -4,6 +4,7 @@ use serde::Serialize;
 #[serde(rename_all = "camelCase")]
 pub struct DocumentLine {
     pub product_id: String,
+    pub description: String,
     pub price: f64,
     pub quantity: f64,
 }
@@ -12,6 +13,7 @@ impl From<crate::core::models::DocumentLine> for DocumentLine {
     fn from(line: crate::core::models::DocumentLine) -> Self {
         Self {
             product_id: line.product.id,
+            description: line.product.description,
             price: line.price,
             quantity: line.quantity,
         }
