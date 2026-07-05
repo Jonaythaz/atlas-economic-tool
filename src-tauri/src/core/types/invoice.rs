@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use super::common::{AccountingParty, Item, OrderReference, Price};
+use super::common::{AccountingParty, AllowanceCharge, Item, OrderReference, Price};
 
 #[derive(Debug, Deserialize)]
 pub struct Invoice {
@@ -22,6 +22,9 @@ pub struct Invoice {
 
 #[derive(Debug, Deserialize)]
 pub struct InvoiceLine {
+    #[serde(rename = "AllowanceCharge")]
+    pub allowance_charge: Option<AllowanceCharge>,
+
     #[serde(rename = "Item")]
     pub item: Item,
 

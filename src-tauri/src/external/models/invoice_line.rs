@@ -11,17 +11,14 @@ pub struct InvoiceLine {
     #[serde(rename = "quantity")]
     quantity: f64,
 
-    #[serde(rename = "unitNetPrice")]
-    unit_net_price: f64,
-
     #[serde(rename = "discountPercentage")]
     discount_percentage: f64,
 
     #[serde(rename = "unitCostPrice")]
     unit_cost_price: f64,
 
-    #[serde(rename = "totalNetAmount")]
-    total_net_amount: f64,
+    #[serde(rename = "unitNetPrice")]
+    unit_net_price: f64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -31,15 +28,20 @@ struct Product {
 }
 
 impl InvoiceLine {
-    pub fn new(description: String, product: String, quantity: f64, price: f64) -> Self {
+    pub fn new(
+        description: String,
+        product: String,
+        quantity: f64,
+        price: f64,
+        discount: Option<f64>,
+    ) -> Self {
         Self {
             description,
             product: Product { id: product },
             quantity: quantity,
-            unit_net_price: price,
-            discount_percentage: 0.0,
+            discount_percentage: discount.map_or(0.0, |d| d.abs() / price.abs() * 100.0),
             unit_cost_price: price,
-            total_net_amount: price,
+            unit_net_price: price - discount.unwrap_or(0.0),
         }
     }
 }

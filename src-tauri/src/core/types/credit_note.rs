@@ -1,4 +1,6 @@
-use super::common::{AccountingParty, BillingReference, Item, OrderReference, Price};
+use super::common::{
+    AccountingParty, AllowanceCharge, BillingReference, Item, OrderReference, Price,
+};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -24,6 +26,9 @@ pub struct CreditNote {
 
 #[derive(Debug, Deserialize)]
 pub struct CreditNoteLine {
+    #[serde(rename = "AllowanceCharge")]
+    pub allowance_charge: Option<AllowanceCharge>,
+
     #[serde(rename = "Item")]
     pub item: Item,
 

@@ -3,4 +3,5 @@ export type NewInvoiceLine = {
 	description: string;
 	quantity: number;
 	price: number;
+	discount: number | null;
 };

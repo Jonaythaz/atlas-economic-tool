@@ -7,6 +7,7 @@ pub struct NewInvoiceLine {
     pub description: String,
     pub quantity: f64,
     pub price: f64,
+    pub discount: Option<f64>,
 }
 
 impl Into<crate::external::models::InvoiceLine> for NewInvoiceLine {
@@ -16,6 +17,7 @@ impl Into<crate::external::models::InvoiceLine> for NewInvoiceLine {
             self.product_id,
             self.quantity,
             self.price,
+            self.discount,
         )
     }
 }

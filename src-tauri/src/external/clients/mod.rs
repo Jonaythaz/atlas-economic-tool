@@ -9,3 +9,5 @@ pub use invoice::post_invoice;
 pub use product::{get_product, post_product};
 
 use helper::{get, parse_response, post};
+
+const MOCK_MODE: bool = false;

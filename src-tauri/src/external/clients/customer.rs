@@ -1,7 +1,11 @@
 use super::{get, parse_response, post, ClientError};
-use crate::external::{models::Customer, ClientResult};
+use crate::external::{clients::MOCK_MODE, models::Customer, ClientResult};
 
 pub async fn get_customer(id: i32, secret: &str, grant: &str) -> ClientResult<Option<Customer>> {
+    if MOCK_MODE {
+        return get_customer_mock(id).await;
+    }
+
     let response = get(
         format!("https://restapi.e-conomic.com/customers/{id}"),
         secret,
@@ -35,6 +39,10 @@ pub async fn post_customer(
     secret: &str,
     grant: &str,
 ) -> ClientResult<Customer> {
+    if MOCK_MODE {
+        return post_customer_mock(customer).await;
+    }
+
     let response = post(
         "https://restapi.e-conomic.com/customers",
         customer,
@@ -52,6 +60,10 @@ pub async fn put_customer(
     secret: &str,
     grant: &str,
 ) -> ClientResult<Customer> {
+    if MOCK_MODE {
+        return put_customer_mock(customer).await;
+    }
+
     let response = surf::put(format!(
         "https://restapi.e-conomic.com/customers/{}",
         customer.id
@@ -64,4 +76,30 @@ pub async fn put_customer(
     .map_err(ClientError::from)?;
 
     parse_response(response).await
+}
+
+async fn get_customer_mock(id: i32) -> ClientResult<Option<Customer>> {
+    println!("Getting customer from mock endpoint...");
+    println!("Customer id: {id}");
+    Ok(None)
+}
+
+async fn post_customer_mock(customer: &Customer) -> ClientResult<Customer> {
+    println!("Posting customer to mock endpoint...");
+    println!(
+        "Customer: {}",
+        serde_json::to_string_pretty(customer)
+            .unwrap_or_else(|_| "unparsable customer".to_string())
+    );
+    Ok(customer.clone())
+}
+
+async fn put_customer_mock(customer: &Customer) -> ClientResult<Customer> {
+    println!("Putting customer to mock endpoint...");
+    println!(
+        "Customer: {}",
+        serde_json::to_string_pretty(customer)
+            .unwrap_or_else(|_| "unparsable customer".to_string())
+    );
+    Ok(customer.clone())
 }

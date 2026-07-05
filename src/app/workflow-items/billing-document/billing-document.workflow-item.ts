@@ -117,5 +117,6 @@ function toNewInvoiceLine(line: BillingLine, productMap: Map<string, CreatedProd
 		description: line.description,
 		price: line.price,
 		quantity: line.quantity,
+		discount: line.discount,
 	});
 }

@@ -7,6 +7,7 @@ pub struct DocumentLine {
     pub description: String,
     pub price: f64,
     pub quantity: f64,
+    pub discount: Option<f64>,
 }
 
 impl From<crate::core::models::DocumentLine> for DocumentLine {
@@ -16,6 +17,7 @@ impl From<crate::core::models::DocumentLine> for DocumentLine {
             description: line.product.description,
             price: line.price,
             quantity: line.quantity,
+            discount: line.discount,
         }
     }
 }
