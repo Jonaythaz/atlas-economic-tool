@@ -14,9 +14,6 @@ pub struct InvoiceLine {
     #[serde(rename = "discountPercentage")]
     discount_percentage: f64,
 
-    #[serde(rename = "unitCostPrice")]
-    unit_cost_price: f64,
-
     #[serde(rename = "unitNetPrice")]
     unit_net_price: f64,
 }
@@ -40,8 +37,7 @@ impl InvoiceLine {
             product: Product { id: product },
             quantity: quantity,
             discount_percentage: discount.map_or(0.0, |d| d.abs() / price.abs() * 100.0),
-            unit_cost_price: price,
-            unit_net_price: price - discount.unwrap_or(0.0),
+            unit_net_price: price,
         }
     }
 }
