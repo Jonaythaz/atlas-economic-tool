@@ -1,10 +1,10 @@
 use crate::external::{
-    clients::{post, MOCK_MODE},
-    models::Invoice,
+    clients::{helper::parse_response, post, MOCK_MODE},
+    models::{Invoice, InvoiceBookRequest, InvoiceResponse},
     ClientError, ClientResult,
 };
 
-pub async fn post_invoice(invoice: &Invoice, secret: &str, grant: &str) -> ClientResult<()> {
+pub async fn post_invoice(invoice: &Invoice, secret: &str, grant: &str) -> ClientResult<i32> {
     if MOCK_MODE {
         return post_invoice_mock(invoice).await;
     }
@@ -18,6 +18,25 @@ pub async fn post_invoice(invoice: &Invoice, secret: &str, grant: &str) -> Clien
     .await
     .map_err(ClientError::from)?;
 
+    parse_response::<InvoiceResponse>(response)
+        .await
+        .map(|response| response.id)
+}
+
+pub async fn book_invoice(
+    request: &InvoiceBookRequest,
+    secret: &str,
+    grant: &str,
+) -> ClientResult<()> {
+    let response = post(
+        "https://restapi.e-conomic.com/invoices/booked",
+        request,
+        secret,
+        grant,
+    )
+    .await
+    .map_err(ClientError::from)?;
+
     if response.status().is_success() {
         Ok(())
     } else {
@@ -25,11 +44,11 @@ pub async fn post_invoice(invoice: &Invoice, secret: &str, grant: &str) -> Clien
     }
 }
 
-async fn post_invoice_mock(invoice: &Invoice) -> ClientResult<()> {
+async fn post_invoice_mock(invoice: &Invoice) -> ClientResult<i32> {
     println!("Posting invoice to mock endpoint...");
     println!(
         "Invoice: {:?}",
         serde_json::to_string_pretty(invoice).unwrap_or_else(|_| "unparsable invoice".to_string())
     );
-    Ok(())
+    Ok(1)
 }

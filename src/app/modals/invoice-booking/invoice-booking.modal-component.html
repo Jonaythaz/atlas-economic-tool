@@ -1,0 +1,21 @@
+<kirby-page-title>Book Invoices</kirby-page-title>
+
+@if (vm.invoices().length > 0) {
+<atlas-invoice-list
+    [invoices]="vm.invoices()"
+    (selected)="vm.view($event)"
+></atlas-invoice-list>
+} @else if (vm.state() === 'idle') {
+<kirby-empty-state
+    iconName="help"
+    title="Idle"
+    subtitle="The workflow hasn't reached this step yet"
+></kirby-empty-state>
+} @else {
+<kirby-empty-state
+    iconName="verify"
+    themeColor="success"
+    title="Success"
+    subtitle="No invoices to book"
+></kirby-empty-state>
+}

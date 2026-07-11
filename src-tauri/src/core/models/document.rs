@@ -5,14 +5,14 @@ use crate::core::{
 
 pub enum Document {
     Invoice {
-        id: String,
+        id: i32,
         damage_number: Option<String>,
         date: String,
         customer: DocumentCustomer,
         lines: Vec<DocumentLine>,
     },
     CreditNote {
-        id: String,
+        id: i32,
         invoice_id: String,
         damage_number: Option<String>,
         date: String,

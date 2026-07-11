@@ -1,9 +1,11 @@
-export function parseError(error: unknown): Error {
+import { CommandError } from '@atlas/errors';
+
+export function parseError(error: unknown): CommandError {
 	if (typeof error === 'string') {
-		return new Error(error);
+		return new CommandError(error);
 	}
 	if (error instanceof Error) {
-		return error;
+		return new CommandError(error.message, { cause: error });
 	}
-	return new Error('Was unable to parse error.');
+	return new CommandError('Unparsable error received.', { cause: error });
 }

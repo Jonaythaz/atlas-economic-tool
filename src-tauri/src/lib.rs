@@ -4,7 +4,7 @@ mod external;
 mod persistence;
 
 use app::commands::{
-    create_customer, create_invoice, create_product, fetch_product, load_documents,
+    book_invoice, create_customer, create_invoice, create_product, fetch_product, load_documents,
 };
 use tauri::Manager;
 
@@ -21,6 +21,7 @@ pub fn run() {
         )
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
+            book_invoice,
             create_customer,
             create_invoice,
             create_product,

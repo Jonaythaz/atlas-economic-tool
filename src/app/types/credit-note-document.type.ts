@@ -3,7 +3,7 @@ import type { CustomerReference } from './customer-reference.type';
 
 export type CreditNoteDocument = {
 	type: 'credit-note';
-	id: string;
+	id: number;
 	invoiceId: string;
 	date: string;
 	customer: CustomerReference;

@@ -9,7 +9,7 @@ use super::DocumentLine;
 pub enum Document {
     #[serde(rename_all = "camelCase")]
     Invoice {
-        id: String,
+        id: i32,
         damage_number: Option<String>,
         date: String,
         customer: CustomerReference,
@@ -17,7 +17,7 @@ pub enum Document {
     },
     #[serde(rename_all = "camelCase")]
     CreditNote {
-        id: String,
+        id: i32,
         invoice_id: String,
         damage_number: Option<String>,
         date: String,

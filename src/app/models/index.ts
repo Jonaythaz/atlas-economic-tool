@@ -6,6 +6,7 @@ export * from './document-line.model';
 export * from './document-product.model';
 export * from './documents.model';
 export * from './invoice.model';
+export * from './invoice-booking.model';
 export * from './new-customer.model';
 export * from './new-invoice.model';
 export * from './new-invoice-line.model';

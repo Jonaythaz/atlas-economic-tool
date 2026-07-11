@@ -1,0 +1,31 @@
+<kirby-page-title>Invoice</kirby-page-title>
+
+@if (vm.errorMessage(); as errorMessage) {
+<kirby-flag
+    themeColor="danger"
+    style="margin-bottom: 16px; white-space: pre-wrap"
+    >{{ errorMessage }}</kirby-flag
+>
+<br />
+} @let invoice = vm.invoice();
+
+<kirby-card>
+    <kirby-item>
+        <p class="kirby-item-title">Invoice ID</p>
+        <data slot="end">{{ invoice.invoiceId }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Invoice Draft ID</p>
+        <data slot="end">{{ invoice.draftInvoiceId }}</data>
+    </kirby-item>
+    <kirby-item>
+        <p class="kirby-item-title">Send by</p>
+        <data slot="end"
+            >{{ invoice.customerType === 'business' ? 'EAN' : 'Email' }}</data
+        >
+    </kirby-item>
+</kirby-card>
+
+<kirby-modal-footer>
+    <button kirby-button type="submit" (click)="vm.book()">Book Invoice</button>
+</kirby-modal-footer>

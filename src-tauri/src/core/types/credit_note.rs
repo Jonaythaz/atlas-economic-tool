@@ -6,7 +6,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct CreditNote {
     #[serde(rename = "ID")]
-    pub id: String,
+    pub id: i32,
 
     #[serde(rename = "IssueDate")]
     pub issue_date: String,

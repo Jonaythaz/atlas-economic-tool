@@ -3,7 +3,7 @@ import type { DocumentLine } from './document-line.model';
 
 export type InvoiceModel = {
 	type: 'invoice';
-	id: string;
+	id: number;
 	date: string;
 	customer: CustomerReferenceModel;
 	damageNumber: string | null;

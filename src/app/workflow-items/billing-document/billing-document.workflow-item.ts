@@ -1,7 +1,7 @@
 import { type Signal, signal, type WritableSignal } from '@angular/core';
 import { createInvoice } from '@atlas/commands';
 import { toCustomerMapKey } from '@atlas/functions/to-customer-map-key';
-import type { NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
+import type { InvoiceBookingModel, NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
 import type { BillingDocument, BillingLine, CreatedCustomer, CreatedProduct, WorkflowState } from '@atlas/types';
 import { Result } from 'typescript-result';
 
@@ -9,6 +9,7 @@ export class BillingDocumentWorkflowItem {
 	readonly #billingDocument: WritableSignal<BillingDocument>;
 	readonly #state = signal<WorkflowState>('idle');
 	readonly #errorMessage = signal<string | undefined>(undefined);
+	readonly #readyInvoice = signal<InvoiceBookingModel | null>(null);
 
 	constructor(billingDocument: BillingDocument) {
 		this.#billingDocument = signal(billingDocument);
@@ -30,9 +31,10 @@ export class BillingDocumentWorkflowItem {
 		customerMap: Map<string, CreatedCustomer>,
 		productMap: Map<string, CreatedProduct>,
 		settings: Settings,
-	): Promise<void> {
-		if (this.#state() === 'completed') {
-			return;
+	): Promise<InvoiceBookingModel> {
+		const readyInvoice = this.#readyInvoice();
+		if (readyInvoice !== null) {
+			return readyInvoice;
 		}
 		this.#state.set('running');
 
@@ -45,16 +47,21 @@ export class BillingDocumentWorkflowItem {
 			throw new Error(newInvoice.error);
 		}
 
-		await createInvoice(newInvoice.value, settings.tokens).then(
-			() => {
+		return createInvoice(newInvoice.value, settings.tokens)
+			.map((draftId) => ({
+				invoiceId: billingDocument.id,
+				draftInvoiceId: draftId,
+				customerType: billingDocument.customer.type,
+			}))
+			.onSuccess((invoice) => {
+				this.#readyInvoice.set(invoice);
 				this.#state.set('completed');
-			},
-			(error) => {
-				this.#errorMessage.set(error.message ?? 'Unexpected error occured');
+			})
+			.onFailure((error) => {
+				this.#errorMessage.set(error.message);
 				this.#state.set('failed');
-				throw error;
-			},
-		);
+			})
+			.getOrThrow();
 	}
 }
 

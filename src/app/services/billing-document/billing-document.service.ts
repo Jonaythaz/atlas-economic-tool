@@ -49,8 +49,9 @@ export class BillingDocumentService {
 		await Promise.all(
 			billingDocuments.map((billingDocument) => billingDocument.create(customerMap, productMap, settings)),
 		)
-			.then(() => {
+			.then((invoices) => {
 				this.#state.set('completed');
+				this.#eventBus.emitInvoices(invoices);
 			})
 			.catch(() => {
 				const state = this.#billingDocuments().some((invoice) => invoice.state() === 'failed') ? 'failed' : 'blocked';

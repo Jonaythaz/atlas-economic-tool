@@ -3,7 +3,7 @@ import type { DocumentLine } from './document-line.model';
 
 export type CreditNoteModel = {
 	type: 'credit-note';
-	id: string;
+	id: number;
 	invoiceId: string;
 	date: string;
 	customer: CustomerReferenceModel;
