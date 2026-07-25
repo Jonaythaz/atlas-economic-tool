@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, type Signal } from '@angular/core';
-import { InvoiceListComponent } from '@atlas/components/invoice-list';
-import { InvoiceTableComponent } from '@atlas/components/invoice-table';
 import { WorkflowStateIndicatorComponent } from '@atlas/components/workflow-state-indicator';
 import { InvoiceBookingService } from '@atlas/services/invoice-booking';
 import type { WorkflowState } from '@atlas/types';
@@ -23,9 +21,8 @@ type ViewModel = {
 	invoices: Signal<InvoiceBookingWorkflowItem[]>;
 	noneChecked: Signal<boolean>;
 	toggleAll: () => void;
-	selectInvoice: (invoice: InvoiceBookingWorkflowItem) => Promise<void>;
-	bookAndSend: () => Promise<void>;
-	bookWithoutSending: () => Promise<void>;
+	viewInvoice: (invoice: InvoiceBookingWorkflowItem) => Promise<void>;
+	book: () => Promise<void>;
 };
 
 @Component({
@@ -70,9 +67,8 @@ export class InvoiceBookingModalComponent {
 		invoices: this.#invoiceBookingService.invoices,
 		noneChecked: computed(() => this.#selectionState() === SelectionState.NONE_SELECTED),
 		toggleAll: this.#toggleAll.bind(this),
-		selectInvoice: this.#invoiceModalService.open.bind(this.#invoiceModalService),
-		bookAndSend: this.#invoiceBookingService.bookInvoices.bind(this.#invoiceBookingService, false),
-		bookWithoutSending: this.#invoiceBookingService.bookInvoices.bind(this.#invoiceBookingService, true),
+		viewInvoice: this.#invoiceModalService.open.bind(this.#invoiceModalService),
+		book: this.#invoiceBookingService.bookInvoices.bind(this.#invoiceBookingService),
 	};
 }
 

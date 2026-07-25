@@ -16,6 +16,7 @@
             <th style="text-align: right">Booking Invoice ID</th>
             <th>Send by</th>
             <th>Status</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -33,8 +34,13 @@
             </td>
             <td class="text-align-right">{{ invoice.value().invoiceId }}</td>
             <td>
-                {{ invoice.value().customerType === 'business' ? 'EAN' : 'Email'
-                }}
+                <kirby-checkbox
+                    size="sm"
+                    [(checked)]="invoice.send"
+                    [disabled]="invoice.state() === 'completed'"
+                    >{{ invoice.value().customerType === 'business' ? 'EAN' :
+                    'Email' }}</kirby-checkbox
+                >
             </td>
             <td>
                 <atlas-workflow-state-indicator
@@ -46,7 +52,7 @@
                     type="button"
                     kirby-button
                     attentionLevel="3"
-                    (click)="vm.selectInvoice(invoice)"
+                    (click)="vm.viewInvoice(invoice)"
                 >
                     <kirby-icon name="see"></kirby-icon>
                 </button>
@@ -75,16 +81,8 @@
         type="button"
         kirby-button
         [disabled]="vm.noneChecked()"
-        (click)="vm.bookWithoutSending()"
+        (click)="vm.book()"
     >
-        Book without sending
-    </button>
-    <button
-        type="button"
-        kirby-button
-        [disabled]="vm.noneChecked()"
-        (click)="vm.bookAndSend()"
-    >
-        Book and send
+        Book
     </button>
 </kirby-modal-footer>

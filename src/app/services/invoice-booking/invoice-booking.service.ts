@@ -35,7 +35,7 @@ export class InvoiceBookingService {
 		return this.#state;
 	}
 
-	async bookInvoices(skipSend: boolean): Promise<void> {
+	async bookInvoices(): Promise<void> {
 		const settings = this.#settings();
 		if (!settings) {
 			throw new Error('No settings');
@@ -44,7 +44,7 @@ export class InvoiceBookingService {
 		await Promise.all(
 			this.#invoices()
 				.filter((invoice) => invoice.selected())
-				.map((invoice) => invoice.create(settings, skipSend)),
+				.map((invoice) => invoice.create(settings)),
 		).then(() => {
 			this.#state.update(this.#determineState.bind(this));
 		});
