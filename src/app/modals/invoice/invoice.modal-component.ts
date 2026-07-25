@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, type Signal } from '@angular/core';
-import type { InvoiceBookingModel } from '@atlas/models';
 import { InvoiceBookingService } from '@atlas/services/invoice-booking';
+import type { InvoiceBooking } from '@atlas/types';
 import type { InvoiceBookingWorkflowItem } from '@atlas/workflow-items/invoice-booking';
 import {
 	ButtonComponent,
@@ -18,7 +18,7 @@ export type ComponentProps = {
 
 type ViewModel = {
 	errorMessage: Signal<string | undefined>;
-	invoice: Signal<InvoiceBookingModel>;
+	invoice: Signal<InvoiceBooking>;
 	book: () => Promise<void>;
 };
 

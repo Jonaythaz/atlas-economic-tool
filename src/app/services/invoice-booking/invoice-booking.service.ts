@@ -35,6 +35,21 @@ export class InvoiceBookingService {
 		return this.#state;
 	}
 
+	async bookInvoices(skipSend: boolean): Promise<void> {
+		const settings = this.#settings();
+		if (!settings) {
+			throw new Error('No settings');
+		}
+		this.#state.set('running');
+		await Promise.all(
+			this.#invoices()
+				.filter((invoice) => invoice.selected())
+				.map((invoice) => invoice.create(settings, skipSend)),
+		).then(() => {
+			this.#state.update(this.#determineState.bind(this));
+		});
+	}
+
 	async bookInvoice(item: InvoiceBookingWorkflowItem): Promise<void> {
 		const settings = this.#settings();
 		if (!settings) {
@@ -42,13 +57,15 @@ export class InvoiceBookingService {
 		}
 		this.#state.set('running');
 		await item.create(settings).then(() => {
-			this.#state.update((state) =>
-				this.#invoices().reduce((prev, item) => {
-					const itemState = item.state();
-					return STATE_PRIORITY[prev] < STATE_PRIORITY[itemState] ? prev : itemState;
-				}, state),
-			);
+			this.#state.update(this.#determineState.bind(this));
 		});
+	}
+
+	#determineState(currentState: WorkflowState): WorkflowState {
+		return this.#invoices().reduce((prev, item) => {
+			const itemState = item.state();
+			return STATE_PRIORITY[prev] < STATE_PRIORITY[itemState] ? prev : itemState;
+		}, currentState);
 	}
 }
 

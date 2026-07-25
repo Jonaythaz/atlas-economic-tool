@@ -1,15 +1,15 @@
 import { type Signal, signal, type WritableSignal } from '@angular/core';
 import { bookInvoice } from '@atlas/commands';
 import type { Settings } from '@atlas/models';
-import type { InvoiceBookingModel } from '@atlas/models/invoice-booking.model';
-import type { WorkflowState } from '@atlas/types';
+import type { InvoiceBooking, WorkflowState } from '@atlas/types';
 
 export class InvoiceBookingWorkflowItem {
-	readonly invoiceBooking: WritableSignal<InvoiceBookingModel>;
+	readonly invoiceBooking: WritableSignal<InvoiceBooking>;
 	readonly #state = signal<WorkflowState>('idle');
 	readonly #errorMessage = signal<string | undefined>(undefined);
+	readonly #selected = signal(true);
 
-	constructor(invoiceBooking: InvoiceBookingModel) {
+	constructor(invoiceBooking: InvoiceBooking) {
 		this.invoiceBooking = signal(invoiceBooking);
 	}
 
@@ -17,7 +17,7 @@ export class InvoiceBookingWorkflowItem {
 		return this.#state.asReadonly();
 	}
 
-	get value(): Signal<InvoiceBookingModel> {
+	get value(): Signal<InvoiceBooking> {
 		return this.invoiceBooking.asReadonly();
 	}
 
@@ -25,17 +25,22 @@ export class InvoiceBookingWorkflowItem {
 		return this.#errorMessage.asReadonly();
 	}
 
-	async create(settings: Settings): Promise<void> {
+	get selected(): WritableSignal<boolean> {
+		return this.#selected;
+	}
+
+	async create(settings: Settings, skipSend: boolean = false): Promise<void> {
 		if (this.#state() === 'completed') {
 			return;
 		}
 		this.#state.set('running');
 
 		const invoiceBooking = this.invoiceBooking();
-		await bookInvoice(invoiceBooking, settings.tokens)
+		await bookInvoice({ ...invoiceBooking, skipSend }, settings.tokens)
 			.onSuccess(() => {
 				this.#errorMessage.set(undefined);
 				this.#state.set('completed');
+				this.#selected.set(false);
 			})
 			.onFailure((error) => {
 				this.#errorMessage.set(error.message);

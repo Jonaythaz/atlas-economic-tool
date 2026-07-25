@@ -1,10 +1,60 @@
 <kirby-page-title>Book Invoices</kirby-page-title>
 
 @if (vm.invoices().length > 0) {
-<atlas-invoice-list
-    [invoices]="vm.invoices()"
-    (selected)="vm.view($event)"
-></atlas-invoice-list>
+<table class="kirby-table">
+    <thead>
+        <tr>
+            <th>
+                <kirby-checkbox
+                    size="sm"
+                    [checked]="vm.allChecked()"
+                    [indeterminate]="vm.indeterminate()"
+                    (click)="vm.toggleAll()"
+                ></kirby-checkbox>
+            </th>
+            <th style="text-align: right">Draft Invoice ID</th>
+            <th style="text-align: right">Booking Invoice ID</th>
+            <th>Send by</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (invoice of vm.invoices(); track invoice.value().invoiceId) {
+        <tr>
+            <td>
+                <kirby-checkbox
+                    size="sm"
+                    [(checked)]="invoice.selected"
+                    [disabled]="invoice.state() === 'completed'"
+                ></kirby-checkbox>
+            </td>
+            <td class="text-align-right">
+                {{ invoice.value().draftInvoiceId }}
+            </td>
+            <td class="text-align-right">{{ invoice.value().invoiceId }}</td>
+            <td>
+                {{ invoice.value().customerType === 'business' ? 'EAN' : 'Email'
+                }}
+            </td>
+            <td>
+                <atlas-workflow-state-indicator
+                    [state]="invoice.state()"
+                ></atlas-workflow-state-indicator>
+            </td>
+            <td>
+                <button
+                    type="button"
+                    kirby-button
+                    attentionLevel="3"
+                    (click)="vm.selectInvoice(invoice)"
+                >
+                    <kirby-icon name="see"></kirby-icon>
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
 } @else if (vm.state() === 'idle') {
 <kirby-empty-state
     iconName="help"
@@ -19,3 +69,22 @@
     subtitle="No invoices to book"
 ></kirby-empty-state>
 }
+
+<kirby-modal-footer>
+    <button
+        type="button"
+        kirby-button
+        [disabled]="vm.noneChecked()"
+        (click)="vm.bookWithoutSending()"
+    >
+        Book without sending
+    </button>
+    <button
+        type="button"
+        kirby-button
+        [disabled]="vm.noneChecked()"
+        (click)="vm.bookAndSend()"
+    >
+        Book and send
+    </button>
+</kirby-modal-footer>

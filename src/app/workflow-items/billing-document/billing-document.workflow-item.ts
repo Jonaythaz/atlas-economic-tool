@@ -1,15 +1,22 @@
 import { type Signal, signal, type WritableSignal } from '@angular/core';
 import { createInvoice } from '@atlas/commands';
 import { toCustomerMapKey } from '@atlas/functions/to-customer-map-key';
-import type { InvoiceBookingModel, NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
-import type { BillingDocument, BillingLine, CreatedCustomer, CreatedProduct, WorkflowState } from '@atlas/types';
+import type { NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
+import type {
+	BillingDocument,
+	BillingLine,
+	CreatedCustomer,
+	CreatedProduct,
+	InvoiceBooking,
+	WorkflowState,
+} from '@atlas/types';
 import { Result } from 'typescript-result';
 
 export class BillingDocumentWorkflowItem {
 	readonly #billingDocument: WritableSignal<BillingDocument>;
 	readonly #state = signal<WorkflowState>('idle');
 	readonly #errorMessage = signal<string | undefined>(undefined);
-	readonly #readyInvoice = signal<InvoiceBookingModel | null>(null);
+	readonly #readyInvoice = signal<InvoiceBooking | null>(null);
 
 	constructor(billingDocument: BillingDocument) {
 		this.#billingDocument = signal(billingDocument);
@@ -31,7 +38,7 @@ export class BillingDocumentWorkflowItem {
 		customerMap: Map<string, CreatedCustomer>,
 		productMap: Map<string, CreatedProduct>,
 		settings: Settings,
-	): Promise<InvoiceBookingModel> {
+	): Promise<InvoiceBooking> {
 		const readyInvoice = this.#readyInvoice();
 		if (readyInvoice !== null) {
 			return readyInvoice;

@@ -20,6 +20,9 @@ struct DraftInvoice {
 
 #[derive(Serialize)]
 pub enum SendBy {
+    #[serde(rename = "none")]
+    None,
+
     #[serde(rename = "ean")]
     Ean,
 

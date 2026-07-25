@@ -1,6 +1,5 @@
-export type InvoiceBookingModel = {
+export type InvoiceBooking = {
 	invoiceId: number;
 	draftInvoiceId: number;
 	customerType: 'business' | 'private';
-	skipSend: boolean;
 };

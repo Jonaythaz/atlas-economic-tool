@@ -46,11 +46,10 @@ $color-shadow: rgba(0, 0, 0, 0.1);
         color: white;
     }
 
-    // Failed state - red with shake animation
+    // Failed state - red
     &.failed {
         background-color: $color-failed;
         color: white;
-        animation: shake-indicator 0.5s ease-in-out infinite;
     }
 }
 
@@ -145,19 +144,6 @@ $color-shadow: rgba(0, 0, 0, 0.1);
         box-shadow:
             0 2px 4px $color-shadow,
             0 0 0 6px rgba(245, 158, 11, 0);
-    }
-}
-
-@keyframes shake-indicator {
-    0%,
-    100% {
-        transform: translateX(0);
-    }
-    25% {
-        transform: translateX(-3px);
-    }
-    75% {
-        transform: translateX(3px);
     }
 }
 

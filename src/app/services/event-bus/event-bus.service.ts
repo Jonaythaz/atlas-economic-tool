@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import type { Documents, InvoiceBookingModel, Settings } from '@atlas/models';
-import type { CreatedCustomer, CreatedProduct } from '@atlas/types';
+import type { Documents, Settings } from '@atlas/models';
+import type { CreatedCustomer, CreatedProduct, InvoiceBooking } from '@atlas/types';
 import { type Observable, Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -10,7 +10,7 @@ export class EventBusService {
 	readonly #settingsEvents = new Subject<Settings>();
 	readonly #customerMapEvents = new Subject<Map<string, CreatedCustomer>>();
 	readonly #productMapEvents = new Subject<Map<string, CreatedProduct>>();
-	readonly #invoicesEvents = new Subject<InvoiceBookingModel[]>();
+	readonly #invoicesEvents = new Subject<InvoiceBooking[]>();
 
 	get startEvents(): Observable<void> {
 		return this.#startEvents.asObservable();
@@ -32,7 +32,7 @@ export class EventBusService {
 		return this.#productMapEvents.asObservable();
 	}
 
-	get invoicesEvents(): Observable<InvoiceBookingModel[]> {
+	get invoicesEvents(): Observable<InvoiceBooking[]> {
 		return this.#invoicesEvents.asObservable();
 	}
 
@@ -56,7 +56,7 @@ export class EventBusService {
 		this.#productMapEvents.next(productMap);
 	}
 
-	emitInvoices(invoices: InvoiceBookingModel[]): void {
+	emitInvoices(invoices: InvoiceBooking[]): void {
 		this.#invoicesEvents.next(invoices);
 	}
 }

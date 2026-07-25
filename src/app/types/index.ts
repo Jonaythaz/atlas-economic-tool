@@ -7,6 +7,7 @@ export * from './credit-note-document.type';
 export * from './customer.type';
 export * from './customer-reference.type';
 export * from './defined.type';
+export * from './invoice-booking.type';
 export * from './invoice-document.type';
 export * from './private-customer.type';
 export * from './product.type';
