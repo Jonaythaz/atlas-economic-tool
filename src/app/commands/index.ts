@@ -1,4 +1,5 @@
 export * from './book-invoice.command';
+export * from './check-if-invoice-is-booked.command';
 export * from './create-customer.command';
 export * from './create-invoice.command';
 export * from './create-product.command';

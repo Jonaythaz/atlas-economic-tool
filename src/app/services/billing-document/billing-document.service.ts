@@ -51,7 +51,7 @@ export class BillingDocumentService {
 		)
 			.then((invoices) => {
 				this.#state.set('completed');
-				this.#eventBus.emitInvoices(invoices);
+				this.#eventBus.emitInvoices(invoices.filter((invoice) => invoice !== null));
 			})
 			.catch(() => {
 				const state = this.#billingDocuments().some((invoice) => invoice.state() === 'failed') ? 'failed' : 'blocked';

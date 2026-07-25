@@ -4,7 +4,8 @@ mod external;
 mod persistence;
 
 use app::commands::{
-    book_invoice, create_customer, create_invoice, create_product, fetch_product, load_documents,
+    book_invoice, check_if_invoice_is_booked, create_customer, create_invoice, create_product,
+    fetch_product, load_documents,
 };
 use tauri::Manager;
 
@@ -22,6 +23,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             book_invoice,
+            check_if_invoice_is_booked,
             create_customer,
             create_invoice,
             create_product,

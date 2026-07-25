@@ -1,5 +1,8 @@
 use crate::external::{
-    clients::{helper::parse_response, post, MOCK_MODE},
+    clients::{
+        helper::{get, parse_response},
+        post, MOCK_MODE,
+    },
     models::{Invoice, InvoiceBookRequest, InvoiceResponse},
     ClientError, ClientResult,
 };
@@ -41,6 +44,22 @@ pub async fn book_invoice(
         Ok(())
     } else {
         Err(ClientError::async_from(response).await)
+    }
+}
+
+pub async fn is_invoice_booked(id: i32, secret: &str, grant: &str) -> ClientResult<bool> {
+    match get(
+        format!("https://restapi.e-conomic.com/invoices/booked/{id}"),
+        secret,
+        grant,
+    )
+    .await
+    {
+        Ok(response) if response.status() == surf::StatusCode::Ok => Ok(true),
+        Ok(response) if response.status() == surf::StatusCode::NotFound => Ok(false),
+        Ok(response) => Err(ClientError::async_from(response).await),
+        Err(err) if err.status() == surf::StatusCode::NotFound => Ok(false),
+        Err(err) => Err(err.into()),
     }
 }
 

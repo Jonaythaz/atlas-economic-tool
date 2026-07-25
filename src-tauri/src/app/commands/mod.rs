@@ -10,6 +10,9 @@ pub use create_invoice::create_invoice;
 mod create_product;
 pub use create_product::create_product;
 
+mod check_if_invoice_is_booked;
+pub use check_if_invoice_is_booked::check_if_invoice_is_booked;
+
 mod fetch_product;
 pub use fetch_product::fetch_product;
 

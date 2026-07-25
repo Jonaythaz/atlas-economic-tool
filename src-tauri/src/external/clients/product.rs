@@ -6,29 +6,20 @@ pub async fn get_product(id: &str, secret: &str, grant: &str) -> ClientResult<Op
         return get_product_mock(id).await;
     }
 
-    let response = get(
+    match get(
         format!("https://restapi.e-conomic.com/products/{id}"),
         secret,
         grant,
     )
     .await
-    .and_then(|res| match res.status() {
-        surf::StatusCode::Ok => Ok(Some(res)),
-        surf::StatusCode::NotFound => Ok(None),
-        _ => Err(surf::Error::from_str(res.status(), "Failed to get product")),
-    });
-
-    match response {
-        Ok(Some(res)) => parse_response(res).await.map(|body| Some(body)),
-        Ok(None) => Ok(None),
-        Err(error) => {
-            println!("status code: {:?}", error.status());
-            if error.status() == surf::StatusCode::NotFound {
-                Ok(None)
-            } else {
-                Err(error.into())
-            }
+    {
+        Ok(response) if response.status() == surf::StatusCode::Ok => {
+            parse_response(response).await.map(Some)
         }
+        Ok(response) if response.status() == surf::StatusCode::NotFound => Ok(None),
+        Ok(response) => Err(ClientError::async_from(response).await),
+        Err(err) if err.status() == surf::StatusCode::NotFound => Ok(None),
+        Err(err) => Err(err.into()),
     }
 }
 

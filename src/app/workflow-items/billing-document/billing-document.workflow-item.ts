@@ -1,5 +1,5 @@
 import { type Signal, signal, type WritableSignal } from '@angular/core';
-import { createInvoice } from '@atlas/commands';
+import { checkIfInvoiceIsBooked, createInvoice } from '@atlas/commands';
 import { toCustomerMapKey } from '@atlas/functions/to-customer-map-key';
 import type { NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
 import type {
@@ -38,28 +38,34 @@ export class BillingDocumentWorkflowItem {
 		customerMap: Map<string, CreatedCustomer>,
 		productMap: Map<string, CreatedProduct>,
 		settings: Settings,
-	): Promise<InvoiceBooking> {
-		const readyInvoice = this.#readyInvoice();
-		if (readyInvoice !== null) {
-			return readyInvoice;
+	): Promise<InvoiceBooking | null> {
+		if (this.#state() === 'completed') {
+			return this.#readyInvoice();
 		}
 		this.#state.set('running');
 
 		const billingDocument = this.#billingDocument();
-		const newInvoice = toNewInvoice(billingDocument, customerMap, productMap, settings);
 
-		if (!newInvoice.ok) {
-			this.#state.set('blocked');
-			this.#errorMessage.set(newInvoice.error);
-			throw new Error(newInvoice.error);
-		}
+		return checkIfInvoiceIsBooked(billingDocument.id, settings.tokens)
+			.map((isAlreadyBooked) => {
+				if (isAlreadyBooked) {
+					return Result.ok(null);
+				}
 
-		return createInvoice(newInvoice.value, settings.tokens)
-			.map((draftId) => ({
-				invoiceId: billingDocument.id,
-				draftInvoiceId: draftId,
-				customerType: billingDocument.customer.type,
-			}))
+				const newInvoice = toNewInvoice(billingDocument, customerMap, productMap, settings);
+
+				if (!newInvoice.ok) {
+					this.#state.set('blocked');
+					this.#errorMessage.set(newInvoice.error);
+					return Result.error(new Error(newInvoice.error));
+				}
+
+				return createInvoice(newInvoice.value, settings.tokens).map((draftId) => ({
+					invoiceId: billingDocument.id,
+					draftInvoiceId: draftId,
+					customerType: billingDocument.customer.type,
+				}));
+			})
 			.onSuccess((invoice) => {
 				this.#readyInvoice.set(invoice);
 				this.#state.set('completed');
