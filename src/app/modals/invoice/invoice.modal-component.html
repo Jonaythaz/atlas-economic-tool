@@ -1,4 +1,4 @@
-<kirby-page-title>Invoice</kirby-page-title>
+<kirby-page-title>Billing Document</kirby-page-title>
 
 @if (vm.errorMessage(); as errorMessage) {
 <kirby-flag
@@ -7,25 +7,81 @@
     >{{ errorMessage }}</kirby-flag
 >
 <br />
-} @let invoice = vm.invoice();
+} @let document = vm.document();
 
+<kirby-section-header>
+    <h3 heading>Document Details</h3>
+</kirby-section-header>
 <kirby-card>
     <kirby-item>
+        <p class="kirby-item-title">ID</p>
+        <data slot="end">{{ document.id }}</data>
+    </kirby-item>
+    @if (document.type === 'credit-note') {
+    <kirby-item>
         <p class="kirby-item-title">Invoice ID</p>
-        <data slot="end">{{ invoice.invoiceId }}</data>
+        <data slot="end">{{ document.invoiceId }}</data>
+    </kirby-item>
+    }
+    <kirby-item>
+        <p class="kirby-item-title">Damage number</p>
+        <data slot="end">{{ document.damageNumber ?? 'None' }}</data>
     </kirby-item>
     <kirby-item>
-        <p class="kirby-item-title">Invoice Draft ID</p>
-        <data slot="end">{{ invoice.draftInvoiceId }}</data>
+        <p class="kirby-item-title">Date</p>
+        <data slot="end">{{ document.date }}</data>
     </kirby-item>
+    @if (document.customer) { @switch (document.customer.type) { @case
+    ('business') {
     <kirby-item>
-        <p class="kirby-item-title">Send by</p>
-        <data slot="end"
-            >{{ invoice.customerType === 'business' ? 'EAN' : 'Email' }}</data
+        <p class="kirby-item-title">Customer EAN</p>
+        <data slot="end">{{ document.customer.ean }}</data>
+    </kirby-item>
+    } @case ('private') {
+    <kirby-item>
+        <p class="kirby-item-title">Customer CPR</p>
+        <data slot="end">{{ document.customer.cpr }}</data>
+    </kirby-item>
+    } } } @else {
+    <kirby-item>
+        <p class="kirby-item-title">Customer</p>
+        <data slot="end">None</data>
+    </kirby-item>
+    }
+</kirby-card>
+
+<br />
+
+<kirby-section-header>
+    <h3 heading>Document Lines</h3>
+</kirby-section-header>
+<kirby-card>
+    <kirby-accordion>
+        @for (line of document.lines; track $index) {
+        <kirby-accordion-item
+            [title]="($index + 1) + '. ' + (line.product?.id ?? 'N/A')"
         >
-    </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Product ID</p>
+                <data slot="end">{{ line.product?.id ?? 'N/A' }}</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Description</p>
+                <data slot="end">{{ line.description }}</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Price</p>
+                <data slot="end">{{ line.price }}DKK</data>
+            </kirby-item>
+            <kirby-item>
+                <p class="kirby-item-title">Quantity</p>
+                <data slot="end">{{ line.quantity }}</data>
+            </kirby-item>
+        </kirby-accordion-item>
+        }
+    </kirby-accordion>
 </kirby-card>
 
 <kirby-modal-footer>
-    <button kirby-button type="submit" (click)="vm.book()">Book Invoice</button>
+    <button kirby-button type="submit">Submit</button>
 </kirby-modal-footer>

@@ -1,15 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { ModalController } from '@kirbydesign/designsystem';
 
-import { InvoiceBookingModalComponent } from './invoice-booking.modal-component';
+import { InvoicesModalComponent } from './invoices.modal-component';
 
 @Injectable({ providedIn: 'root' })
-export class InvoiceBookingModalService {
+export class InvoicesModalService {
 	readonly #modalController = inject(ModalController);
 
 	async open(): Promise<void> {
 		await this.#modalController.showModal({
-			component: InvoiceBookingModalComponent,
+			component: InvoicesModalComponent,
 			size: 'large',
 		});
 	}

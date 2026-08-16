@@ -1,10 +1,10 @@
-<kirby-page-title>Create Billing Documents</kirby-page-title>
+<kirby-page-title>Create Invoices</kirby-page-title>
 
-@if (vm.billingDocuments().length > 0) {
-<atlas-billing-document-list
-    [documents]="vm.billingDocuments()"
-    (selected)="vm.view($event)"
-></atlas-billing-document-list>
+@if (vm.invoices().length > 0) {
+<atlas-invoice-table
+    [invoices]="vm.invoices()"
+    (invoiceSelected)="vm.view($event)"
+></atlas-invoice-table>
 } @else if (vm.state() === 'idle') {
 <kirby-empty-state
     iconName="help"
@@ -19,3 +19,7 @@
     subtitle="No billing documents to create"
 ></kirby-empty-state>
 }
+
+<kirby-modal-footer>
+    <button kirby-button type="submit" (click)="vm.create()">Create</button>
+</kirby-modal-footer>

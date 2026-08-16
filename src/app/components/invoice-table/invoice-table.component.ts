@@ -1,26 +1,41 @@
 import { ChangeDetectionStrategy, Component, computed, model, output, type Signal } from '@angular/core';
-import type { InvoiceBookingWorkflowItem } from '@atlas/workflow-items/invoice-booking';
-import { ButtonComponent, CheckboxComponent, IconComponent } from '@kirbydesign/designsystem';
+import { INVOICE_ACTION_SEGMENTS } from '@atlas/constants';
+import type { InvoiceActionSegmentItem } from '@atlas/types';
+import type { InvoiceWorkflowItem } from '@atlas/workflow-items/invoice';
+import {
+	ButtonComponent,
+	CheckboxComponent,
+	IconComponent,
+	SegmentedControlComponent,
+} from '@kirbydesign/designsystem';
 
 import { WorkflowStateIndicatorComponent } from '../workflow-state-indicator';
 
 type ViewModel = {
-	invoices: Signal<InvoiceBookingWorkflowItem[]>;
+	invoices: Signal<InvoiceWorkflowItem[]>;
 	allChecked: Signal<boolean>;
 	indeterminate: Signal<boolean>;
+	invoiceActionSegmentItems: InvoiceActionSegmentItem[];
+	invoiceActionSegments: typeof INVOICE_ACTION_SEGMENTS;
 	toggleAll: () => void;
-	selectInvoice: (invoice: InvoiceBookingWorkflowItem) => void;
+	selectInvoice: (invoice: InvoiceWorkflowItem) => void;
 };
 
 @Component({
 	selector: 'atlas-invoice-table',
 	templateUrl: './invoice-table.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [CheckboxComponent, WorkflowStateIndicatorComponent, ButtonComponent, IconComponent],
+	imports: [
+		CheckboxComponent,
+		WorkflowStateIndicatorComponent,
+		ButtonComponent,
+		IconComponent,
+		SegmentedControlComponent,
+	],
 })
 export class InvoiceTableComponent {
-	readonly invoices = model.required<InvoiceBookingWorkflowItem[]>();
-	readonly invoiceSelected = output<InvoiceBookingWorkflowItem>();
+	readonly invoices = model.required<InvoiceWorkflowItem[]>();
+	readonly invoiceSelected = output<InvoiceWorkflowItem>();
 
 	readonly #selectionState = computed(() => {
 		const invoices = this.invoices();
@@ -42,6 +57,8 @@ export class InvoiceTableComponent {
 		invoices: this.invoices,
 		allChecked: this.#allChecked,
 		indeterminate: computed(() => this.#selectionState() === SelectionState.INDETERMINATE),
+		invoiceActionSegmentItems: Object.values(INVOICE_ACTION_SEGMENTS),
+		invoiceActionSegments: INVOICE_ACTION_SEGMENTS,
 		toggleAll: this.#toggleAll.bind(this),
 		selectInvoice: this.invoiceSelected.emit.bind(this.invoiceSelected),
 	};

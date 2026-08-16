@@ -1,11 +1,11 @@
 import type { BillingLine } from './billing-line.type';
-import type { CustomerReference } from './customer-reference.type';
+import type { CreatedCustomer } from './created-customer.type';
 
 export type InvoiceDocument = {
 	type: 'invoice';
 	id: number;
 	date: string;
-	customer: CustomerReference;
+	customer: CreatedCustomer | null;
 	damageNumber: string | null;
 	lines: BillingLine[];
 };

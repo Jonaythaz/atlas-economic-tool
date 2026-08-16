@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, type Signal } from '@angular/core';
-import { InvoiceBookingService } from '@atlas/services/invoice-booking';
-import type { InvoiceBooking } from '@atlas/types';
-import type { InvoiceBookingWorkflowItem } from '@atlas/workflow-items/invoice-booking';
+import type { BillingDocument } from '@atlas/types';
+import type { InvoiceWorkflowItem } from '@atlas/workflow-items/invoice';
 import {
+	AccordionModule,
 	ButtonComponent,
 	CardComponent,
 	COMPONENT_PROPS,
@@ -10,34 +10,37 @@ import {
 	ItemComponent,
 	ModalFooterComponent,
 	PageTitleComponent,
+	SectionHeaderComponent,
 } from '@kirbydesign/designsystem';
 
-export type ComponentProps = {
-	invoice: InvoiceBookingWorkflowItem;
+export type InvoiceComponentProps = {
+	invoice: InvoiceWorkflowItem;
 };
 
 type ViewModel = {
 	errorMessage: Signal<string | undefined>;
-	invoice: Signal<InvoiceBooking>;
-	book: () => Promise<void>;
+	document: Signal<BillingDocument>;
 };
 
 @Component({
 	templateUrl: './invoice.modal-component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [FlagComponent, CardComponent, ItemComponent, ModalFooterComponent, ButtonComponent, PageTitleComponent],
+	imports: [
+		FlagComponent,
+		CardComponent,
+		ItemComponent,
+		ModalFooterComponent,
+		ButtonComponent,
+		PageTitleComponent,
+		AccordionModule,
+		SectionHeaderComponent,
+	],
 })
 export class InvoiceModalComponent {
-	readonly #invoice = inject<ComponentProps>(COMPONENT_PROPS).invoice;
-	readonly #invoiceBookingService = inject(InvoiceBookingService);
-
-	async #book(): Promise<void> {
-		await this.#invoiceBookingService.bookInvoice(this.#invoice);
-	}
+	readonly #invoice = inject<InvoiceComponentProps>(COMPONENT_PROPS).invoice;
 
 	readonly vm: ViewModel = {
 		errorMessage: this.#invoice.errorMessage,
-		invoice: this.#invoice.value,
-		book: this.#book.bind(this),
+		document: this.#invoice.value,
 	};
 }

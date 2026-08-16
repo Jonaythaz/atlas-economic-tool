@@ -8,19 +8,30 @@
                 (click)="vm.toggleAll()"
             ></kirby-checkbox>
         </th>
-        <th style="text-align:right;">Draft Invoice ID</th>
-        <th style="text-align:right;">Booking Invoice ID</th>
-        <th>Send by</th>
+        <th style="text-align:right;">ID</th>
+        <th>Customer</th>
+        <th>Action</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      @for (invoice of vm.invoices(); track invoice.value().invoiceId) {
+      @for (invoice of vm.invoices(); track invoice.value().id) {
+        @let invoiceValue = invoice.value();
         <tr>
             <td><kirby-checkbox [(checked)]="invoice.selected"></kirby-checkbox></td>
-            <td class="text-align-right">{{ invoice.value().draftInvoiceId }}</td>
-            <td class="text-align-right">{{ invoice.value().draftInvoiceId }}</td>
-            <td>{{ invoice.value().customerType === 'business' ? 'EAN' : 'Email' }}</td>
+            <td class="text-align-right">{{ invoiceValue.id }}</td>
+            <td>
+                @if (invoiceValue.customer) {
+                    {{ invoiceValue.customer.name }}
+                } @else {
+                    No customer
+                }
+            </td>
+            <td><kirby-segmented-control
+                [items]="vm.invoiceActionSegmentItems"
+                [value]="vm.invoiceActionSegments[invoice.action()]"
+                (segmentSelect)="invoice.action.set($event.id)"
+            ></kirby-segmented-control></td>
             <td><atlas-workflow-state-indicator [state]="invoice.state()"></atlas-workflow-state-indicator></td>
             <td><button type="button" kirby-button attentionLevel="3" (click)="vm.selectInvoice(invoice)"><kirby-icon name="see"></kirby-icon></button></td>
         </tr>
