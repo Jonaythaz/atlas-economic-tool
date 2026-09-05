@@ -3,6 +3,8 @@ mod core;
 mod external;
 mod persistence;
 
+use std::fs::create_dir_all;
+
 use app::commands::{
     book_invoice, check_if_invoice_is_booked, create_customer, create_invoice, create_product,
     fetch_product, load_documents,
@@ -32,6 +34,7 @@ pub fn run() {
         ])
         .setup(|app| {
             let data_directory = app.path().app_data_dir()?;
+            create_dir_all(&data_directory)?;
             let connection = open_connection(&data_directory).map_err(|error| error.to_string())?;
             app.manage(AppState::new(connection));
             Ok(())
