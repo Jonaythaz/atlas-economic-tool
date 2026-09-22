@@ -21,8 +21,8 @@
             <td><kirby-checkbox [(checked)]="invoice.selected"></kirby-checkbox></td>
             <td class="text-align-right">{{ invoiceValue.id }}</td>
             <td>
-                @if (invoiceValue.customer) {
-                    {{ invoiceValue.customer.name }}
+                @if (invoiceValue.customerId) {
+                    {{ invoiceValue.recipient.name }}
                 } @else {
                     No customer
                 }

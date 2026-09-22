@@ -30,8 +30,8 @@ importers:
         specifier: 21.2.0
         version: 21.2.0(@angular/common@21.2.0(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))(@angular/platform-browser@21.2.0(@angular/animations@21.2.0(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1)))(@angular/common@21.2.0(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1)))(rxjs@7.8.2)
       '@kirbydesign/designsystem':
-        specifier: 11.8.0
-        version: 11.8.0(1f7887c447c89c07a044ff8adb50f0ac)
+        specifier: 11.11.0
+        version: 11.11.0(97604b952d667f0442421dddf41a1938)
       '@tauri-apps/api':
         specifier: 2.10.1
         version: 2.10.1
@@ -776,11 +776,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@kirbydesign/core@0.0.83':
-    resolution: {integrity: sha512-wN34WILOlj4jfuAQPp/p4TylrwPix2bI5AHVxbD35Yqv+yTSENwkxsAvPCBPmKeqSbq8a8ExXq/EjEtAOt07xg==}
+  '@kirbydesign/core@0.0.92':
+    resolution: {integrity: sha512-zLXrX/T2pnW+9eP5rfeMJiTjiWsZJoQw63JVKD7/jgcCv2WYSlHM+rhDsmy0o7VGqnYBJqFWE+wzWPuNCTDE7Q==}
 
-  '@kirbydesign/designsystem@11.8.0':
-    resolution: {integrity: sha512-zjYqLjuyN9n6sdaPBu2IFxTKRhQkc5xSe1TFxhjKxoAq+tb/WubNNzpEqo3EJnqj0YIAo8+Hp7jUG+NC6m4STA==}
+  '@kirbydesign/designsystem@11.11.0':
+    resolution: {integrity: sha512-sE3hoW5pYvqb7IGmpvXiWvqEnzeOgTiDKBwfxQoN0iPCWzE1M4ZJ2EUsnIaESAcnnsOsphvJsMoywKotMQ3F1A==}
     peerDependencies:
       '@angular/animations': ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
       '@angular/cdk': ^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0
@@ -791,14 +791,14 @@ packages:
       '@floating-ui/dom': ^1.1.0
       '@fontsource/roboto': ^5.2.6
       '@ionic/angular': 8.6.3
-      '@kirbydesign/core': ^0.0.89
+      '@kirbydesign/core': ^0.0.92
       chart.js: ^3.9.1
       chartjs-adapter-date-fns: ^2.0.0
       chartjs-plugin-annotation: ^1.0.2
       chartjs-plugin-datalabels: ^2.0.0
       date-fns: ^4.1.0
       date-fns-tz: ^3.2.0
-      inputmask: ^5.0.9
+      inputmask: ^5.0.10
       rxjs: ^7.0.0
       swiper: ^9.2.0
 
@@ -2063,8 +2063,8 @@ packages:
     resolution: {integrity: sha512-IBTdIkzZNOpqm7q3dRqJvMaldXjDHWkEDfrwGEQTs5eaQMWV+djAhR+wahyNNMAa+qpbDUhBMVt4ZKNwpPm7xQ==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  inputmask@5.0.9:
-    resolution: {integrity: sha512-s0lUfqcEbel+EQXtehXqwCJGShutgieOaIImFKC/r4reYNvX3foyrChl6LOEvaEgxEbesePIrw1Zi2jhZaDZbQ==}
+  inputmask@5.0.10:
+    resolution: {integrity: sha512-WksYiOYQb9cYLxbpyZsoxWZXQAlRmA/gTj4t0TOgeaEpSxuQKMK+64mKrZtsFA0OYtwlhd+tR7oMp7jRKQAakg==}
 
   ionicons@7.4.0:
     resolution: {integrity: sha512-ZK94MMqgzMCPPMhmk8Ouu6goyVHFIlw/ACP6oe3FrikcI0N7CX0xcwVaEbUc0G/v3W0shI93vo+9ve/KpvcNhQ==}
@@ -3477,11 +3477,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@kirbydesign/core@0.0.83':
+  '@kirbydesign/core@0.0.92':
     dependencies:
       lit: 3.3.2
 
-  '@kirbydesign/designsystem@11.8.0(1f7887c447c89c07a044ff8adb50f0ac)':
+  '@kirbydesign/designsystem@11.11.0(97604b952d667f0442421dddf41a1938)':
     dependencies:
       '@angular/animations': 21.2.0(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))
       '@angular/cdk': 20.2.14(@angular/common@21.2.0(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2))(@angular/core@21.2.0(@angular/compiler@21.2.0)(rxjs@7.8.2)(zone.js@0.16.1))(rxjs@7.8.2)
@@ -3492,14 +3492,14 @@ snapshots:
       '@floating-ui/dom': 1.7.4
       '@fontsource/roboto': 5.2.9
       '@ionic/angular': 8.6.3(77a787868c292a0880322232bcc32de0)
-      '@kirbydesign/core': 0.0.83
+      '@kirbydesign/core': 0.0.92
       chart.js: 3.9.1
       chartjs-adapter-date-fns: 2.0.1(chart.js@3.9.1)
       chartjs-plugin-annotation: 1.4.0(chart.js@3.9.1)
       chartjs-plugin-datalabels: 2.2.0(chart.js@3.9.1)
       date-fns: 4.1.0
       date-fns-tz: 3.2.0(date-fns@4.1.0)
-      inputmask: 5.0.9
+      inputmask: 5.0.10
       rxjs: 7.8.2
       swiper: 9.4.1
       tslib: 2.8.1
@@ -4584,7 +4584,7 @@ snapshots:
 
   ini@6.0.0: {}
 
-  inputmask@5.0.9: {}
+  inputmask@5.0.10: {}
 
   ionicons@7.4.0:
     dependencies:

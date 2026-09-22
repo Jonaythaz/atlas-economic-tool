@@ -1,15 +1,8 @@
 import { type Signal, signal, type WritableSignal } from '@angular/core';
-import { bookInvoice, checkIfInvoiceIsBooked, createInvoice } from '@atlas/commands';
+import { bookInvoice, createInvoice } from '@atlas/commands';
 import { type CommandError, WorkflowError } from '@atlas/errors';
-import type { NewInvoice, NewInvoiceLine, NewInvoiceRecipient, Settings } from '@atlas/models';
-import type {
-	BillingDocument,
-	BillingLine,
-	CreatedCustomer,
-	InvoiceAction,
-	InvoiceBooking,
-	WorkflowState,
-} from '@atlas/types';
+import type { NewInvoice, NewInvoiceLine, Settings } from '@atlas/models';
+import type { BillingDocument, BillingLine, InvoiceAction, InvoiceBooking, WorkflowState } from '@atlas/types';
 import type { InvoiceStatus } from '@atlas/types/invoice-status.type';
 import { type AsyncResult, Result } from 'typescript-result';
 
@@ -49,12 +42,17 @@ export class InvoiceWorkflowItem {
 		return this.#errorMessage.asReadonly();
 	}
 
+	update(value: BillingDocument): void {
+		this.#value.set(value);
+	}
+
 	async create(settings: Settings): Promise<void> {
 		const status = this.#status();
 		if (status.type === 'booked') {
 			return;
 		}
 		this.#state.set('running');
+		this.#errorMessage.set(undefined);
 
 		const value = this.#value();
 		const action = this.#action();
@@ -88,7 +86,7 @@ function draftInvoice(
 	value: BillingDocument,
 	settings: Settings,
 ): AsyncResult<InvoiceStatus, CommandError | WorkflowError> {
-	const newInvoice = toNewInvoice(value, settings);
+	const newInvoice = toNewInvoice(value);
 	if (!newInvoice.ok) {
 		return Result.fromAsync(async () => Result.error(new WorkflowError('blocked', newInvoice.error)));
 	}
@@ -112,56 +110,37 @@ function performInvoiceBooking(
 	}));
 }
 
-function toNewInvoice(value: BillingDocument, settings: Settings): Result<NewInvoice, string> {
-	const customer = value.customer;
-	if (customer === null) {
+function toNewInvoice(value: BillingDocument): Result<NewInvoice, string> {
+	if (value.customerId === 0) {
 		return Result.error('Missing customer for invoice');
 	}
-	const { layout, paymentTerms } = settings.defaults;
-	if (layout === null || paymentTerms === null) {
-		return Result.error('Missing default values');
-	}
-	return Result.all(...value.lines.map((line) => toNewInvoiceLine(line))).map((lines) => ({
-		layout,
-		paymentTerms,
-		customerId: customer.id,
-		recipient: toNewInvoiceRecipient(customer),
+	const lines = value.lines.map((line) => toNewInvoiceLine(line));
+	return Result.all(...lines).map((lines) => ({
+		layout: value.layout,
+		paymentTerms: value.paymentTerms,
+		customerId: value.customerId,
+		recipient: {
+			type: value.recipient.type,
+			name: value.recipient.name,
+			...(value.recipient.type === 'business' ? { ean: value.recipient.ean } : {}),
+			street: value.recipient.street,
+			city: value.recipient.city,
+			postalCode: value.recipient.postalCode,
+			country: value.recipient.country,
+			vatZone: value.recipient.vatNumber,
+		},
 		date: value.date,
-		damageNumber: value.damageNumber,
+		damageNumber: value.damageNumber === '' ? null : value.damageNumber,
 		lines,
 	}));
 }
 
-function toNewInvoiceRecipient(customer: CreatedCustomer): NewInvoiceRecipient {
-	return customer.type === 'business'
-		? {
-				type: 'business',
-				ean: customer.ean,
-				name: customer.name,
-				street: customer.street,
-				city: customer.city,
-				postalCode: customer.postalCode,
-				country: customer.country,
-				vatZone: customer.vatZone,
-			}
-		: {
-				type: 'private',
-				name: customer.name,
-				street: customer.street,
-				city: customer.city,
-				postalCode: customer.postalCode,
-				country: customer.country,
-				vatZone: customer.vatZone,
-			};
-}
-
 function toNewInvoiceLine(line: BillingLine): Result<NewInvoiceLine, string> {
-	const product = line.product;
-	if (!product) {
+	if (!line.id) {
 		return Result.error('Missing product for line');
 	}
 	return Result.ok({
-		productId: product.id,
+		productId: line.id,
 		description: line.description,
 		price: line.price,
 		quantity: line.quantity,

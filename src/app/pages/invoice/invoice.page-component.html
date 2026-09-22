@@ -1,0 +1,24 @@
+<kirby-page defaultBackHref="/" maxWidth="full">
+    <kirby-header
+        title="Edit & Send Invoice"
+        subtitle1="Review and adjust the extracted invoice before sending."
+    ></kirby-header>
+
+    <kirby-page-content>
+        <div class="kirby-grid">
+            <div class="kirby-grid-item" xs="12" lg="8" xl="9">
+                <atlas-invoice-form [form]="vm.form"></atlas-invoice-form>
+            </div>
+            <div class="kirby-grid-item" xs="12" lg="4" xl="3">
+                <atlas-invoice-send-options
+                    [(draft)]="vm.draft"
+                    [(send)]="vm.send"
+                    [state]="vm.state().state()"
+                    [errorMessage]="vm.state().errorMessage()"
+                    (submitted)="vm.submit()"
+                    (cancelled)="vm.cancel()"
+                ></atlas-invoice-send-options>
+            </div>
+        </div>
+    </kirby-page-content>
+</kirby-page>

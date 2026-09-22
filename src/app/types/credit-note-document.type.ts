@@ -6,6 +6,8 @@ export type CreditNoteDocument = {
 	id: number;
 	invoiceId: string;
 	date: string;
+	layout: number | null;
+	paymentTerms: number | null;
 	customer: CreatedCustomer | null;
 	damageNumber: string | null;
 	lines: BillingLine[];

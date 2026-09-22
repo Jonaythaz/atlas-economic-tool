@@ -1,8 +1,8 @@
 import { Injectable, inject, type Signal, signal } from '@angular/core';
 import { checkIfInvoiceIsBooked } from '@atlas/commands';
 import { toCustomerMapKey } from '@atlas/functions/to-customer-map-key';
-import type { DocumentLine, DocumentModel, Settings } from '@atlas/models';
-import type { BillingDocument, BillingLine, CreatedCustomer, CreatedProduct, WorkflowState } from '@atlas/types';
+import type { DocumentModel, Settings } from '@atlas/models';
+import type { BillingDocument, BillingRecipient, CreatedCustomer, CreatedProduct, WorkflowState } from '@atlas/types';
 import { InvoiceWorkflowItem } from '@atlas/workflow-items/invoice';
 import { combineLatestWith } from 'rxjs';
 
@@ -38,7 +38,7 @@ export class InvoiceService {
 										isAlreadyBooked ? { type: 'booked' as const } : { type: 'local' as const },
 									)
 									.getOrElse(() => ({ type: 'local' as const }));
-								return new InvoiceWorkflowItem(toBillingDocument(document, customerMap, productMap), status);
+								return new InvoiceWorkflowItem(toBillingDocument(document, customerMap, productMap, settings), status);
 							}),
 					),
 				);
@@ -91,19 +91,71 @@ function toBillingDocument(
 	document: DocumentModel,
 	customerMap: Map<string, CreatedCustomer>,
 	productMap: Map<string, CreatedProduct>,
+	settings: Settings,
 ): BillingDocument {
-	return {
-		...document,
-		customer: customerMap.get(toCustomerMapKey(document.customer)) ?? null,
-		lines: document.lines.map((line) => toBillingLine(line, productMap)),
+	const customer = customerMap.get(toCustomerMapKey(document.customer));
+	const defaults = settings.defaults;
+	const common = {
+		id: document.id,
+		customerId: customer?.id ?? 0,
+		date: document.date,
+		layout: defaults.layout ?? 0,
+		paymentTerms: customer?.paymentTerms ?? defaults.paymentTerms ?? 0,
+		damageNumber: document.damageNumber ?? '',
+		currency: 'DKK',
+		recipient: toBillingRecipient(customer, defaults.vatZone ?? 0),
+		lines: document.lines.map((line, index) => {
+			const product = productMap.get(line.productId);
+			return {
+				id: product?.id ?? line.productId,
+				name: product?.name ?? `Line ${index + 1}`,
+				description: line.description,
+				quantity: line.quantity,
+				price: line.price,
+				discount: line.discount ?? 0,
+				totalPrice: line.quantity * (line.price - (line.discount ?? 0)),
+			};
+		}),
 	};
+	return document.type === 'credit-note'
+		? { ...common, type: 'credit-note', invoiceId: document.invoiceId }
+		: { ...common, type: 'invoice' };
 }
 
-function toBillingLine(line: DocumentLine, productMap: Map<string, CreatedProduct>): BillingLine {
-	return {
-		...line,
-		product: productMap.get(line.productId) ?? null,
-	};
+function toBillingRecipient(customer: CreatedCustomer | undefined, defaultVatNumber: number): BillingRecipient {
+	if (!customer) {
+		return {
+			type: 'business',
+			name: '',
+			ean: '',
+			street: '',
+			city: '',
+			postalCode: '',
+			country: '',
+			vatNumber: defaultVatNumber,
+		};
+	}
+	return customer.type === 'business'
+		? {
+				type: 'business',
+				name: customer.name,
+				ean: customer.ean,
+				street: customer.street,
+				city: customer.city,
+				postalCode: customer.postalCode,
+				country: customer.country,
+				vatNumber: customer.vatZone,
+			}
+		: {
+				type: 'private',
+				name: customer.name,
+				email: customer.email,
+				street: customer.street,
+				city: customer.city,
+				postalCode: customer.postalCode,
+				country: customer.country,
+				vatNumber: customer.vatZone,
+			};
 }
 
 const STATE_PRIORITY: Record<WorkflowState, number> = {

@@ -1,9 +1,9 @@
-import type { CreatedProduct } from './created-product.type';
-
 export type BillingLine = {
-	product: CreatedProduct | null;
+	id: string;
+	name: string;
 	description: string;
-	price: number;
 	quantity: number;
-	discount: number | null;
+	price: number;
+	discount: number;
+	totalPrice: number;
 };
