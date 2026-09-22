@@ -5,6 +5,8 @@ export type InvoiceDocument = {
 	type: 'invoice';
 	id: number;
 	date: string;
+	layout: number | null;
+	paymentTerms: number | null;
 	customer: CreatedCustomer | null;
 	damageNumber: string | null;
 	lines: BillingLine[];

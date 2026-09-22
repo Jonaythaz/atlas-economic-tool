@@ -1,0 +1,35 @@
+<kirby-page-title>Edit Line Item</kirby-page-title>
+
+<kirby-form-field label="Name">
+    <input kirby-input size="md" [formField]="vm.line.name" />
+</kirby-form-field>
+
+<kirby-form-field label="Description">
+    <input kirby-input size="md" [formField]="vm.line.description" />
+</kirby-form-field>
+
+<kirby-form-field label="Quantity">
+    <input kirby-input size="md" type="number" [formField]="vm.line.quantity" />
+</kirby-form-field>
+
+<kirby-form-field label="Unit Price">
+    <input kirby-input size="md" type="number" [formField]="vm.line.price" />
+</kirby-form-field>
+
+<kirby-form-field label="Discount">
+    <input kirby-input size="md" type="number" [formField]="vm.line.discount" />
+</kirby-form-field>
+
+<kirby-form-field label="Total">
+    <input kirby-input size="md" type="number" [formField]="vm.line.totalPrice" />
+</kirby-form-field>
+
+<kirby-modal-footer>
+    <button
+        kirby-button
+        type="button"
+        (click)="vm.close()"
+    >
+        Done
+    </button>
+</kirby-modal-footer>

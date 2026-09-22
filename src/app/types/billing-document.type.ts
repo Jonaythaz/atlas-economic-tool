@@ -1,4 +1,23 @@
-import type { CreditNoteDocument } from './credit-note-document.type';
-import type { InvoiceDocument } from './invoice-document.type';
+import type { BillingLine } from './billing-line.type';
+import type { BillingRecipient } from './billing-recipient.type';
 
-export type BillingDocument = InvoiceDocument | CreditNoteDocument;
+type BillingDocumentBase = {
+	id: number;
+	customerId: number;
+	date: string;
+	layout: number;
+	paymentTerms: number;
+	damageNumber: string;
+	currency: string;
+	recipient: BillingRecipient;
+	lines: BillingLine[];
+};
+
+export type BillingDocument =
+	| (BillingDocumentBase & {
+			type: 'invoice';
+	  })
+	| (BillingDocumentBase & {
+			type: 'credit-note';
+			invoiceId: string;
+	  });

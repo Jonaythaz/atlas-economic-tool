@@ -1,0 +1,94 @@
+<kirby-card [hasPadding]="true">
+    <kirby-section-header>
+        <kirby-label>
+            <h3 heading>Transfer Options</h3>
+            <p label wrap>Choose how this invoice reaches e-conomic</p>
+        </kirby-label>
+    </kirby-section-header>
+
+    @switch (vm.state()) {
+        @case ('idle') {
+            <kirby-flag themeColor="semi-light" style="margin-top: 1rem">Ready to transfer</kirby-flag>
+        }
+        @case ('running') {
+            <kirby-flag themeColor="warning" style="margin-top: 1rem">Transfer in progress</kirby-flag>
+        }
+        @case ('blocked') {
+            <kirby-flag themeColor="warning" style="margin-top: 1rem">Transfer blocked</kirby-flag>
+        }
+        @case ('completed') {
+            <kirby-flag themeColor="success" style="margin-top: 1rem">Transfer completed</kirby-flag>
+        }
+        @case ('failed') {
+            <kirby-flag themeColor="danger" style="margin-top: 1rem">Transfer failed</kirby-flag>
+        }
+    }
+
+    <kirby-radio-group
+        aria-label="Select transfer option"
+        [value]="vm.draft() ? 'draft' : 'book'"
+        (valueChange)="$event === 'draft' ? vm.selectDraft() : vm.selectBook()"
+    >
+        <kirby-card variant="outlined" style="margin: 1rem 0">
+            <kirby-item>
+                <kirby-radio slot="start" value="draft"></kirby-radio>
+                <kirby-label>
+                    <p class="kirby-item-title">Draft Invoice</p>
+                    <p class="kirby-item-subtitle kirby-item-wrap">Create an editable draft in e-conomic.</p>
+                </kirby-label>
+            </kirby-item>
+        </kirby-card>
+        <kirby-card variant="outlined" style="margin: 1rem 0">
+            <kirby-item>
+                <kirby-radio slot="start" value="book"></kirby-radio>
+                <kirby-label>
+                    <p class="kirby-item-title">Book Invoice</p>
+                    <p class="kirby-item-subtitle kirby-item-wrap">Finalize and book immediately.</p>
+                </kirby-label>
+            </kirby-item>
+        </kirby-card>
+    </kirby-radio-group>
+
+    <kirby-card variant="outlined" style="margin: 1rem 0">
+        <kirby-item>
+            <kirby-checkbox
+                slot="start"
+                [checked]="vm.send()"
+                [disabled]="vm.draft()"
+                (checkedChange)="vm.send.set($event)"
+            ></kirby-checkbox>
+            <kirby-label>
+                <p class="kirby-item-title">Send Booked Invoice</p>
+                <p class="kirby-item-subtitle kirby-item-wrap">Instructs e-conomic to send the booked invoice to the customer.</p>
+            </kirby-label>
+        </kirby-item>
+    </kirby-card>
+
+    <button
+        type="button"
+        kirby-button
+        attentionLevel="2"
+        expand="block"
+        [disabled]="!vm.canSubmit()"
+        (click)="vm.submit()"
+    >
+        <kirby-icon name="send"></kirby-icon>
+        Transfer to e-conomic
+    </button>
+    <button
+        type="button"
+        kirby-button
+        attentionLevel="3"
+        expand="block"
+        (click)="vm.cancel()"
+    >
+        Cancel
+    </button>
+</kirby-card>
+
+@if (vm.errorMessage(); as errorMessage) {
+    <kirby-flag
+        themeColor="danger"
+        style="margin-top: 1rem; white-space: pre-wrap"
+    >{{ errorMessage }}</kirby-flag>
+}

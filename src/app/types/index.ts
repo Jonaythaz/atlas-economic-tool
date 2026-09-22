@@ -1,5 +1,6 @@
 export * from './billing-document.type';
 export * from './billing-line.type';
+export * from './billing-recipient.type';
 export * from './business-customer.type';
 export * from './created-customer.type';
 export * from './created-product.type';

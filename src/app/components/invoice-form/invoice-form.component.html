@@ -1,0 +1,159 @@
+@let invoice = vm.invoice();
+<kirby-card [hasPadding]="true">
+    <div class="kirby-grid">
+        <div class="kirby-grid-item" xs="12" xl="6">
+            <kirby-section-header>
+                <h3 heading>Invoice Details</h3>
+            </kirby-section-header>
+
+            <div class="kirby-grid">
+                <div class="kirby-grid-item" xs="12">
+                    <kirby-form-field label="Invoice ID">
+                        <input kirby-input size="md" type="number" [formField]="invoice.id" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12">
+                    <kirby-form-field label="Customer ID">
+                        <input kirby-input size="md" type="number" [formField]="invoice.customerId" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="Date">
+                        <input kirby-input size="md" type="date" [useNativeDatePicker]="true" [formField]="invoice.date" [hasError]="invoice.date().invalid()" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="Layout">
+                        <input kirby-input size="md" type="number" [formField]="invoice.layout" [hasError]="invoice.layout().invalid()" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="Payment Terms">
+                        <input kirby-input size="md" type="number" [formField]="invoice.paymentTerms" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="8">
+                    <kirby-form-field label="Damage Number">
+                        <input kirby-input size="md" type="text" [formField]="invoice.damageNumber" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="Currency">
+                        <input kirby-input size="md" [formField]="invoice.currency" />
+                    </kirby-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="kirby-grid-item" xs="12" xl="6">
+            <kirby-section-header>
+                <h3 heading>Recipient Details</h3>
+            </kirby-section-header>
+
+            <div class="kirby-grid">
+                <div class="kirby-grid-item" xs="12" xl="6">
+                    <kirby-form-field label="Name">
+                        <input kirby-input size="md" [formField]="invoice.recipient.name" />
+                    </kirby-form-field>
+                </div>
+
+                @if (invoice.recipient.type().value() === 'private') {
+                    <div class="kirby-grid-item" xs="12" xl="6">
+                        <kirby-form-field label="Email">
+                            <input kirby-input size="md" type="email" [formField]="vm.recipientField(invoice.recipient, 'email')" />
+                        </kirby-form-field>
+                    </div>
+                } @else {
+                    <div class="kirby-grid-item" xs="12" xl="6">
+                        <kirby-form-field label="EAN">
+                            <input kirby-input size="md" [formField]="vm.recipientField(invoice.recipient, 'ean')" />
+                        </kirby-form-field>
+                    </div>
+                }
+
+                <div class="kirby-grid-item" xs="12">
+                    <kirby-form-field label="Street">
+                        <input kirby-input size="md" [formField]="invoice.recipient.street" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="Postal Code">
+                        <input kirby-input size="md" [formField]="invoice.recipient.postalCode" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="8">
+                    <kirby-form-field label="City">
+                        <input kirby-input size="md" [formField]="invoice.recipient.city" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="8">
+                    <kirby-form-field label="Country">
+                        <input kirby-input size="md" [formField]="invoice.recipient.country" />
+                    </kirby-form-field>
+                </div>
+
+                <div class="kirby-grid-item" xs="12" xl="4">
+                    <kirby-form-field label="VAT">
+                        <input kirby-input size="md" type="number" [formField]="invoice.recipient.vatNumber" />
+                    </kirby-form-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="kirby-grid-item" xs="12">
+            <kirby-section-header>
+                <h3 heading>Line Items</h3>
+            </kirby-section-header>
+
+            <kirby-card variant="outlined">
+                <table class="kirby-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th style="text-align:right;">Quantity</th>
+                            <th style="text-align:right;">Unit Price</th>
+                            <th style="text-align:right;">Discount</th>
+                            <th style="text-align:right;">Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (line of invoice.lines; track line.id().value()) {
+                            @let lineValue = line().value();
+                            <tr>
+                                <td>{{ lineValue.name }}</td>
+                                <td>{{ lineValue.description }}</td>
+                                <td style="text-align:right;">{{ lineValue.quantity }}</td>
+                                <td style="text-align:right;">{{ lineValue.price }}</td>
+                                <td style="text-align:right;">{{ lineValue.discount }}</td>
+                                <td style="text-align:right;">{{ lineValue.quantity * (lineValue.price - lineValue.discount) }}</td>
+                                <td style="text-align:right;">
+                                    <button
+                                        type="button"
+                                        kirby-button
+                                        size="sm"
+                                        attentionLevel="3"
+                                        aria-label="Edit invoice line"
+                                        (click)="vm.editLine(line)"
+                                    >
+                                        <kirby-icon name="edit"></kirby-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </kirby-card>
+        </div>
+    </div>
+</kirby-card>
