@@ -30,4 +30,7 @@ pub struct InvoiceLine {
 
     #[serde(rename = "Price")]
     pub price: Price,
+
+    #[serde(rename = "InvoicedQuantity")]
+    pub quantity: f64,
 }
