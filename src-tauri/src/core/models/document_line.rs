@@ -34,7 +34,7 @@ impl From<CreditNoteLine> for DocumentLine {
         Self {
             product: line.item.into(),
             price: discount.map_or(line.price.price_amount, |d| line.price.price_amount + d),
-            quantity: line.price.base_quantity.abs().neg(),
+            quantity: line.quantity.abs().neg(),
             discount,
         }
     }

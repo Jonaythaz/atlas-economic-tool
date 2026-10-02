@@ -34,4 +34,7 @@ pub struct CreditNoteLine {
 
     #[serde(rename = "Price")]
     pub price: Price,
+
+    #[serde(rename = "CreditedQuantity")]
+    pub quantity: f64,
 }
