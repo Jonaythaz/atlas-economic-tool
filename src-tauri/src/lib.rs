@@ -7,7 +7,7 @@ use std::fs::create_dir_all;
 
 use app::commands::{
     book_invoice, check_if_invoice_is_booked, create_customer, create_invoice, create_product,
-    fetch_product, load_documents,
+    fetch_product, load_documents, start_invoice_status_scan,
 };
 use tauri::Manager;
 
@@ -31,6 +31,7 @@ pub fn run() {
             create_product,
             fetch_product,
             load_documents,
+            start_invoice_status_scan,
         ])
         .setup(|app| {
             let data_directory = app.path().app_data_dir()?;

@@ -6,4 +6,5 @@ export * from './create-product.command';
 export * from './fetch-product.command';
 export * from './fetch-settings.command';
 export * from './load-documents.command';
+export * from './start-invoice-status-scan.command';
 export * from './update-settings.command';

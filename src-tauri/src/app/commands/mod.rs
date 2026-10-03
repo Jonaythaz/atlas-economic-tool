@@ -18,3 +18,6 @@ pub use fetch_product::fetch_product;
 
 mod load_documents;
 pub use load_documents::load_documents;
+
+mod start_invoice_status_scan;
+pub use start_invoice_status_scan::start_invoice_status_scan;

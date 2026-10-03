@@ -18,6 +18,12 @@ enum CustomerType {
     Private,
 }
 
+impl InvoiceBooking {
+    pub fn invoice_id(&self) -> i32 {
+        self.invoice_id
+    }
+}
+
 impl Into<InvoiceBookRequest> for InvoiceBooking {
     fn into(self) -> InvoiceBookRequest {
         let send_by = match (self.skip_send, self.customer_type) {

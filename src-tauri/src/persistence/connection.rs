@@ -7,6 +7,23 @@ const MIGRATIONS_SLICE: &[M<'_>] = &[
     M::up(
         "CREATE TABLE product(id TEXT PRIMARY KEY, name TEXT NOT NULL, group_id INTEGER NOT NULL);",
     ),
+    M::up(
+        "CREATE TABLE invoice_status(
+            invoice_id INTEGER PRIMARY KEY,
+            is_booked INTEGER NOT NULL CHECK(is_booked IN (0, 1)),
+            checked_at INTEGER NOT NULL
+        );
+        CREATE TABLE accounting_year_scan(
+            year TEXT PRIMARY KEY,
+            next_page INTEGER NOT NULL,
+            completed INTEGER NOT NULL CHECK(completed IN (0, 1))
+        );
+        CREATE TABLE invoice_scan_metadata(
+            id INTEGER PRIMARY KEY CHECK(id = 1),
+            catch_up_complete INTEGER NOT NULL CHECK(catch_up_complete IN (0, 1)),
+            newest_year TEXT
+        );",
+    ),
 ];
 
 const MIGRATIONS: Migrations<'_> = Migrations::from_slice(MIGRATIONS_SLICE);

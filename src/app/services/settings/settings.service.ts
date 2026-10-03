@@ -1,5 +1,5 @@
 import { Injectable, inject, type Signal, signal } from '@angular/core';
-import { fetchSettings, updateSettings } from '@atlas/commands';
+import { fetchSettings, startInvoiceStatusScan, updateSettings } from '@atlas/commands';
 import type { Settings } from '@atlas/models';
 import type { WorkflowState } from '@atlas/types';
 
@@ -58,5 +58,10 @@ export class SettingsService {
 		this.#settings.set(settings);
 		this.#error.set(undefined);
 		await updateSettings(settings);
+		if (settings.tokens.secret.trim() && settings.tokens.grant.trim()) {
+			await startInvoiceStatusScan(settings.tokens).catch((error) => {
+				console.error('Unable to start the background invoice status scan.', error);
+			});
+		}
 	}
 }

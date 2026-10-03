@@ -37,12 +37,16 @@ pub async fn parse_response<T>(mut response: surf::Response) -> Result<T, Client
 where
     T: DeserializeOwned,
 {
-    if response.status().is_success() {
-        if let Ok(body) = response.body_json::<T>().await {
-            return Ok(body);
-        }
+    if !response.status().is_success() {
+        return Err(ClientError::async_from(response).await);
     }
-    Err(ClientError::async_from(response).await)
+
+    let body = response.body_string().await.map_err(ClientError::from)?;
+    serde_json::from_str(&body).map_err(|error| {
+        ClientError::FailedResponse(format!(
+            "Could not deserialize a successful response body: {error}"
+        ))
+    })
 }
 
 impl ClientError {
