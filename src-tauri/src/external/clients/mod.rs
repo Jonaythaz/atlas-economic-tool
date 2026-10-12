@@ -11,6 +11,6 @@ pub use invoice::{
 };
 pub use product::{get_product, post_product};
 
-use helper::{get, parse_response, post};
+use helper::{get, parse_response, post, put};
 
 const MOCK_MODE: bool = false;

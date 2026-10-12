@@ -1,6 +1,11 @@
-use std::fmt::Display;
+use std::{fmt::Display, future::Future, sync::OnceLock, time::Duration};
 
+use futures::lock::Mutex;
 use serde::{de::DeserializeOwned, Serialize};
+
+const MAX_QUEUE_RETRIES: usize = 4;
+const INITIAL_RETRY_DELAY: Duration = Duration::from_millis(250);
+static REQUEST_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
 pub enum ClientError {
     FailedRequest(String),
@@ -14,10 +19,17 @@ pub async fn get(
     secret: &str,
     grant: &str,
 ) -> Result<surf::Response, surf::Error> {
-    surf::get(uri)
-        .header("X-AppSecretToken", secret)
-        .header("X-AgreementGrantToken", grant)
-        .await
+    let uri = uri.as_ref().to_owned();
+    let secret = secret.to_owned();
+    let grant = grant.to_owned();
+
+    request_with_retry(|| {
+        let request = surf::get(uri.clone())
+            .header("X-AppSecretToken", &secret)
+            .header("X-AgreementGrantToken", &grant);
+        async move { request.await }
+    })
+    .await
 }
 
 pub async fn post(
@@ -26,11 +38,95 @@ pub async fn post(
     secret: &str,
     grant: &str,
 ) -> Result<surf::Response, surf::Error> {
-    surf::post(uri)
-        .header("X-AppSecretToken", secret)
-        .header("X-AgreementGrantToken", grant)
-        .body_json(req)?
-        .await
+    let uri = uri.as_ref().to_owned();
+    let secret = secret.to_owned();
+    let grant = grant.to_owned();
+
+    request_with_retry(|| {
+        let request = surf::post(uri.clone())
+            .header("X-AppSecretToken", &secret)
+            .header("X-AgreementGrantToken", &grant)
+            .body_json(req);
+        async move { request?.await }
+    })
+    .await
+}
+
+pub async fn put(
+    uri: impl AsRef<str>,
+    req: &impl Serialize,
+    secret: &str,
+    grant: &str,
+) -> Result<surf::Response, surf::Error> {
+    let uri = uri.as_ref().to_owned();
+    let secret = secret.to_owned();
+    let grant = grant.to_owned();
+
+    request_with_retry(|| {
+        let request = surf::put(uri.clone())
+            .header("X-AppSecretToken", &secret)
+            .header("X-AgreementGrantToken", &grant)
+            .body_json(req);
+        async move { request?.await }
+    })
+    .await
+}
+
+async fn request_with_retry<F, Fut>(mut send: F) -> Result<surf::Response, surf::Error>
+where
+    F: FnMut() -> Fut,
+    Fut: Future<Output = Result<surf::Response, surf::Error>>,
+{
+    for attempt in 0..=MAX_QUEUE_RETRIES {
+        let result = {
+            let _guard = REQUEST_LOCK.get_or_init(|| Mutex::new(())).lock().await;
+            send().await
+        };
+
+        let response = match result {
+            Ok(response) => response,
+            Err(error) if error.status() == surf::StatusCode::TooManyRequests => {
+                if attempt == MAX_QUEUE_RETRIES {
+                    return Err(error);
+                }
+                async_std::task::sleep(retry_delay(attempt)).await;
+                continue;
+            }
+            Err(error) => return Err(error),
+        };
+
+        if response.status() != surf::StatusCode::TooManyRequests || attempt == MAX_QUEUE_RETRIES {
+            return Ok(response);
+        }
+
+        let retry_after = response
+            .header("Retry-After")
+            .and_then(|value| value.as_str().parse::<u64>().ok())
+            .map(Duration::from_secs);
+        drop(response);
+        let delay = retry_after.unwrap_or_else(|| retry_delay(attempt));
+        async_std::task::sleep(delay).await;
+    }
+
+    unreachable!("the retry loop always returns its final response")
+}
+
+fn retry_delay(attempt: usize) -> Duration {
+    INITIAL_RETRY_DELAY
+        .checked_mul(1_u32 << attempt)
+        .unwrap_or(Duration::MAX)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn queue_retry_delay_grows_exponentially() {
+        assert_eq!(retry_delay(0), Duration::from_millis(250));
+        assert_eq!(retry_delay(1), Duration::from_millis(500));
+        assert_eq!(retry_delay(3), Duration::from_secs(2));
+    }
 }
 
 pub async fn parse_response<T>(mut response: surf::Response) -> Result<T, ClientError>

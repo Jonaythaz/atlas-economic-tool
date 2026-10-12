@@ -1,4 +1,4 @@
-use super::{get, parse_response, post, ClientError};
+use super::{get, parse_response, post, put, ClientError};
 use crate::external::{clients::MOCK_MODE, models::Customer, ClientResult};
 
 pub async fn get_customer(id: i32, secret: &str, grant: &str) -> ClientResult<Option<Customer>> {
@@ -64,14 +64,12 @@ pub async fn put_customer(
         return put_customer_mock(customer).await;
     }
 
-    let response = surf::put(format!(
-        "https://restapi.e-conomic.com/customers/{}",
-        customer.id
-    ))
-    .header("X-AppSecretToken", secret)
-    .header("X-AgreementGrantToken", grant)
-    .body_json(customer)
-    .map_err(ClientError::from)?
+    let response = put(
+        format!("https://restapi.e-conomic.com/customers/{}", customer.id),
+        customer,
+        secret,
+        grant,
+    )
     .await
     .map_err(ClientError::from)?;
 
