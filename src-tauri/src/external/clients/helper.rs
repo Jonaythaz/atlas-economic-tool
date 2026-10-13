@@ -1,4 +1,4 @@
-use std::{fmt::Display, future::Future, sync::OnceLock, time::Duration};
+use std::{fmt::Display, future::Future, time::Duration};
 
 use async_lock::Semaphore;
 use serde::{de::DeserializeOwned, Serialize};
@@ -6,7 +6,7 @@ use serde::{de::DeserializeOwned, Serialize};
 const MAX_QUEUE_RETRIES: usize = 4;
 const MAX_CONCURRENT_REQUESTS: usize = 50;
 const INITIAL_RETRY_DELAY: Duration = Duration::from_millis(250);
-static REQUEST_LIMITER: OnceLock<Semaphore> = OnceLock::new();
+static REQUEST_LIMITER: Semaphore = Semaphore::new(MAX_CONCURRENT_REQUESTS);
 
 pub enum ClientError {
     FailedRequest(String),
@@ -80,10 +80,7 @@ where
 {
     for attempt in 0..=MAX_QUEUE_RETRIES {
         let result = {
-            let _permit = REQUEST_LIMITER
-                .get_or_init(|| Semaphore::new(MAX_CONCURRENT_REQUESTS))
-                .acquire()
-                .await;
+            let _permit = REQUEST_LIMITER.acquire().await;
             send().await
         };
 
